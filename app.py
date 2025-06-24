@@ -12,6 +12,12 @@ import threading
 from apscheduler.schedulers.background import BackgroundScheduler
 import logging
 from pathlib import Path
+import ssl
+import socket
+from urllib.parse import urlparse
+import requests
+from cryptography import x509
+from cryptography.hazmat.backends import default_backend
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -209,6 +215,7 @@ def get_certificate_info(domain):
             'domain': domain,
             'exists': False,
             'expiry_date': None,
+            'days_left': None,
             'days_until_expiry': None,
             'needs_renewal': False,
             'dns_provider': None
@@ -220,6 +227,7 @@ def get_certificate_info(domain):
             'domain': domain,
             'exists': False,
             'expiry_date': None,
+            'days_left': None,
             'days_until_expiry': None,
             'needs_renewal': False,
             'dns_provider': None
@@ -254,6 +262,7 @@ def get_certificate_info(domain):
                         'domain': domain,
                         'exists': True,
                         'expiry_date': expiry_date.strftime('%Y-%m-%d %H:%M:%S'),
+                        'days_left': days_left,
                         'days_until_expiry': days_left,
                         'needs_renewal': days_left < 30,
                         'dns_provider': dns_provider
@@ -267,6 +276,7 @@ def get_certificate_info(domain):
         'domain': domain,
         'exists': False,
         'expiry_date': None,
+        'days_left': None,
         'days_until_expiry': None,
         'needs_renewal': False,
         'dns_provider': dns_provider
@@ -506,9 +516,12 @@ dns_providers_model = api.model('DNSProviders', {
 
 certificate_model = api.model('Certificate', {
     'domain': fields.String(required=True, description='Domain name'),
+    'exists': fields.Boolean(description='Whether certificate exists'),
     'expiry_date': fields.String(description='Certificate expiry date'),
     'days_left': fields.Integer(description='Days until expiry'),
-    'needs_renewal': fields.Boolean(description='Whether certificate needs renewal')
+    'days_until_expiry': fields.Integer(description='Days until expiry (alias for days_left)'),
+    'needs_renewal': fields.Boolean(description='Whether certificate needs renewal'),
+    'dns_provider': fields.String(description='DNS provider used for the certificate')
 })
 
 settings_model = api.model('Settings', {
@@ -865,13 +878,17 @@ def index():
         if cert_info:
             certificates.append(cert_info)
     
-    return render_template('index.html', certificates=certificates)
+    # Get API token for frontend use
+    api_token = settings.get('api_bearer_token', os.getenv('API_BEARER_TOKEN', 'certmate-api-token-12345'))
+    return render_template('index.html', certificates=certificates, api_token=api_token)
 
 @app.route('/settings')
 def settings_page():
     """Settings page"""
     settings = load_settings()
-    return render_template('settings.html', settings=settings)
+    # Get API token for frontend use
+    api_token = settings.get('api_bearer_token', os.getenv('API_BEARER_TOKEN', 'change-this-token'))
+    return render_template('settings.html', settings=settings, api_token=api_token)
 
 # Health check for Docker
 @app.route('/health')
@@ -1071,6 +1088,144 @@ def web_download_certificate(domain):
                     zip_file.write(file_path, file_name)
         
         return send_file(tmp_file.name, as_attachment=True, download_name=f'{domain}-certificates.zip')
+
+def check_ssl_certificate(domain, port=443, timeout=10):
+    """Check SSL certificate for a domain"""
+    try:
+        # Create SSL context
+        context = ssl.create_default_context()
+        
+        # Connect to the domain
+        with socket.create_connection((domain, port), timeout=timeout) as sock:
+            with context.wrap_socket(sock, server_hostname=domain) as ssock:
+                # Get certificate info
+                cert_der = ssock.getpeercert(binary_form=True)
+                cert = x509.load_der_x509_certificate(cert_der, default_backend())
+                
+                # Check if certificate is valid for this domain
+                san_extension = None
+                try:
+                    san_extension = cert.extensions.get_extension_for_oid(x509.oid.ExtensionOID.SUBJECT_ALTERNATIVE_NAME)
+                    san_names = [name.value for name in san_extension.value]
+                except:
+                    san_names = []
+                
+                # Get subject common name
+                subject_cn = None
+                for attribute in cert.subject:
+                    if attribute.oid == x509.oid.NameOID.COMMON_NAME:
+                        subject_cn = attribute.value
+                        break
+                
+                # Check if domain matches certificate
+                certificate_domains = []
+                if subject_cn:
+                    certificate_domains.append(subject_cn)
+                certificate_domains.extend(san_names)
+                
+                domain_match = any(
+                    domain == cert_domain or 
+                    (cert_domain.startswith('*.') and domain.endswith(cert_domain[2:]))
+                    for cert_domain in certificate_domains
+                )
+                
+                return {
+                    'deployed': True,
+                    'reachable': True,
+                    'certificate_match': domain_match,
+                    'certificate_domains': certificate_domains,
+                    'issuer': cert.issuer.rfc4514_string(),
+                    'expires_at': cert.not_valid_after_utc.isoformat(),
+                    'method': 'ssl-direct',
+                    'timestamp': datetime.now().isoformat()
+                }
+                
+    except socket.timeout:
+        return {
+            'deployed': False,
+            'reachable': False,
+            'certificate_match': False,
+            'error': 'timeout',
+            'method': 'ssl-direct',
+            'timestamp': datetime.now().isoformat()
+        }
+    except socket.gaierror:
+        return {
+            'deployed': False,
+            'reachable': False,
+            'certificate_match': False,
+            'error': 'dns_resolution_failed',
+            'method': 'ssl-direct',
+            'timestamp': datetime.now().isoformat()
+        }
+    except ssl.SSLError as e:
+        return {
+            'deployed': False,
+            'reachable': True,
+            'certificate_match': False,
+            'error': f'ssl_error: {str(e)}',
+            'method': 'ssl-direct',
+            'timestamp': datetime.now().isoformat()
+        }
+    except Exception as e:
+        return {
+            'deployed': False,
+            'reachable': False,
+            'certificate_match': False,
+            'error': f'unknown: {str(e)}',
+            'method': 'ssl-direct',
+            'timestamp': datetime.now().isoformat()
+        }
+
+@ns_certificates.route('/<string:domain>/deployment-status')
+class CertificateDeploymentStatus(Resource):
+    def get(self, domain):
+        """Check deployment status of a certificate for a domain"""
+        try:
+            logger.info(f"Checking deployment status for domain: {domain}")
+            
+            # Check SSL certificate deployment
+            deployment_status = check_ssl_certificate(domain)
+            
+            # If we have a certificate for this domain, compare with deployed cert
+            cert_dir = CERT_DIR / domain
+            if cert_dir.exists():
+                cert_file = cert_dir / "cert.pem"
+                if cert_file.exists():
+                    try:
+                        # Load our certificate
+                        with open(cert_file, 'rb') as f:
+                            our_cert = x509.load_pem_x509_certificate(f.read(), default_backend())
+                        
+                        # If the domain has SSL but doesn't match, check if it's our certificate
+                        if deployment_status['reachable'] and not deployment_status['certificate_match']:
+                            # Additional verification - check certificate fingerprints or other identifiers
+                            deployment_status['has_local_cert'] = True
+                            deployment_status['local_cert_expires'] = our_cert.not_valid_after_utc.isoformat()
+                        else:
+                            deployment_status['has_local_cert'] = True
+                            deployment_status['local_cert_expires'] = our_cert.not_valid_after_utc.isoformat()
+                            
+                    except Exception as e:
+                        logger.error(f"Error reading local certificate for {domain}: {e}")
+                        deployment_status['has_local_cert'] = False
+                else:
+                    deployment_status['has_local_cert'] = False
+            else:
+                deployment_status['has_local_cert'] = False
+            
+            return deployment_status
+            
+        except Exception as e:
+            logger.error(f"Error checking deployment status for {domain}: {e}")
+            return {
+                'deployed': False,
+                'reachable': False,
+                'certificate_match': False,
+                'error': f'check_failed: {str(e)}',
+                'method': 'ssl-direct',
+                'timestamp': datetime.now().isoformat()
+            }, 500
 
 def get_domain_dns_provider(domain, settings):
     """Get the DNS provider used for a specific domain"""

@@ -48,46 +48,67 @@
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="bg-white shadow rounded-lg mb-6">
-            <div class="px-6 py-4">
-                <h2 class="text-2xl font-bold text-gray-900">SSL Certificates</h2>
-                <p class="text-gray-600 mt-1">Manage your SSL certificates with automatic renewal</p>
+        <div class="bg-white shadow-sm rounded-lg mb-6 border border-gray-200">
+            <div class="px-6 py-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-primary text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-2xl font-bold text-gray-900">SSL Certificates Dashboard</h2>
+                        <p class="text-gray-600 mt-1">Manage your SSL certificates with automatic renewal</p>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6" id="statsCards">
+            <!-- Stats will be populated here -->
+        </div>
+
         <!-- Create Certificate Form -->
-        <div class="bg-white shadow rounded-lg mb-6">
-            <div class="px-6 py-4 border-b">
-                <h3 class="text-lg font-medium text-gray-900">Create New Certificate</h3>
+        <div class="bg-white shadow-sm rounded-lg mb-6 border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+                <h3 class="text-lg font-semibold text-gray-900">Create New Certificate</h3>
+                <p class="text-sm text-gray-600 mt-1">Generate a new SSL certificate for your domain</p>
             </div>
-            <div class="px-6 py-4">
-                <form id="createCertForm" class="space-y-4">
-                    <div>
-                        <label for="domain" class="block text-sm font-medium text-gray-700">Domain</label>
-                        <input type="text" id="domain" name="domain" 
-                               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
-                               placeholder="example.com" required>
+            <div class="px-6 py-6">
+                <form id="createCertForm" class="space-y-6">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div>
+                            <label for="domain" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-globe mr-1 text-gray-400"></i>
+                                Domain
+                            </label>
+                            <input type="text" id="domain" name="domain" 
+                                   class="block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200"
+                                   placeholder="example.com" required>
+                        </div>
+                        <div>
+                            <label for="dns_provider_select" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-server mr-1 text-gray-400"></i>
+                                DNS Provider (Optional)
+                            </label>
+                            <select id="dns_provider_select" name="dns_provider" 
+                                    class="block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200">
+                                <option value="">Use default from settings</option>
+                                <option value="cloudflare">Cloudflare</option>
+                                <option value="route53">AWS Route53</option>
+                                <option value="azure">Azure DNS</option>
+                                <option value="google">Google Cloud DNS</option>
+                                <option value="powerdns">PowerDNS</option>
+                            </select>
+                            <p class="mt-2 text-sm text-gray-500">
+                                Leave empty to use the default DNS provider from settings
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <label for="dns_provider_select" class="block text-sm font-medium text-gray-700">
-                            DNS Provider (Optional)
-                        </label>
-                        <select id="dns_provider_select" name="dns_provider" 
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary">
-                            <option value="">Use default from settings</option>
-                            <option value="cloudflare">Cloudflare</option>
-                            <option value="route53">AWS Route53</option>
-                            <option value="azure">Azure DNS</option>
-                            <option value="google">Google Cloud DNS</option>
-                            <option value="powerdns">PowerDNS</option>
-                        </select>
-                        <p class="mt-1 text-sm text-gray-500">
-                            Leave empty to use the default DNS provider from settings
-                        </p>
-                    </div>
-                    <div>
+                    <div class="flex justify-end">
                         <button type="submit" 
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
                             <i class="fas fa-plus mr-2"></i>
                             Create Certificate
                         </button>
@@ -97,9 +118,36 @@
         </div>
 
         <!-- Certificates List -->
-        <div class="bg-white shadow rounded-lg">
-            <div class="px-6 py-4 border-b">
-                <h3 class="text-lg font-medium text-gray-900">Your Certificates</h3>
+        <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                    <h3 class="text-lg font-semibold text-gray-900">Your Certificates</h3>
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                        <div class="relative">
+                            <input type="text" id="certificateSearch" placeholder="Search certificates..." 
+                                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm bg-white shadow-sm transition-shadow duration-200">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                        </div>
+                        <select id="statusFilter" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary bg-white shadow-sm transition-shadow duration-200">
+                            <option value="all">All Status</option>
+                            <option value="valid">Valid</option>
+                            <option value="expiring">Expiring Soon</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                        <button onclick="checkAllDeploymentStatuses()" 
+                                class="inline-flex items-center px-3 py-2 border border-indigo-300 shadow-sm text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                            <i class="fas fa-sync mr-2"></i>
+                            Check All
+                        </button>
+                        <button onclick="toggleDebugConsole()" 
+                                class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                            <i class="fas fa-terminal mr-2"></i>
+                            Debug
+                        </button>
+                    </div>
+                </div>
             </div>
             <div id="certificatesList" class="divide-y divide-gray-200">
                 <!-- Certificates will be loaded here -->
@@ -109,11 +157,20 @@
 
     <!-- Loading Modal -->
     <div id="loadingModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 m-4 max-w-sm w-full">
+        <div class="bg-white rounded-lg p-6 m-4 max-w-md w-full">
             <div class="text-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-                <p class="mt-4 text-gray-600">Creating certificate...</p>
-                <p class="text-sm text-gray-500 mt-2">This may take a few minutes</p>
+                <div class="relative">
+                    <div class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-primary mx-auto"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-certificate text-primary text-lg"></i>
+                    </div>
+                </div>
+                <h3 class="mt-4 text-lg font-medium text-gray-900" id="loadingTitle">Processing Certificate...</h3>
+                <p class="mt-2 text-sm text-gray-600" id="loadingMessage">This may take a few minutes</p>
+                <div class="mt-4 bg-gray-200 rounded-full h-2">
+                    <div class="bg-primary h-2 rounded-full transition-all duration-1000" id="progressBar" style="width: 0%"></div>
+                </div>
+                <p class="mt-2 text-xs text-gray-500">Do not close this window</p>
             </div>
         </div>
     </div>
@@ -158,124 +215,1001 @@
     <!-- Success/Error Messages -->
     <div id="messages" class="fixed top-4 right-4 z-50"></div>
 
+    <!-- Debug Console -->
+    <div id="debugConsole" class="fixed bottom-4 left-4 right-4 bg-black text-green-400 font-mono text-xs rounded-lg shadow-lg border border-gray-600 hidden z-40">
+        <div class="flex items-center justify-between p-3 border-b border-gray-600">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-terminal text-green-400"></i>
+                <span class="text-white font-semibold">Deployment Check Debug Console</span>
+                <span class="text-gray-400 text-xs">| Cache: <span id="debug-cache-info">Loading...</span></span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="showCacheStats()" class="text-blue-400 hover:text-blue-300" title="Show cache stats">
+                    <i class="fas fa-database"></i>
+                </button>
+                <button onclick="invalidateAllCache()" class="text-orange-400 hover:text-orange-300" title="Clear cache">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button onclick="clearDebugConsole()" class="text-yellow-400 hover:text-yellow-300" title="Clear console">
+                    <i class="fas fa-eraser"></i>
+                </button>
+                <button onclick="toggleDebugConsole()" class="text-gray-400 hover:text-white" title="Close console">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div id="debugOutput" class="p-3 max-h-64 overflow-y-auto">
+            <div class="text-gray-500">Debug console ready. Click "Check All" to see deployment check logs...</div>
+        </div>
+    </div>
+
     <script>
-        // Show message function
+        // API Configuration
+        const API_TOKEN = '{{ api_token }}';
+        const API_HEADERS = {
+            'Authorization': `Bearer ${API_TOKEN}`,
+            'Content-Type': 'application/json'
+        };
+
+        // Show enhanced loading modal with progress
+        function showLoadingModal(title = 'Processing Certificate...', message = 'This may take a few minutes') {
+            const modal = document.getElementById('loadingModal');
+            document.getElementById('loadingTitle').textContent = title;
+            document.getElementById('loadingMessage').textContent = message;
+            document.getElementById('progressBar').style.width = '0%';
+            modal.classList.remove('hidden');
+            
+            // Simulate progress for better UX
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90; // Don't complete until actual completion
+                document.getElementById('progressBar').style.width = progress + '%';
+            }, 1000);
+            
+            return progressInterval;
+        }
+        
+        // Hide loading modal and complete progress
+        function hideLoadingModal(progressInterval) {
+            document.getElementById('progressBar').style.width = '100%';
+            setTimeout(() => {
+                document.getElementById('loadingModal').classList.add('hidden');
+                if (progressInterval) clearInterval(progressInterval);
+            }, 500);
+        }
+
+        // Show message function with improved styling
         function showMessage(message, type = 'success') {
             const messagesContainer = document.getElementById('messages');
             const messageDiv = document.createElement('div');
-            messageDiv.className = `mb-4 p-4 rounded-md shadow-lg max-w-sm ${
-                type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 
-                'bg-red-50 text-red-800 border border-red-200'
-            }`;
+            
+            const typeStyles = {
+                'success': 'bg-green-50 text-green-800 border border-green-200',
+                'error': 'bg-red-50 text-red-800 border border-red-200',
+                'info': 'bg-blue-50 text-blue-800 border border-blue-200',
+                'warning': 'bg-yellow-50 text-yellow-800 border border-yellow-200'
+            };
+            
+            const typeIcons = {
+                'success': 'fa-check-circle',
+                'error': 'fa-exclamation-circle',
+                'info': 'fa-info-circle',
+                'warning': 'fa-exclamation-triangle'
+            };
+            
+            messageDiv.className = `mb-4 p-4 rounded-lg shadow-lg max-w-sm transform transition-all duration-300 ease-in-out ${typeStyles[type] || typeStyles.success}`;
             messageDiv.innerHTML = `
-                <div class="flex">
+                <div class="flex items-start">
                     <div class="flex-shrink-0">
-                        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                        <i class="fas ${typeIcons[type] || typeIcons.success} mt-0.5"></i>
                     </div>
-                    <div class="ml-3">
+                    <div class="ml-3 flex-1">
                         <p class="text-sm font-medium">${message}</p>
                     </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
                 </div>
             `;
+            
+            // Add animation
+            messageDiv.style.transform = 'translateX(100%)';
+            messageDiv.style.opacity = '0';
             messagesContainer.appendChild(messageDiv);
             
+            // Trigger animation
             setTimeout(() => {
-                messageDiv.remove();
+                messageDiv.style.transform = 'translateX(0)';
+                messageDiv.style.opacity = '1';
+            }, 10);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.style.transform = 'translateX(100%)';
+                    messageDiv.style.opacity = '0';
+                    setTimeout(() => messageDiv.remove(), 300);
+                }
             }, 5000);
         }
 
-        // Load certificates
-        async function loadCertificates() {
-            try {
-                const response = await fetch('/api/web/certificates');
-                const certificates = await response.json();
-                
-                const container = document.getElementById('certificatesList');
-                
-                if (certificates.length === 0) {
-                    container.innerHTML = `
-                        <div class="px-6 py-8 text-center text-gray-500">
-                            <i class="fas fa-certificate text-4xl mb-4"></i>
-                            <p>No certificates found. Create your first certificate above.</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                container.innerHTML = certificates.map(cert => {
-                    if (!cert.exists) {
-                        return `
-                            <div class="px-6 py-4">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="text-lg font-medium text-gray-900">${cert.domain}</h4>
-                                        <p class="text-sm text-red-600">Certificate not found</p>
-                                        ${cert.dns_provider ? `<p class="text-sm text-gray-500">DNS Provider: ${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>` : ''}
-                                    </div>
+        // Clear filters function
+        function clearFilters() {
+            document.getElementById('certificateSearch').value = '';
+            document.getElementById('statusFilter').value = 'all';
+            filterCertificates();
+        }
+
+        // Update statistics cards with deployment info
+        function updateStats(certificates) {
+            const total = certificates.length;
+            const valid = certificates.filter(cert => cert.exists && cert.days_until_expiry > 30).length;
+            const expiring = certificates.filter(cert => cert.exists && cert.days_until_expiry > 0 && cert.days_until_expiry <= 30).length;
+            const expired = certificates.filter(cert => cert.exists && cert.days_until_expiry <= 0).length;
+            
+            const statsContainer = document.getElementById('statsCards');
+            statsContainer.innerHTML = `
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-certificate text-blue-600 text-xl"></i>
                                 </div>
                             </div>
-                        `;
+                            <div class="ml-4 flex-1">
+                                <p class="text-sm font-medium text-gray-600">Total Certificates</p>
+                                <p class="text-2xl font-bold text-gray-900">${total}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <p class="text-sm font-medium text-gray-600">Valid</p>
+                                <p class="text-2xl font-bold text-green-600">${valid}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <p class="text-sm font-medium text-gray-600">Expiring Soon</p>
+                                <p class="text-2xl font-bold text-yellow-600">${expiring}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-globe text-indigo-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <p class="text-sm font-medium text-gray-600">Deployment</p>
+                                <p class="text-2xl font-bold text-indigo-600" id="deploymentCount">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Deployment Status Cache System
+        class DeploymentCache {
+            constructor() {
+                this.cache = new Map();
+                this.defaultTTL = 300000; // 5 minutes default
+                this.loadSettings();
+            }
+
+            loadSettings() {
+                try {
+                    const savedSettings = localStorage.getItem('deployment-cache-settings');
+                    if (savedSettings) {
+                        const settings = JSON.parse(savedSettings);
+                        this.defaultTTL = settings.ttl || this.defaultTTL;
+                        console.log(`[DEPLOYMENT CACHE] Loaded settings: TTL ${this.defaultTTL}ms`);
                     }
+                } catch (error) {
+                    console.warn('[DEPLOYMENT CACHE] Failed to load settings:', error);
+                }
+            }
+
+            saveSettings(ttl) {
+                try {
+                    this.defaultTTL = ttl;
+                    localStorage.setItem('deployment-cache-settings', JSON.stringify({ ttl }));
+                    console.log(`[DEPLOYMENT CACHE] Saved settings: TTL ${ttl}ms`);
+                } catch (error) {
+                    console.error('[DEPLOYMENT CACHE] Failed to save settings:', error);
+                }
+            }
+
+            set(domain, result) {
+                const timestamp = Date.now();
+                this.cache.set(domain, {
+                    result,
+                    timestamp,
+                    ttl: this.defaultTTL
+                });
+                console.log(`[DEPLOYMENT CACHE] Cached result for ${domain}, expires in ${this.defaultTTL}ms`);
+            }
+
+            get(domain) {
+                const cached = this.cache.get(domain);
+                if (!cached) return null;
+
+                const now = Date.now();
+                const isExpired = (now - cached.timestamp) > cached.ttl;
+                
+                if (isExpired) {
+                    this.cache.delete(domain);
+                    console.log(`[DEPLOYMENT CACHE] Cache expired for ${domain}`);
+                    return null;
+                }
+
+                const remainingTime = cached.ttl - (now - cached.timestamp);
+                console.log(`[DEPLOYMENT CACHE] Cache hit for ${domain}, expires in ${Math.round(remainingTime/1000)}s`);
+                return cached.result;
+            }
+
+            invalidate(domain) {
+                if (this.cache.delete(domain)) {
+                    console.log(`[DEPLOYMENT CACHE] Invalidated cache for ${domain}`);
+                }
+            }
+
+            clear() {
+                const size = this.cache.size;
+                this.cache.clear();
+                console.log(`[DEPLOYMENT CACHE] Cleared ${size} cached entries`);
+            }
+
+            getStatus() {
+                const now = Date.now();
+                const entries = Array.from(this.cache.entries()).map(([domain, data]) => ({
+                    domain,
+                    age: Math.round((now - data.timestamp) / 1000),
+                    remaining: Math.round((data.ttl - (now - data.timestamp)) / 1000),
+                    status: data.result.deployed ? 'deployed' : 'not-deployed'
+                }));
+                return {
+                    totalEntries: this.cache.size,
+                    ttl: Math.round(this.defaultTTL / 1000),
+                    entries
+                };
+            }
+        }
+
+        // Initialize cache
+        const deploymentCache = new DeploymentCache();
+
+        // Global variable to store all certificates
+        let allCertificates = [];
+
+        // Filter and search certificates
+        function filterCertificates() {
+            const searchTerm = document.getElementById('certificateSearch').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            const filteredCerts = allCertificates.filter(cert => {
+                // Search filter
+                const matchesSearch = cert.domain.toLowerCase().includes(searchTerm);
+                
+                // Status filter
+                let matchesStatus = true;
+                if (statusFilter !== 'all') {
+                    const isExpired = cert.exists && cert.days_until_expiry <= 0;
+                    const isExpiringSoon = cert.exists && cert.days_until_expiry > 0 && cert.days_until_expiry <= 30;
+                    const isValid = cert.exists && cert.days_until_expiry > 30;
                     
-                    const expiryDate = new Date(cert.expiry_date);
-                    const isExpiringSoon = cert.days_until_expiry <= 30;
-                    const isExpired = cert.days_until_expiry <= 0;
-                    
+                    switch (statusFilter) {
+                        case 'valid':
+                            matchesStatus = isValid;
+                            break;
+                        case 'expiring':
+                            matchesStatus = isExpiringSoon;
+                            break;
+                        case 'expired':
+                            matchesStatus = isExpired;
+                            break;
+                    }
+                }
+                
+                return matchesSearch && matchesStatus;
+            });
+            
+            displayCertificates(filteredCerts);
+        }
+
+        // Display certificates  
+        function displayCertificates(certificates) {
+            const container = document.getElementById('certificatesList');
+            
+            if (certificates.length === 0) {
+                const isFiltered = document.getElementById('certificateSearch').value || 
+                                 document.getElementById('statusFilter').value !== 'all';
+                
+                container.innerHTML = `
+                    <div class="px-6 py-12 text-center">
+                        <div class="mx-auto max-w-sm">
+                            <div class="mx-auto h-16 w-16 flex items-center justify-center bg-gray-100 rounded-full mb-4">
+                                <i class="fas ${isFiltered ? 'fa-search' : 'fa-certificate'} text-gray-400 text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">
+                                ${isFiltered ? 'No matching certificates' : 'No certificates yet'}
+                            </h3>
+                            <p class="text-gray-500 mb-6">
+                                ${isFiltered ? 
+                                    'Try adjusting your search criteria or filters to find certificates.' : 
+                                    'Get started by creating your first SSL certificate above.'
+                                }
+                            </p>
+                            ${!isFiltered ? `
+                                <button onclick="document.getElementById('domain').focus()" 
+                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Create Certificate
+                                </button>
+                            ` : `
+                                <button onclick="clearFilters()" 
+                                        class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                                    <i class="fas fa-times mr-2"></i>
+                                    Clear Filters
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = certificates.map(cert => {
+                if (!cert.exists) {
                     return `
                         <div class="px-6 py-4">
                             <div class="flex items-center justify-between">
-                                <div class="flex-1">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-1">
-                                            <h4 class="text-lg font-medium text-gray-900">${cert.domain}</h4>
-                                            <div class="mt-2 space-y-1">
-                                                <p class="text-sm text-gray-600">
-                                                    <i class="fas fa-calendar mr-1"></i>
-                                                    Expires: ${expiryDate.toLocaleDateString()}
-                                                </p>
-                                                <p class="text-sm ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-yellow-600' : 'text-green-600'}">
-                                                    <i class="fas ${isExpired ? 'fa-times-circle' : isExpiringSoon ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-1"></i>
-                                                    ${isExpired ? 'Expired' : isExpiringSoon ? `Expires in ${cert.days_until_expiry} days` : `Valid for ${cert.days_until_expiry} days`}
-                                                </p>
-                                                ${cert.dns_provider ? `
-                                                    <p class="text-sm text-gray-500">
-                                                        <i class="fas fa-server mr-1"></i>
-                                                        DNS Provider: <span class="font-medium">${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</span>
-                                                    </p>
-                                                ` : ''}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button onclick="renewCertificate('${cert.domain}')" 
-                                            class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                                        <i class="fas fa-sync-alt mr-1"></i>
-                                        Renew
-                                    </button>
-                                    <button onclick="downloadCertificate('${cert.domain}')" 
-                                            class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                                        <i class="fas fa-download mr-1"></i>
-                                        Cert
-                                    </button>
-                                    <button onclick="downloadKey('${cert.domain}')" 
-                                            class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                                        <i class="fas fa-key mr-1"></i>
-                                        Key
-                                    </button>
-                                    <button onclick="copyCurlCommand('${cert.domain}')" 
-                                            class="inline-flex items-center px-3 py-1 border border-blue-300 shadow-sm text-sm font-medium rounded-md text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                        <i class="fas fa-code mr-1"></i>
-                                        curl
-                                    </button>
+                                <div>
+                                    <h4 class="text-lg font-medium text-gray-900">${cert.domain}</h4>
+                                    <p class="text-sm text-red-600">Certificate not found</p>
+                                    ${cert.dns_provider ? `<p class="text-sm text-gray-500">DNS Provider: ${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>` : ''}
                                 </div>
                             </div>
                         </div>
                     `;
-                }).join('');
+                }
+                
+                const expiryDate = new Date(cert.expiry_date);
+                const isExpiringSoon = cert.days_until_expiry <= 30;
+                const isExpired = cert.days_until_expiry <= 0;
+                
+                return `
+                    <div class="px-6 py-6 hover:bg-gray-50 transition-colors duration-200">
+                        <div class="flex flex-col space-y-4">
+                            <!-- Certificate Header -->
+                            <div class="flex flex-wrap items-start justify-between gap-3">
+                                <div class="flex items-center space-x-3 min-w-0 flex-1">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-certificate text-blue-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <h4 class="text-lg font-semibold text-gray-900 truncate">${cert.domain}</h4>
+                                        <div class="flex items-center space-x-2 mt-1">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                                isExpired ? 'bg-red-100 text-red-800' : 
+                                                isExpiringSoon ? 'bg-yellow-100 text-yellow-800' : 
+                                                'bg-green-100 text-green-800'
+                                            }">
+                                                <i class="fas ${isExpired ? 'fa-times-circle' : isExpiringSoon ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-1"></i>
+                                                ${isExpired ? 'Expired' : isExpiringSoon ? 'Expiring Soon' : 'Valid'}
+                                            </span>
+                                            <span id="deployment-status-${cert.domain.replace(/\./g, '-')}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                                <i class="fas fa-spinner fa-spin mr-1"></i>
+                                                Checking...
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Certificate Details Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-calendar text-blue-600 text-sm"></i>
+                                        </div>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-medium text-gray-500">Expires</p>
+                                        <p class="text-sm font-medium text-gray-900">${expiryDate.toLocaleDateString()}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-8 h-8 ${isExpired ? 'bg-red-100' : isExpiringSoon ? 'bg-yellow-100' : 'bg-green-100'} rounded-full flex items-center justify-center">
+                                            <i class="fas fa-clock ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-yellow-600' : 'text-green-600'} text-sm"></i>
+                                        </div>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-medium text-gray-500">Days Left</p>
+                                        <p class="text-sm font-medium ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-yellow-600' : 'text-green-600'}">${cert.days_until_expiry}</p>
+                                    </div>
+                                </div>
+                                
+                                ${cert.dns_provider ? `
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex-shrink-0">
+                                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-server text-purple-600 text-sm"></i>
+                                            </div>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <p class="text-xs font-medium text-gray-500">DNS Provider</p>
+                                            <p class="text-sm font-medium text-gray-900">${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-globe text-indigo-600 text-sm"></i>
+                                        </div>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-medium text-gray-500">Deployment</p>
+                                        <p id="deployment-text-${cert.domain.replace(/\./g, '-')}" class="text-sm font-medium text-gray-600">Checking...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Auto-renewal Notice -->
+                            ${cert.days_until_expiry > 0 && cert.days_until_expiry <= 30 ? `
+                                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                    <div class="flex items-start space-x-2">
+                                        <i class="fas fa-exclamation-triangle text-yellow-600 mt-0.5"></i>
+                                        <div class="text-sm text-yellow-800">
+                                            <p class="font-medium">Auto-renewal scheduled</p>
+                                            <p class="mt-1">Certificate will be renewed automatically within ${Math.max(cert.days_until_expiry - 30, 0)} days</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex flex-wrap gap-3 pt-2">
+                                <!-- Primary Actions -->
+                                <div class="flex gap-2">
+                                    <button onclick="renewCertificate('${cert.domain}')" 
+                                            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                                        <i class="fas fa-sync-alt mr-2 text-green-600"></i>
+                                        Renew
+                                    </button>
+                                    <button onclick="checkDeploymentStatus('${cert.domain}')" 
+                                            class="inline-flex items-center px-4 py-2 border border-indigo-300 shadow-sm text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                        <i class="fas fa-globe mr-2"></i>
+                                        Check Deployment
+                                    </button>
+                                </div>
+                                
+                                <!-- Download Actions -->
+                                <div class="flex gap-2">
+                                    <button onclick="downloadCertificate('${cert.domain}')" 
+                                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                                        <i class="fas fa-download mr-2 text-blue-600"></i>
+                                        Bundle
+                                    </button>
+                                    <button onclick="copyCurlCommand('${cert.domain}')" 
+                                            class="inline-flex items-center px-3 py-2 border border-blue-300 shadow-sm text-sm font-medium rounded-lg text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                        <i class="fas fa-code mr-2"></i>
+                                        API
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Debug console functions
+        function toggleDebugConsole() {
+            const console = document.getElementById('debugConsole');
+            console.classList.toggle('hidden');
+        }
+
+        function clearDebugConsole() {
+            document.getElementById('debugOutput').innerHTML = '<div class="text-gray-500">Debug console cleared. Click "Check All" to see deployment check logs...</div>';
+        }
+
+        function addDebugLog(message, type = 'info') {
+            const output = document.getElementById('debugOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                info: 'text-green-400',
+                warn: 'text-yellow-400', 
+                error: 'text-red-400',
+                success: 'text-blue-400'
+            };
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `${colors[type] || colors.info} mb-1`;
+            logEntry.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> ${message}`;
+            
+            output.appendChild(logEntry);
+            output.scrollTop = output.scrollHeight;
+            
+            // Keep only last 100 entries
+            while (output.children.length > 100) {
+                output.removeChild(output.firstChild);
+            }
+        }
+
+        // Override console methods to also log to debug panel
+        const originalConsoleLog = console.log;
+        const originalConsoleWarn = console.warn;
+        const originalConsoleError = console.error;
+
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            if (args[0] && args[0].includes && args[0].includes('[DEPLOYMENT CHECK]')) {
+                addDebugLog(args.join(' '), 'info');
+            }
+        };
+
+        console.warn = function(...args) {
+            originalConsoleWarn.apply(console, args);
+            if (args[0] && args[0].includes && args[0].includes('[DEPLOYMENT CHECK]')) {
+                addDebugLog(args.join(' '), 'warn');
+            }
+        };
+
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            if (args[0] && args[0].includes && args[0].includes('[DEPLOYMENT CHECK]')) {
+                addDebugLog(args.join(' '), 'error');
+            }
+        };
+
+        // Cache management functions
+        function showCacheStats() {
+            const stats = deploymentCache.getStatus();
+            const ttlMinutes = Math.round(stats.ttl / 60);
+            const ttlHours = Math.round(stats.ttl / 3600);
+            
+            let ttlDisplay = `${stats.ttl}s`;
+            if (ttlHours >= 1) {
+                ttlDisplay = `${ttlHours}h`;
+            } else if (ttlMinutes >= 1) {
+                ttlDisplay = `${ttlMinutes}m`;
+            }
+            
+            addDebugLog(`=== CACHE STATISTICS ===`, 'info');
+            addDebugLog(`Total entries: ${stats.totalEntries}`, 'info');
+            addDebugLog(`TTL: ${ttlDisplay} (${stats.ttl} seconds)`, 'info');
+            
+            if (stats.entries.length > 0) {
+                addDebugLog(`Recent entries:`, 'info');
+                stats.entries.slice(0, 5).forEach(entry => {
+                    addDebugLog(`  ${entry.domain}: ${entry.status} (${entry.remaining}s remaining)`, 'info');
+                });
+                if (stats.entries.length > 5) {
+                    addDebugLog(`  ... and ${stats.entries.length - 5} more entries`, 'info');
+                }
+            } else {
+                addDebugLog(`No cached entries`, 'warn');
+            }
+            addDebugLog(`========================`, 'info');
+        }
+
+        function invalidateAllCache() {
+            if (confirm('Clear all cached deployment status data? This will force a fresh check for all certificates.')) {
+                deploymentCache.clear();
+                addDebugLog('All cache entries cleared by user request', 'warn');
+                updateCacheInfo();
+                
+                // Optionally re-check all certificates
+                if (allCertificates.length > 0) {
+                    addDebugLog('Re-checking all certificates after cache clear...', 'info');
+                    setTimeout(() => {
+                        const existingCerts = allCertificates.filter(cert => cert.exists);
+                        existingCerts.forEach(cert => checkDeploymentStatus(cert.domain));
+                    }, 1000);
+                }
+            }
+        }
+
+        function updateCacheInfo() {
+            const stats = deploymentCache.getStatus();
+            const ttlMinutes = Math.round(stats.ttl / 60);
+            const infoElement = document.getElementById('debug-cache-info');
+            
+            if (infoElement) {
+                let ttlDisplay = `${stats.ttl}s`;
+                if (ttlMinutes >= 1) {
+                    ttlDisplay = `${ttlMinutes}m`;
+                }
+                infoElement.textContent = `${stats.totalEntries} entries, TTL ${ttlDisplay}`;
+            }
+        }
+
+        // Update cache info periodically
+        setInterval(updateCacheInfo, 10000); // Update every 10 seconds
+
+        // Update deployment statistics with better counting
+        function updateDeploymentStats() {
+            console.log('[DEPLOYMENT CHECK] Updating deployment statistics');
+            
+            const deployedCount = allCertificates.filter(cert => {
+                if (!cert.exists) return false;
+                const statusElement = document.getElementById(`deployment-status-${cert.domain.replace(/\./g, '-')}`);
+                const isDeployed = statusElement && statusElement.textContent.includes('Deployed');
+                
+                if (isDeployed) {
+                    console.log(`[DEPLOYMENT CHECK] ${cert.domain} counted as deployed`);
+                }
+                
+                return isDeployed;
+            }).length;
+            
+            const deploymentCountElement = document.getElementById('deploymentCount');
+            if (deploymentCountElement) {
+                deploymentCountElement.textContent = deployedCount;
+                console.log(`[DEPLOYMENT CHECK] Updated statistics: ${deployedCount} certificates deployed`);
+            }
+            
+            addDebugLog(`Statistics updated: ${deployedCount} certificates actively deployed`, 'success');
+        }
+
+        // Check deployment status for all certificates
+        async function checkAllDeploymentStatuses() {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Checking...';
+            button.disabled = true;
+            
+            console.log('[DEPLOYMENT CHECK] Starting bulk deployment check for all certificates');
+            
+            try {
+                const certificatesToCheck = allCertificates.filter(cert => cert.exists);
+                console.log(`[DEPLOYMENT CHECK] Found ${certificatesToCheck.length} certificates to check`);
+                
+                if (certificatesToCheck.length === 0) {
+                    showMessage('No certificates found to check', 'info');
+                    return;
+                }
+                
+                // Update button to show progress
+                let completed = 0;
+                const total = certificatesToCheck.length;
+                
+                const updateProgress = () => {
+                    const percentage = Math.round((completed / total) * 100);
+                    button.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Checking... ${completed}/${total} (${percentage}%)`;
+                };
+                
+                // Check certificates in batches to avoid overwhelming the server
+                const batchSize = 3;
+                const batches = [];
+                for (let i = 0; i < certificatesToCheck.length; i += batchSize) {
+                    batches.push(certificatesToCheck.slice(i, i + batchSize));
+                }
+                
+                console.log(`[DEPLOYMENT CHECK] Processing ${batches.length} batches of ${batchSize} certificates each`);
+                
+                for (const batch of batches) {
+                    const batchPromises = batch.map(async (cert) => {
+                        try {
+                            await checkDeploymentStatus(cert.domain);
+                            completed++;
+                            updateProgress();
+                            console.log(`[DEPLOYMENT CHECK] Completed check for ${cert.domain} (${completed}/${total})`);
+                        } catch (error) {
+                            console.error(`[DEPLOYMENT CHECK] Failed to check ${cert.domain}:`, error);
+                            completed++;
+                            updateProgress();
+                        }
+                    });
+                    
+                    await Promise.all(batchPromises);
+                    
+                    // Small delay between batches to be nice to the server
+                    if (batches.indexOf(batch) < batches.length - 1) {
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                }
+                
+                updateDeploymentStats();
+                console.log('[DEPLOYMENT CHECK] Bulk deployment check completed successfully');
+                showMessage(`Deployment status updated for ${total} certificates`, 'success');
+                
             } catch (error) {
+                console.error('[DEPLOYMENT CHECK] Bulk deployment check failed:', error);
+                showMessage('Failed to check deployment status for some certificates', 'error');
+            } finally {
+                button.innerHTML = originalText;
+                button.disabled = false;
+                console.log('[DEPLOYMENT CHECK] Bulk deployment check finished');
+            }
+        }
+
+        // Check deployment status for a specific domain
+        async function checkDeploymentStatus(domain) {
+            const statusElement = document.getElementById(`deployment-status-${domain.replace(/\./g, '-')}`);
+            const textElement = document.getElementById(`deployment-text-${domain.replace(/\./g, '-')}`);
+            
+            if (!statusElement || !textElement) {
+                console.warn(`[DEPLOYMENT CHECK] Elements not found for domain: ${domain}`);
+                return;
+            }
+            
+            console.log(`[DEPLOYMENT CHECK] Starting check for: ${domain}`);
+            
+            // Check cache first
+            const cachedResult = deploymentCache.get(domain);
+            if (cachedResult) {
+                console.log(`[DEPLOYMENT CHECK] Using cached result for ${domain}`);
+                updateDeploymentUI(domain, cachedResult, statusElement, textElement);
+                return;
+            }
+            
+            // Update UI to show checking state
+            statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-600';
+            statusElement.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Checking...';
+            textElement.textContent = 'Checking...';
+            textElement.className = 'text-sm font-medium text-blue-600';
+            
+            try {
+                // Method 1: Try dedicated deployment status endpoint (real API)
+                console.log(`[DEPLOYMENT CHECK] Method 1: Trying API endpoint for ${domain}`);
+                let result = null;
+                let apiSuccess = false;
+                
+                try {
+                    const response = await fetch(`/api/certificates/${domain}/deployment-status`, {
+                        method: 'GET',
+                        headers: API_HEADERS
+                    });
+                    
+                    if (response.ok) {
+                        result = await response.json();
+                        apiSuccess = true;
+                        console.log(`[DEPLOYMENT CHECK] API response for ${domain}:`, result);
+                    } else {
+                        console.warn(`[DEPLOYMENT CHECK] API endpoint failed for ${domain}:`, response.status, response.statusText);
+                    }
+                } catch (apiError) {
+                    console.warn(`[DEPLOYMENT CHECK] API endpoint error for ${domain}:`, apiError.message);
+                }
+                
+                // Method 2: Fallback to browser-based certificate check
+                if (!apiSuccess) {
+                    console.log(`[DEPLOYMENT CHECK] Method 2: Fallback certificate check for ${domain}`);
+                    result = await checkDeploymentViaBrowser(domain);
+                }
+                
+                // Method 3: Final fallback - only if absolutely necessary (disabled now that we have real API)
+                if (!result) {
+                    console.log(`[DEPLOYMENT CHECK] Method 3: No fallback available for ${domain}`);
+                    result = {
+                        deployed: false,
+                        reachable: false,
+                        certificate_match: false,
+                        method: 'unavailable',
+                        error: 'all_methods_failed',
+                        timestamp: new Date().toISOString()
+                    };
+                }
+                
+                // Cache the result
+                deploymentCache.set(domain, result);
+                
+                // Update UI based on result
+                updateDeploymentUI(domain, result, statusElement, textElement);
+                
+            } catch (error) {
+                console.error(`[DEPLOYMENT CHECK] Fatal error for ${domain}:`, error);
+                // Error occurred during check
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600';
+                statusElement.innerHTML = '<i class="fas fa-question-circle mr-1"></i>Error';
+                textElement.textContent = 'Check Failed';
+                textElement.className = 'text-sm font-medium text-gray-600';
+            }
+        }
+
+        // Browser-based certificate check fallback
+        async function checkDeploymentViaBrowser(domain) {
+            try {
+                console.log(`[DEPLOYMENT CHECK] Browser check: Testing HTTPS for ${domain}`);
+                
+                // Try to fetch the SSL certificate info via a simple request
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                
+                const response = await fetch(`https://${domain}`, {
+                    method: 'HEAD',
+                    mode: 'no-cors', // Avoid CORS issues
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                // If we get here, the domain is reachable with HTTPS
+                console.log(`[DEPLOYMENT CHECK] Browser check: ${domain} is reachable via HTTPS`);
+                
+                return {
+                    deployed: true, // We can't verify exact certificate match via browser
+                    reachable: true,
+                    certificate_match: null, // Unknown via browser method
+                    method: 'browser-fallback',
+                    timestamp: new Date().toISOString()
+                };
+                
+            } catch (browserError) {
+                console.warn(`[DEPLOYMENT CHECK] Browser check failed for ${domain}:`, browserError.message);
+                
+                if (browserError.name === 'AbortError') {
+                    return {
+                        deployed: false,
+                        reachable: false,
+                        certificate_match: false,
+                        method: 'browser-fallback',
+                        error: 'timeout',
+                        timestamp: new Date().toISOString()
+                    };
+                }
+                
+                return null; // Let it fall through to simulation
+            }
+        }
+
+        // Update deployment UI based on check result
+        function updateDeploymentUI(domain, result, statusElement, textElement) {
+            console.log(`[DEPLOYMENT CHECK] Updating UI for ${domain}:`, result);
+            
+            if (result.deployed && result.certificate_match !== false) {
+                // Certificate is deployed and matches (or match unknown but deployed)
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800';
+                statusElement.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Deployed';
+                textElement.textContent = 'Active';
+                textElement.className = 'text-sm font-medium text-green-600';
+                console.log(`[DEPLOYMENT CHECK] ${domain}: Status set to DEPLOYED`);
+                
+            } else if (result.reachable && result.certificate_match === false) {
+                // Domain is reachable but certificate doesn't match
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800';
+                statusElement.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i>Mismatch';
+                textElement.textContent = 'Cert Mismatch';
+                textElement.className = 'text-sm font-medium text-yellow-600';
+                console.log(`[DEPLOYMENT CHECK] ${domain}: Status set to MISMATCH`);
+                
+            } else if (result.reachable) {
+                // Domain is reachable but certificate status unknown
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800';
+                statusElement.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Unknown';
+                textElement.textContent = 'Cert Unknown';
+                textElement.className = 'text-sm font-medium text-blue-600';
+                console.log(`[DEPLOYMENT CHECK] ${domain}: Status set to UNKNOWN`);
+                
+            } else {
+                // Domain is not reachable
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800';
+                statusElement.innerHTML = '<i class="fas fa-times-circle mr-1"></i>Unreachable';
+                textElement.textContent = 'Not Reachable';
+                textElement.className = 'text-sm font-medium text-red-600';
+                console.log(`[DEPLOYMENT CHECK] ${domain}: Status set to UNREACHABLE`);
+            }
+            
+            // Add method info to title for debugging
+            if (result.method) {
+                statusElement.title = `Checked via: ${result.method} at ${result.timestamp}`;
+                textElement.title = statusElement.title;
+            }
+        }
+
+        // Load certificates with deployment status
+        async function loadCertificates() {
+            console.log('[DEPLOYMENT CHECK] Loading certificates...');
+            addDebugLog('Loading certificates from API...', 'info');
+            
+            try {
+                const response = await fetch('/api/certificates', {
+                    headers: API_HEADERS
+                });
+                const certificates = await response.json();
+                
+                console.log(`[DEPLOYMENT CHECK] Loaded ${certificates.length} certificates`);
+                addDebugLog(`Loaded ${certificates.length} certificates successfully`, 'success');
+                
+                allCertificates = certificates;
+                updateStats(certificates);
+                displayCertificates(certificates);
+                
+                // Check deployment status for all certificates after a short delay
+                console.log('[DEPLOYMENT CHECK] Scheduling automatic deployment checks...');
+                addDebugLog('Scheduling automatic deployment status checks...', 'info');
+                
+                setTimeout(async () => {
+                    console.log('[DEPLOYMENT CHECK] Starting automatic deployment checks');
+                    addDebugLog('Starting automatic deployment status checks for all certificates', 'info');
+                    
+                    const existingCerts = certificates.filter(cert => cert.exists);
+                    if (existingCerts.length > 0) {
+                        // Check certificates individually with batching
+                        const promises = existingCerts.map(cert => checkDeploymentStatus(cert.domain));
+                        await Promise.all(promises);
+                        updateDeploymentStats();
+                        addDebugLog(`Automatic deployment check completed for ${existingCerts.length} certificates`, 'success');
+                    } else {
+                        addDebugLog('No certificates with valid status found to check', 'warn');
+                    }
+                }, 1500);
+                
+            } catch (error) {
+                console.error('[DEPLOYMENT CHECK] Failed to load certificates:', error);
+                addDebugLog(`Failed to load certificates: ${error.message}`, 'error');
                 showMessage('Failed to load certificates', 'error');
             }
+        }
+
+        // Listen for cache settings updates from settings page
+        function setupCacheSettingsListener() {
+            let lastUpdate = localStorage.getItem('cache-settings-updated');
+            let lastClearSignal = localStorage.getItem('clear-deployment-cache');
+            
+            setInterval(() => {
+                // Check for settings updates
+                const currentUpdate = localStorage.getItem('cache-settings-updated');
+                if (currentUpdate && currentUpdate !== lastUpdate) {
+                    console.log('[DEPLOYMENT CACHE] Settings updated, reloading cache configuration');
+                    deploymentCache.loadSettings();
+                    addDebugLog('Cache settings updated from settings page', 'info');
+                    lastUpdate = currentUpdate;
+                }
+                
+                // Check for cache clear signals
+                const currentClearSignal = localStorage.getItem('clear-deployment-cache');
+                if (currentClearSignal && currentClearSignal !== lastClearSignal) {
+                    console.log('[DEPLOYMENT CACHE] Cache clear requested');
+                    deploymentCache.clear();
+                    addDebugLog('Deployment cache cleared by admin request', 'warn');
+                    // Re-check all certificates
+                    setTimeout(() => {
+                        if (allCertificates.length > 0) {
+                            addDebugLog('Re-checking all certificates after cache clear...', 'info');
+                            const existingCerts = allCertificates.filter(cert => cert.exists);
+                            existingCerts.forEach(cert => checkDeploymentStatus(cert.domain));
+                        }
+                    }, 1000);
+                    lastClearSignal = currentClearSignal;
+                }
+            }, 2000); // Check every 2 seconds
         }
 
         // Create certificate
@@ -290,8 +1224,10 @@
                 return;
             }
             
-            const loadingModal = document.getElementById('loadingModal');
-            loadingModal.classList.remove('hidden');
+            const progressInterval = showLoadingModal(
+                `Creating Certificate for ${domain}`, 
+                'Validating domain ownership and generating certificate...'
+            );
             
             const requestBody = { domain };
             if (dnsProvider) {
@@ -299,19 +1235,18 @@
             }
             
             try {
-                const response = await fetch('/api/web/certificates/create', {
+                const response = await fetch('/api/certificates/create', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: API_HEADERS,
                     body: JSON.stringify(requestBody),
                 });
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    showMessage('Certificate created successfully!');
+                    showMessage(`Certificate created successfully for ${domain}!`);
                     document.getElementById('domain').value = '';
+                    document.getElementById('dns_provider_select').value = '';
                     loadCertificates();
                 } else {
                     showMessage(result.message || 'Failed to create certificate', 'error');
@@ -319,7 +1254,7 @@
             } catch (error) {
                 showMessage('Failed to create certificate', 'error');
             } finally {
-                loadingModal.classList.add('hidden');
+                hideLoadingModal(progressInterval);
             }
         });
 
@@ -329,18 +1264,21 @@
                 return;
             }
             
-            const loadingModal = document.getElementById('loadingModal');
-            loadingModal.classList.remove('hidden');
+            const progressInterval = showLoadingModal(
+                `Renewing Certificate for ${domain}`, 
+                'Requesting new certificate from Let\'s Encrypt...'
+            );
             
             try {
-                const response = await fetch(`/api/web/certificates/${domain}/renew`, {
+                const response = await fetch(`/api/certificates/${domain}/renew`, {
                     method: 'POST',
+                    headers: API_HEADERS
                 });
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    showMessage('Certificate renewed successfully!');
+                    showMessage(`Certificate renewed successfully for ${domain}!`);
                     loadCertificates();
                 } else {
                     showMessage(result.error || 'Failed to renew certificate', 'error');
@@ -348,13 +1286,13 @@
             } catch (error) {
                 showMessage('Failed to renew certificate', 'error');
             } finally {
-                loadingModal.classList.add('hidden');
+                hideLoadingModal(progressInterval);
             }
         }
 
         // Download certificate
         function downloadCertificate(domain) {
-            window.open(`/api/web/certificates/${domain}/download`, '_blank');
+            window.open(`/api/certificates/${domain}/download`, '_blank');
         }
 
         // Download private key (use the same download endpoint)
@@ -400,6 +1338,12 @@
         // Load certificates on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadCertificates();
+            setupCacheSettingsListener();
+            updateCacheInfo();
+            
+            // Add search and filter event listeners
+            document.getElementById('certificateSearch').addEventListener('input', filterCertificates);
+            document.getElementById('statusFilter').addEventListener('change', filterCertificates);
             
             // Close curl modal when clicking outside
             document.getElementById('curlModal').addEventListener('click', function(e) {

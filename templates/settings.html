@@ -46,12 +46,26 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="max-w-6xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="bg-white shadow rounded-lg mb-6">
             <div class="px-6 py-4">
                 <h2 class="text-2xl font-bold text-gray-900">Settings</h2>
                 <p class="text-gray-600 mt-1">Configure your DNS provider credentials and preferences</p>
+                <div class="mt-3 flex items-center text-sm">
+                    <div class="flex items-center text-green-600" id="connectionStatus" style="display: none;">
+                        <i class="fas fa-check-circle mr-1"></i>
+                        <span>Connected and configured</span>
+                    </div>
+                    <div class="flex items-center text-yellow-600" id="partialStatus" style="display: none;">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                        <span>Partially configured</span>
+                    </div>
+                    <div class="flex items-center text-red-600" id="disconnectedStatus" style="display: none;">
+                        <i class="fas fa-times-circle mr-1"></i>
+                        <span>Not configured</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -370,6 +384,74 @@
                         </div>
                     </div>
 
+                    <!-- Cache Configuration -->
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-lg font-medium text-gray-900 mb-4">
+                            <i class="fas fa-database mr-2 text-blue-500"></i>
+                            Deployment Status Cache
+                        </h4>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="cache_ttl" class="block text-sm font-medium text-gray-700">
+                                        Cache TTL (Time to Live)
+                                    </label>
+                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                        <input type="number" id="cache_ttl" name="cache_ttl" min="30" max="3600" step="30"
+                                               class="block w-full border border-gray-300 rounded-l-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                               placeholder="300">
+                                        <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                                            seconds
+                                        </span>
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">
+                                        How long to cache deployment status results (30-3600 seconds)
+                                    </p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Cache Statistics
+                                    </label>
+                                    <div class="bg-white p-3 rounded border text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Cached Entries:</span>
+                                            <span id="cache-entries" class="font-medium">-</span>
+                                        </div>
+                                        <div class="flex justify-between mt-1">
+                                            <span class="text-gray-600">Current TTL:</span>
+                                            <span id="cache-current-ttl" class="font-medium">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button type="button" onclick="refreshCacheStats()" 
+                                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm">
+                                    <i class="fas fa-sync-alt mr-1"></i>
+                                    Refresh Stats
+                                </button>
+                                <button type="button" onclick="clearDeploymentCache()" 
+                                        class="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors text-sm">
+                                    <i class="fas fa-trash mr-1"></i>
+                                    Clear Cache
+                                </button>
+                            </div>
+                            <div class="bg-blue-50 border border-blue-200 rounded-md p-3">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-info-circle text-blue-400"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm text-blue-700">
+                                            The deployment status cache stores SSL certificate check results to improve performance. 
+                                            Lower TTL values provide more up-to-date status but may cause slower page loads.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Submit Button -->
                     <div class="flex justify-end">
                         <button type="submit" id="saveBtn" class="bg-primary text-white px-6 py-2 rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors">
@@ -386,6 +468,13 @@
     </div>
 
     <script>
+        // API Configuration
+        const API_TOKEN = '{{ api_token }}';
+        const API_HEADERS = {
+            'Authorization': `Bearer ${API_TOKEN}`,
+            'Content-Type': 'application/json'
+        };
+
         // Global variables
         let currentSettings = {};
         let dnsProviders = {};
@@ -431,16 +520,8 @@
         }
 
         function loadSettings() {
-            const token = localStorage.getItem('api_token');
-            if (!token) {
-                showMessage('Please set your API token first', 'error');
-                return;
-            }
-
             fetch('/api/settings', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: API_HEADERS
             })
             .then(response => response.json())
             .then(data => {
@@ -454,13 +535,8 @@
         }
 
         function loadDNSProviders() {
-            const token = localStorage.getItem('api_token');
-            if (!token) return;
-
             fetch('/api/settings/dns-providers', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: API_HEADERS
             })
             .then(response => response.json())
             .then(data => {
@@ -527,15 +603,43 @@
             if (data.has_api_bearer_token) {
                 document.getElementById('api_bearer_token').placeholder = 'Token configured (hidden)';
             }
+            
+            // Cache settings
+            loadCacheSettings();
+            
+            // Update connection status
+            updateConnectionStatus(data);
+        }
+        
+        function updateConnectionStatus(data) {
+            const connectionStatus = document.getElementById('connectionStatus');
+            const partialStatus = document.getElementById('partialStatus');
+            const disconnectedStatus = document.getElementById('disconnectedStatus');
+            
+            // Hide all status indicators
+            [connectionStatus, partialStatus, disconnectedStatus].forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Check configuration completeness
+            const hasEmail = data.email && data.email.length > 0;
+            const hasDomains = data.domains && data.domains.length > 0;
+            const hasApiToken = data.has_api_bearer_token;
+            const hasDnsProvider = data.dns_provider && data.dns_providers && 
+                                  Object.keys(data.dns_providers[data.dns_provider] || {}).length > 0;
+            
+            const completeness = [hasEmail, hasDomains, hasApiToken, hasDnsProvider].filter(Boolean).length;
+            
+            if (completeness === 4) {
+                connectionStatus.style.display = 'flex';
+            } else if (completeness > 0) {
+                partialStatus.style.display = 'flex';
+            } else {
+                disconnectedStatus.style.display = 'flex';
+            }
         }
 
         function saveSettings() {
-            const token = localStorage.getItem('api_token');
-            if (!token) {
-                showMessage('Please set your API token first', 'error');
-                return;
-            }
-
             saveBtn.disabled = true;
             saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
 
@@ -596,10 +700,7 @@
 
             fetch('/api/settings', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
+                headers: API_HEADERS,
                 body: JSON.stringify(settings)
             })
             .then(response => response.json())
@@ -628,38 +729,217 @@
                 info: 'bg-blue-100 border-blue-400 text-blue-700'
             };
 
-            statusMessage.className = `border-l-4 p-4 ${colors[type] || colors.info}`;
+            statusMessage.className = `border-l-4 p-4 transform transition-all duration-300 ${colors[type] || colors.info}`;
             statusMessage.innerHTML = `
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm">${message}</p>
+                        <p class="text-sm font-medium">${message}</p>
+                        ${type === 'success' ? '<p class="text-xs mt-1 opacity-75">Changes have been saved successfully</p>' : ''}
                     </div>
                 </div>
             `;
             statusMessage.classList.remove('hidden');
 
+            // Add subtle animation
+            setTimeout(() => {
+                statusMessage.style.transform = 'translateX(0)';
+            }, 10);
+            
             // Auto-hide after 5 seconds
             setTimeout(() => {
-                statusMessage.classList.add('hidden');
+                statusMessage.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    statusMessage.classList.add('hidden');
+                }, 300);
             }, 5000);
         }
 
-        // API Token Management
-        function promptForApiToken() {
-            const token = prompt('Enter your API Bearer Token:');
-            if (token) {
-                localStorage.setItem('api_token', token);
-                loadSettings();
+        // Cache Management Functions
+        function loadCacheSettings() {
+            try {
+                const savedSettings = localStorage.getItem('deployment-cache-settings');
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    const ttlSeconds = Math.round((settings.ttl || 300000) / 1000);
+                    document.getElementById('cache_ttl').value = ttlSeconds;
+                } else {
+                    document.getElementById('cache_ttl').value = 300; // 5 minutes default
+                }
+                refreshCacheStats();
+            } catch (error) {
+                console.error('Error loading cache settings:', error);
+                document.getElementById('cache_ttl').value = 300; // 5 minutes default
             }
         }
 
-        // Check if API token is set
-        if (!localStorage.getItem('api_token')) {
-            promptForApiToken();
+        function saveCacheSettings() {
+            const ttlSeconds = parseInt(document.getElementById('cache_ttl').value) || 300;
+            const ttlMs = ttlSeconds * 1000;
+            
+            try {
+                // Save to localStorage (this will be picked up by the cache system on the main page)
+                localStorage.setItem('deployment-cache-settings', JSON.stringify({ ttl: ttlMs }));
+                
+                // Also notify any open main pages to update their cache settings
+                localStorage.setItem('cache-settings-updated', Date.now().toString());
+                
+                showMessage(`Cache TTL updated to ${ttlSeconds} seconds`, 'success');
+                setTimeout(refreshCacheStats, 500);
+            } catch (error) {
+                console.error('Error saving cache settings:', error);
+                showMessage('Error saving cache settings', 'error');
+            }
         }
+
+        function refreshCacheStats() {
+            try {
+                const savedSettings = localStorage.getItem('deployment-cache-settings');
+                let ttlSeconds = 300; // default
+                
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    ttlSeconds = Math.round((settings.ttl || 300000) / 1000);
+                }
+                
+                // We can't directly access the cache from the settings page,
+                // but we can show the configured TTL
+                document.getElementById('cache-entries').textContent = 'N/A (main page only)';
+                document.getElementById('cache-current-ttl').textContent = `${ttlSeconds}s`;
+                
+                // If there's a way to get cache stats from the main page via postMessage or similar,
+                // we could implement that here. For now, we show what we can.
+                
+            } catch (error) {
+                console.error('Error refreshing cache stats:', error);
+                document.getElementById('cache-entries').textContent = 'Error';
+                document.getElementById('cache-current-ttl').textContent = 'Error';
+            }
+        }
+
+        function clearDeploymentCache() {
+            if (confirm('Are you sure you want to clear the deployment status cache? This will force a refresh of all certificate deployment statuses.')) {
+                try {
+                    // Signal main page to clear cache
+                    localStorage.setItem('clear-deployment-cache', Date.now().toString());
+                    showMessage('Cache clear signal sent. Refresh the main page to see the effect.', 'info');
+                    setTimeout(refreshCacheStats, 500);
+                } catch (error) {
+                    console.error('Error clearing cache:', error);
+                    showMessage('Error clearing cache', 'error');
+                }
+            }
+        }
+
+        // Update the saveSettings function to include cache settings
+        function saveSettings() {
+            const formData = new FormData(form);
+            
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+
+            // Convert form data to object
+            const settings = {};
+            
+            // Basic settings
+            settings.email = formData.get('email');
+            settings.domains = formData.get('domains').split('\n').filter(domain => domain.trim());
+            settings.auto_renew = formData.has('auto_renew');
+            settings.dns_provider = formData.get('dns_provider');
+
+            // DNS provider configurations
+            settings.dns_providers = {};
+            const dnsProvider = settings.dns_provider;
+            
+            if (dnsProvider === 'cloudflare') {
+                const token = formData.get('cloudflare_api_token');
+                if (token) {
+                    settings.dns_providers.cloudflare = { api_token: token };
+                }
+            } else if (dnsProvider === 'route53') {
+                const accessKey = formData.get('route53_access_key_id');
+                const secretKey = formData.get('route53_secret_access_key');
+                const region = formData.get('route53_region');
+                if (accessKey && secretKey) {
+                    settings.dns_providers.route53 = {
+                        access_key_id: accessKey,
+                        secret_access_key: secretKey,
+                        region: region || 'us-east-1'
+                    };
+                }
+            } else if (dnsProvider === 'azure') {
+                const subscriptionId = formData.get('azure_subscription_id');
+                const resourceGroup = formData.get('azure_resource_group');
+                const tenantId = formData.get('azure_tenant_id');
+                const clientId = formData.get('azure_client_id');
+                const clientSecret = formData.get('azure_client_secret');
+                if (subscriptionId && resourceGroup && tenantId && clientId && clientSecret) {
+                    settings.dns_providers.azure = {
+                        subscription_id: subscriptionId,
+                        resource_group: resourceGroup,
+                        tenant_id: tenantId,
+                        client_id: clientId,
+                        client_secret: clientSecret
+                    };
+                }
+            } else if (dnsProvider === 'google') {
+                const projectId = formData.get('google_project_id');
+                const serviceAccountKey = formData.get('google_service_account_key');
+                if (projectId && serviceAccountKey) {
+                    settings.dns_providers.google = {
+                        project_id: projectId,
+                        service_account_key: serviceAccountKey
+                    };
+                }
+            } else if (dnsProvider === 'powerdns') {
+                const apiUrl = formData.get('powerdns_api_url');
+                const apiKey = formData.get('powerdns_api_key');
+                if (apiUrl && apiKey) {
+                    settings.dns_providers.powerdns = {
+                        api_url: apiUrl,
+                        api_key: apiKey
+                    };
+                }
+            }
+
+            // API Bearer Token
+            const apiToken = formData.get('api_bearer_token');
+            if (apiToken) {
+                settings.api_bearer_token = apiToken;
+            }
+
+            // Save cache settings separately (they're handled on client-side)
+            saveCacheSettings();
+
+            fetch('/api/settings', {
+                method: 'POST',
+                headers: API_HEADERS,
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('Settings saved successfully!', 'success');
+                    loadDNSProviders(); // Refresh provider status
+                } else {
+                    showMessage(data.message || 'Error saving settings', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving settings:', error);
+                showMessage('Error saving settings', 'error');
+            })
+            .finally(() => {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Save Settings';
+            });
+        }
+
+        // Load settings when page loads
+        loadSettings();
     </script>
 </body>
 </html>
