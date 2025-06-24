@@ -101,6 +101,43 @@
         </div>
     </div>
 
+    <!-- Curl Command Modal -->
+    <div id="curlModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 m-4 max-w-2xl w-full max-h-96 overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium text-gray-900">
+                    <i class="fas fa-code mr-2"></i>
+                    Automation curl Command
+                </h3>
+                <button onclick="closeCurlModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Copy this command:</label>
+                    <div class="bg-gray-100 p-3 rounded-md font-mono text-sm">
+                        <code id="curlCommandText"></code>
+                    </div>
+                    <button onclick="copyFromModal()" class="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <i class="fas fa-copy mr-1"></i>
+                        Copy Command
+                    </button>
+                </div>
+                
+                <div class="text-sm text-gray-600">
+                    <p class="mb-2"><strong>Note:</strong> Replace <code>YOUR_API_TOKEN</code> with your actual API bearer token.</p>
+                    <p class="mb-2"><strong>Usage:</strong> This downloads a ZIP file containing cert.pem, chain.pem, fullchain.pem, and privkey.pem</p>
+                    <p><strong>Example extraction:</strong></p>
+                    <div class="bg-gray-100 p-2 rounded text-xs font-mono mt-1">
+                        <code>unzip domain.com-tls.zip -d /etc/ssl/certs/domain.com/</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Success/Error Messages -->
     <div id="messages" class="fixed top-4 right-4 z-50"></div>
 
@@ -133,7 +170,7 @@
         // Load certificates
         async function loadCertificates() {
             try {
-                const response = await fetch('/api/certificates');
+                const response = await fetch('/api/web/certificates');
                 const certificates = await response.json();
                 
                 const container = document.getElementById('certificatesList');
@@ -198,6 +235,11 @@
                                         <i class="fas fa-key mr-1"></i>
                                         Key
                                     </button>
+                                    <button onclick="copyCurlCommand('${cert.domain}')" 
+                                            class="inline-flex items-center px-3 py-1 border border-blue-300 shadow-sm text-sm font-medium rounded-md text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <i class="fas fa-code mr-1"></i>
+                                        curl
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -223,7 +265,7 @@
             loadingModal.classList.remove('hidden');
             
             try {
-                const response = await fetch('/api/certificates', {
+                const response = await fetch('/api/web/certificates/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -238,7 +280,7 @@
                     document.getElementById('domain').value = '';
                     loadCertificates();
                 } else {
-                    showMessage(result.error || 'Failed to create certificate', 'error');
+                    showMessage(result.message || 'Failed to create certificate', 'error');
                 }
             } catch (error) {
                 showMessage('Failed to create certificate', 'error');
@@ -257,7 +299,7 @@
             loadingModal.classList.remove('hidden');
             
             try {
-                const response = await fetch(`/api/certificates/${domain}/renew`, {
+                const response = await fetch(`/api/web/certificates/${domain}/renew`, {
                     method: 'POST',
                 });
                 
@@ -278,17 +320,59 @@
 
         // Download certificate
         function downloadCertificate(domain) {
-            window.open(`/api/certificates/${domain}/download`, '_blank');
+            window.open(`/api/web/certificates/${domain}/download`, '_blank');
         }
 
-        // Download private key
+        // Download private key (use the same download endpoint)
         function downloadKey(domain) {
-            window.open(`/api/certificates/${domain}/download-key`, '_blank');
+            window.open(`/api/web/certificates/${domain}/download`, '_blank');
+        }
+
+        // Copy curl command for automation
+        function copyCurlCommand(domain) {
+            const curlCommand = `curl -H "Authorization: Bearer YOUR_API_TOKEN" \\
+     -o "${domain}-tls.zip" \\
+     "${window.location.origin}/${domain}/tls"`;
+            
+            // Show modal with the command
+            document.getElementById('curlCommandText').textContent = curlCommand;
+            document.getElementById('curlModal').classList.remove('hidden');
+        }
+
+        // Close curl modal
+        function closeCurlModal() {
+            document.getElementById('curlModal').classList.add('hidden');
+        }
+
+        // Copy command from modal
+        function copyFromModal() {
+            const curlCommand = document.getElementById('curlCommandText').textContent;
+            navigator.clipboard.writeText(curlCommand).then(function() {
+                showMessage('curl command copied to clipboard!');
+                closeCurlModal();
+            }).catch(function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = curlCommand;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showMessage('curl command copied to clipboard!');
+                closeCurlModal();
+            });
         }
 
         // Load certificates on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadCertificates();
+            
+            // Close curl modal when clicking outside
+            document.getElementById('curlModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeCurlModal();
+                }
+            });
         });
     </script>
 </body>

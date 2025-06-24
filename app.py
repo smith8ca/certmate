@@ -112,11 +112,23 @@ def get_certificate_info(domain):
     """Get certificate information for a domain"""
     cert_path = CERT_DIR / domain
     if not cert_path.exists():
-        return None
+        return {
+            'domain': domain,
+            'exists': False,
+            'expiry_date': None,
+            'days_until_expiry': None,
+            'needs_renewal': False
+        }
     
     cert_file = cert_path / "cert.pem"
     if not cert_file.exists():
-        return None
+        return {
+            'domain': domain,
+            'exists': False,
+            'expiry_date': None,
+            'days_until_expiry': None,
+            'needs_renewal': False
+        }
     
     try:
         # Get certificate expiry using openssl
@@ -141,8 +153,9 @@ def get_certificate_info(domain):
                     
                     return {
                         'domain': domain,
+                        'exists': True,
                         'expiry_date': expiry_date.strftime('%Y-%m-%d %H:%M:%S'),
-                        'days_left': days_left,
+                        'days_until_expiry': days_left,
                         'needs_renewal': days_left < 30
                     }
                 except Exception as e:
@@ -150,7 +163,13 @@ def get_certificate_info(domain):
     except Exception as e:
         logger.error(f"Error getting certificate info: {e}")
     
-    return None
+    return {
+        'domain': domain,
+        'exists': False,
+        'expiry_date': None,
+        'days_until_expiry': None,
+        'needs_renewal': False
+    }
 
 def create_certificate(domain, email, cloudflare_token):
     """Create SSL certificate using Let's Encrypt and Cloudflare DNS challenge"""
@@ -158,9 +177,23 @@ def create_certificate(domain, email, cloudflare_token):
         # Create Cloudflare config
         config_file = create_cloudflare_config(cloudflare_token)
         
-        # Prepare certbot command
+        # Create local directories for certbot
+        letsencrypt_dir = Path("letsencrypt")
+        config_dir = letsencrypt_dir / "config"
+        work_dir = letsencrypt_dir / "work"
+        logs_dir = letsencrypt_dir / "logs"
+        
+        # Create directories if they don't exist
+        config_dir.mkdir(parents=True, exist_ok=True)
+        work_dir.mkdir(parents=True, exist_ok=True)
+        logs_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Prepare certbot command with local directories
         cmd = [
             'certbot', 'certonly',
+            '--config-dir', str(config_dir),
+            '--work-dir', str(work_dir),
+            '--logs-dir', str(logs_dir),
             '--dns-cloudflare',
             '--dns-cloudflare-credentials', str(config_file),
             '--dns-cloudflare-propagation-seconds', '60',
@@ -177,7 +210,7 @@ def create_certificate(domain, email, cloudflare_token):
         
         if result.returncode == 0:
             # Copy certificates to our directory
-            src_dir = Path(f"/etc/letsencrypt/live/{domain}")
+            src_dir = config_dir / "live" / domain
             dest_dir = CERT_DIR / domain
             dest_dir.mkdir(exist_ok=True)
             
@@ -480,5 +513,130 @@ def health_check():
     """Health check endpoint for Docker"""
     return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
 
+# Web-specific settings endpoints (no auth required for initial setup)
+@app.route('/api/web/settings', methods=['GET', 'POST'])
+def web_settings():
+    """Web interface settings endpoint (no auth required for initial setup)"""
+    if request.method == 'GET':
+        settings = load_settings()
+        # Don't return sensitive data
+        safe_settings = {
+            'domains': settings.get('domains', []),
+            'email': settings.get('email', ''),
+            'auto_renew': settings.get('auto_renew', True),
+            'has_cloudflare_token': bool(settings.get('cloudflare_token')),
+            'has_api_bearer_token': bool(settings.get('api_bearer_token'))
+        }
+        return jsonify(safe_settings)
+    
+    elif request.method == 'POST':
+        data = request.get_json()
+        settings = load_settings()
+        
+        # Update settings
+        if 'cloudflare_token' in data and data['cloudflare_token']:
+            settings['cloudflare_token'] = data['cloudflare_token']
+        if 'domains' in data:
+            settings['domains'] = data['domains']
+        if 'email' in data:
+            settings['email'] = data['email']
+        if 'auto_renew' in data:
+            settings['auto_renew'] = data['auto_renew']
+        if 'api_bearer_token' in data and data['api_bearer_token']:
+            settings['api_bearer_token'] = data['api_bearer_token']
+        
+        if save_settings(settings):
+            return jsonify({'success': True, 'message': 'Settings saved successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Failed to save settings'}), 500
+
+# Web-specific certificates endpoint (no auth required for initial setup)
+@app.route('/api/web/certificates')
+def web_certificates():
+    """Web interface certificates endpoint (no auth required)"""
+    settings = load_settings()
+    certificates = []
+    
+    for domain in settings.get('domains', []):
+        cert_info = get_certificate_info(domain)
+        certificates.append(cert_info)
+    
+    return jsonify(certificates)
+
+@app.route('/api/web/certificates/create', methods=['POST'])
+def web_create_certificate():
+    """Web interface create certificate endpoint (no auth required)"""
+    data = request.get_json()
+    domain = data.get('domain')
+    
+    if not domain:
+        return jsonify({'success': False, 'message': 'Domain is required'}), 400
+    
+    settings = load_settings()
+    email = settings.get('email')
+    cloudflare_token = settings.get('cloudflare_token')
+    
+    if not email:
+        return jsonify({'success': False, 'message': 'Email not configured in settings'}), 400
+    
+    if not cloudflare_token:
+        return jsonify({'success': False, 'message': 'Cloudflare token not configured in settings'}), 400
+    
+    # Add domain to settings if not already there
+    domains = settings.get('domains', [])
+    if domain not in domains:
+        domains.append(domain)
+        settings['domains'] = domains
+        save_settings(settings)
+    
+    # Create certificate synchronously for web interface (so we can show real progress)
+    success, message = create_certificate(domain, email, cloudflare_token)
+    logger.info(f"Certificate creation for {domain}: {'Success' if success else 'Failed'} - {message}")
+    
+    if success:
+        return jsonify({'success': True, 'message': message})
+    else:
+        return jsonify({'success': False, 'message': message}), 500
+
+@app.route('/api/web/certificates/<domain>/renew', methods=['POST'])
+def web_renew_certificate(domain):
+    """Web interface renew certificate endpoint (no auth required)"""
+    settings = load_settings()
+    
+    if domain not in settings.get('domains', []):
+        return jsonify({'success': False, 'message': 'Domain not found in settings'}), 404
+    
+    # Renew certificate in background
+    def renew_cert_async():
+        success = renew_certificate(domain)
+        logger.info(f"Certificate renewal for {domain}: {'Success' if success else 'Failed'}")
+    
+    thread = threading.Thread(target=renew_cert_async)
+    thread.start()
+    
+    return jsonify({'success': True, 'message': f'Certificate renewal started for {domain}'})
+
+@app.route('/api/web/certificates/<domain>/download')
+def web_download_certificate(domain):
+    """Web interface download certificate endpoint (no auth required)"""
+    cert_dir = CERT_DIR / domain
+    if not cert_dir.exists():
+        return jsonify({'error': 'Certificate not found'}), 404
+    
+    # Create temporary ZIP file
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as tmp_file:
+        with zipfile.ZipFile(tmp_file.name, 'w') as zip_file:
+            for file_name in ['cert.pem', 'chain.pem', 'fullchain.pem', 'privkey.pem']:
+                file_path = cert_dir / file_name
+                if file_path.exists():
+                    zip_file.write(file_path, file_name)
+        
+        return send_file(tmp_file.name, as_attachment=True, download_name=f'{domain}-certificates.zip')
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    host = os.getenv('HOST', '127.0.0.1')
+    port = int(os.getenv('PORT', 8000))
+    debug = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    
+    print(f"Starting CertMate on http://{host}:{port}")
+    app.run(host=host, port=port, debug=debug)

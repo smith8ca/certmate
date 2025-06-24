@@ -37,6 +37,8 @@ logs/
 *.key
 *.crt
 *.csr
+letsencrypt/
+.secrets/
 
 # Environment files
 .env
