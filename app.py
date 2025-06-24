@@ -702,8 +702,9 @@ class CertificateList(Resource):
         settings = load_settings()
         certificates = []
         
-        for domain in settings.get('domains', []):
-            cert_info = get_certificate_info(domain)
+        for domain_config in settings.get('domains', []):
+            domain_name = domain_config.get('domain') if isinstance(domain_config, dict) else domain_config
+            cert_info = get_certificate_info(domain_name)
             if cert_info:
                 certificates.append(cert_info)
         
@@ -848,8 +849,9 @@ def index():
     settings = load_settings()
     certificates = []
     
-    for domain in settings.get('domains', []):
-        cert_info = get_certificate_info(domain)
+    for domain_config in settings.get('domains', []):
+        domain_name = domain_config.get('domain') if isinstance(domain_config, dict) else domain_config
+        cert_info = get_certificate_info(domain_name)
         if cert_info:
             certificates.append(cert_info)
     
