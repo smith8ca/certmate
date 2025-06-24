@@ -1330,7 +1330,7 @@ We love contributions! CertMate is an open-source project and we welcome:
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/your-username/certmate.git
+git clone https://github.com/fabriziosalmi/certmate.git
 cd certmate
 
 # Create development environment
