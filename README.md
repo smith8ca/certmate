@@ -1,11 +1,6 @@
-# CertMate - Enhanced SSL Certificate Management System
+# CertMate - SSL Certificate Management System
 
 CertMate is a comprehensive SSL certificate management system with Docker support, REST API, and **multi-DNS provider support**. Perfect for managing certificates across multiple datacenters with support for **Cloudflare, AWS Route53, Azure DNS, Google Cloud DNS, and PowerDNS**.
-
-## Screenshots
-
-![screenshot1](https://github.com/fabriziosalmi/certmate/blob/main/screenshot_1.png?raw=true)
-![screenshot2](https://github.com/fabriziosalmi/certmate/blob/main/screenshot_2.png?raw=true)
 
 ## Features
 
