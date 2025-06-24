@@ -69,6 +69,23 @@
                                placeholder="example.com" required>
                     </div>
                     <div>
+                        <label for="dns_provider_select" class="block text-sm font-medium text-gray-700">
+                            DNS Provider (Optional)
+                        </label>
+                        <select id="dns_provider_select" name="dns_provider" 
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary">
+                            <option value="">Use default from settings</option>
+                            <option value="cloudflare">Cloudflare</option>
+                            <option value="route53">AWS Route53</option>
+                            <option value="azure">Azure DNS</option>
+                            <option value="google">Google Cloud DNS</option>
+                            <option value="powerdns">PowerDNS</option>
+                        </select>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Leave empty to use the default DNS provider from settings
+                        </p>
+                    </div>
+                    <div>
                         <button type="submit" 
                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                             <i class="fas fa-plus mr-2"></i>
@@ -193,6 +210,7 @@
                                     <div>
                                         <h4 class="text-lg font-medium text-gray-900">${cert.domain}</h4>
                                         <p class="text-sm text-red-600">Certificate not found</p>
+                                        ${cert.dns_provider ? `<p class="text-sm text-gray-500">DNS Provider: ${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>` : ''}
                                     </div>
                                 </div>
                             </div>
@@ -207,16 +225,26 @@
                         <div class="px-6 py-4">
                             <div class="flex items-center justify-between">
                                 <div class="flex-1">
-                                    <h4 class="text-lg font-medium text-gray-900">${cert.domain}</h4>
-                                    <div class="mt-2 space-y-1">
-                                        <p class="text-sm text-gray-600">
-                                            <i class="fas fa-calendar mr-1"></i>
-                                            Expires: ${expiryDate.toLocaleDateString()}
-                                        </p>
-                                        <p class="text-sm ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-yellow-600' : 'text-green-600'}">
-                                            <i class="fas ${isExpired ? 'fa-times-circle' : isExpiringSoon ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-1"></i>
-                                            ${isExpired ? 'Expired' : isExpiringSoon ? `Expires in ${cert.days_until_expiry} days` : `Valid for ${cert.days_until_expiry} days`}
-                                        </p>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex-1">
+                                            <h4 class="text-lg font-medium text-gray-900">${cert.domain}</h4>
+                                            <div class="mt-2 space-y-1">
+                                                <p class="text-sm text-gray-600">
+                                                    <i class="fas fa-calendar mr-1"></i>
+                                                    Expires: ${expiryDate.toLocaleDateString()}
+                                                </p>
+                                                <p class="text-sm ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-yellow-600' : 'text-green-600'}">
+                                                    <i class="fas ${isExpired ? 'fa-times-circle' : isExpiringSoon ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-1"></i>
+                                                    ${isExpired ? 'Expired' : isExpiringSoon ? `Expires in ${cert.days_until_expiry} days` : `Valid for ${cert.days_until_expiry} days`}
+                                                </p>
+                                                ${cert.dns_provider ? `
+                                                    <p class="text-sm text-gray-500">
+                                                        <i class="fas fa-server mr-1"></i>
+                                                        DNS Provider: <span class="font-medium">${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</span>
+                                                    </p>
+                                                ` : ''}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="flex space-x-2">
@@ -255,6 +283,7 @@
             e.preventDefault();
             
             const domain = document.getElementById('domain').value;
+            const dnsProvider = document.getElementById('dns_provider_select').value;
             
             if (!domain) {
                 showMessage('Please enter a domain', 'error');
@@ -264,13 +293,18 @@
             const loadingModal = document.getElementById('loadingModal');
             loadingModal.classList.remove('hidden');
             
+            const requestBody = { domain };
+            if (dnsProvider) {
+                requestBody.dns_provider = dnsProvider;
+            }
+            
             try {
                 const response = await fetch('/api/web/certificates/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ domain }),
+                    body: JSON.stringify(requestBody),
                 });
                 
                 const result = await response.json();

@@ -1,6 +1,6 @@
 # CertMate - Enhanced SSL Certificate Management System
 
-CertMate is a comprehensive SSL certificate management system with Docker support, REST API, and automated certificate downloads. Perfect for managing certificates across multiple datacenters with Cloudflare DNS challenge.
+CertMate is a comprehensive SSL certificate management system with Docker support, REST API, and **multi-DNS provider support**. Perfect for managing certificates across multiple datacenters with support for **Cloudflare, AWS Route53, Azure DNS, Google Cloud DNS, and PowerDNS**.
 
 ## Screenshots
 
@@ -10,7 +10,7 @@ CertMate is a comprehensive SSL certificate management system with Docker suppor
 ## Features
 
 - 🔐 **SSL Certificate Management** - Create, renew, and manage Let's Encrypt certificates
-- 🌐 **Cloudflare DNS Challenge** - Automatic domain validation via Cloudflare API
+- 🌐 **Multi-DNS Provider Support** - Cloudflare, AWS Route53, Azure DNS, Google Cloud DNS, PowerDNS
 - 🔄 **Auto-Renewal** - Certificates are automatically renewed 30 days before expiry
 - 🐳 **Docker Support** - Complete containerization with Docker Compose
 - 🚀 **REST API** - Full API with Bearer token authentication
@@ -18,6 +18,20 @@ CertMate is a comprehensive SSL certificate management system with Docker suppor
 - 📦 **Easy Downloads** - Simple URL-based certificate downloads for automation
 - 🎨 **Modern UI** - Clean, responsive web interface with Tailwind CSS
 - 🔒 **Security** - Bearer token authentication for all API endpoints
+- 🔄 **Backward Compatible** - Existing Cloudflare configurations work seamlessly
+
+## Supported DNS Providers
+
+| Provider | Certbot Plugin | Required Credentials | Status |
+|----------|---------------|---------------------|---------|
+| **Cloudflare** | `certbot-dns-cloudflare==4.1.1` | API Token | ✅ Stable |
+| **AWS Route53** | `certbot-dns-route53==4.1.1` | Access Key ID, Secret Access Key | ✅ Stable |
+| **Azure DNS** | `certbot-dns-azure==2.6.1` | Subscription ID, Resource Group, Tenant ID, Client ID, Client Secret | ✅ Stable |
+| **Google Cloud DNS** | `certbot-dns-google==4.1.1` | Project ID, Service Account JSON Key | ✅ Stable |
+| **PowerDNS** | `certbot-dns-powerdns==0.2.1` | API URL, API Key | ✅ Stable |
+
+> 📚 **Documentation:** See [DNS_PROVIDERS.md](DNS_PROVIDERS.md) for detailed configuration instructions.  
+> 🔧 **Installation:** See [INSTALLATION.md](INSTALLATION.md) for step-by-step setup guide.
 
 ## Quick Start with Docker
 
@@ -27,8 +41,25 @@ Create a `.env` file:
 
 ```bash
 # Required settings
-CLOUDFLARE_TOKEN=your_cloudflare_api_token_here
 API_BEARER_TOKEN=your_secure_api_token_here
+
+# DNS Provider (choose one or multiple)
+CLOUDFLARE_TOKEN=your_cloudflare_api_token_here
+# OR
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+# OR
+AZURE_SUBSCRIPTION_ID=your_azure_subscription_id
+AZURE_RESOURCE_GROUP=your_resource_group
+AZURE_TENANT_ID=your_tenant_id
+AZURE_CLIENT_ID=your_client_id
+AZURE_CLIENT_SECRET=your_client_secret
+# OR
+GOOGLE_PROJECT_ID=your_gcp_project_id
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
+# OR
+POWERDNS_API_URL=https://your-powerdns-server:8081
+POWERDNS_API_KEY=your_powerdns_api_key
 
 # Optional settings
 SECRET_KEY=your_flask_secret_key_here

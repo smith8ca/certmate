@@ -46,12 +46,12 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="bg-white shadow rounded-lg mb-6">
             <div class="px-6 py-4">
                 <h2 class="text-2xl font-bold text-gray-900">Settings</h2>
-                <p class="text-gray-600 mt-1">Configure your Cloudflare credentials and preferences</p>
+                <p class="text-gray-600 mt-1">Configure your DNS provider credentials and preferences</p>
             </div>
         </div>
 
@@ -61,97 +61,318 @@
                 <h3 class="text-lg font-medium text-gray-900">Configuration</h3>
             </div>
             <div class="px-6 py-6">
-                <form id="settingsForm" class="space-y-6">
-                    <!-- Cloudflare Token -->
-                    <div>
-                        <label for="cloudflare_token" class="block text-sm font-medium text-gray-700">
-                            Cloudflare API Token
+                <form id="settingsForm" class="space-y-8">
+                    
+                    <!-- DNS Provider Selection -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            <i class="fas fa-server mr-1"></i>
+                            DNS Provider
                         </label>
-                        <div class="mt-1">
-                            <input type="password" id="cloudflare_token" name="cloudflare_token" 
-                                   class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
-                                   placeholder="Enter your Cloudflare API token">
-                        </div>
-                        <p class="mt-2 text-sm text-gray-500">
-                            <i class="fas fa-info-circle mr-1"></i>
-                            You can create an API token at 
-                            <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" class="text-primary hover:underline">
-                                Cloudflare Dashboard
-                            </a>. 
-                            Make sure it has <strong>Zone:DNS:Edit</strong> permissions.
-                        </p>
-                        <div id="tokenStatus" class="mt-2"></div>
-                    </div>
-
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">
-                            Email Address
-                        </label>
-                        <div class="mt-1">
-                            <input type="email" id="email" name="email" 
-                                   class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
-                                   placeholder="your@email.com" required>
-                        </div>
-                        <p class="mt-2 text-sm text-gray-500">
-                            <i class="fas fa-info-circle mr-1"></i>
-                            Used for Let's Encrypt registration and renewal notifications.
-                        </p>
-                    </div>
-
-                    <!-- Domains -->
-                    <div>
-                        <label for="domains" class="block text-sm font-medium text-gray-700">
-                            <i class="fas fa-globe mr-1"></i>
-                            Domains
-                        </label>
-                        <div class="mt-1">
-                            <textarea id="domains" name="domains" rows="3"
-                                   class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
-                                   placeholder="example.com&#10;anotherdomain.com&#10;One domain per line"></textarea>
-                        </div>
-                        <p class="mt-2 text-sm text-gray-500">
-                            <i class="fas fa-info-circle mr-1"></i>
-                            Enter one domain per line. Certificates will be created for each domain with wildcard support (*.domain.com).
-                        </p>
-                    </div>
-
-                    <!-- Auto Renewal -->
-                    <div>
-                        <div class="flex items-center">
-                            <input type="checkbox" id="auto_renew" name="auto_renew" 
-                                   class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                            <label for="auto_renew" class="ml-2 block text-sm text-gray-900">
-                                Enable automatic certificate renewal
+                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="cloudflare" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fab fa-cloudflare text-2xl text-orange-500 mb-2"></i>
+                                        <div class="text-sm font-medium">Cloudflare</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="cloudflare-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="route53" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fab fa-aws text-2xl text-orange-400 mb-2"></i>
+                                        <div class="text-sm font-medium">Route53</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="route53-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="azure" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fab fa-microsoft text-2xl text-blue-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Azure DNS</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="azure-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="google" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fab fa-google text-2xl text-blue-500 mb-2"></i>
+                                        <div class="text-sm font-medium">Google DNS</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="google-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="powerdns" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-server text-2xl text-gray-600 mb-2"></i>
+                                        <div class="text-sm font-medium">PowerDNS</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="powerdns-status">Not configured</div>
+                                    </div>
+                                </div>
                             </label>
                         </div>
-                        <p class="mt-2 text-sm text-gray-500 ml-6">
-                            <i class="fas fa-info-circle mr-1"></i>
-                            Certificates will be automatically renewed when they have 30 days or less until expiration.
-                        </p>
                     </div>
 
-                    <!-- API Bearer Token -->
-                    <div>
-                        <label for="api_bearer_token" class="block text-sm font-medium text-gray-700">
-                            <i class="fas fa-key mr-1"></i>
-                            API Bearer Token
-                        </label>
-                        <div class="mt-1">
-                            <input type="password" id="api_bearer_token" name="api_bearer_token" 
-                                   class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-                                   placeholder="Enter API bearer token for authentication">
+                    <!-- DNS Provider Configurations -->
+                    <!-- Cloudflare Configuration -->
+                    <div id="cloudflare-config" class="dns-config hidden">
+                        <div class="border border-orange-200 rounded-lg p-4 bg-orange-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fab fa-cloudflare mr-2 text-orange-500"></i>
+                                Cloudflare Configuration
+                            </h4>
+                            <div>
+                                <label for="cloudflare_api_token" class="block text-sm font-medium text-gray-700">
+                                    API Token
+                                </label>
+                                <div class="mt-1">
+                                    <input type="password" id="cloudflare_api_token" name="cloudflare_api_token" 
+                                           class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Enter your Cloudflare API token">
+                                </div>
+                                <p class="mt-2 text-sm text-gray-600">
+                                    Create an API token at <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" class="text-primary hover:underline">Cloudflare Dashboard</a> with <strong>Zone:DNS:Edit</strong> permissions.
+                                </p>
+                            </div>
                         </div>
-                        <p class="mt-2 text-sm text-gray-500">
-                            <i class="fas fa-shield-alt mr-1"></i>
-                            This token is required for API access and automated certificate downloads. Keep it secure!
-                        </p>
                     </div>
 
-                    <!-- Save Button -->
-                    <div class="pt-4">
-                        <button type="submit" 
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                    <!-- AWS Route53 Configuration -->
+                    <div id="route53-config" class="dns-config hidden">
+                        <div class="border border-orange-200 rounded-lg p-4 bg-orange-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fab fa-aws mr-2 text-orange-400"></i>
+                                AWS Route53 Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="route53_access_key_id" class="block text-sm font-medium text-gray-700">
+                                        Access Key ID
+                                    </label>
+                                    <input type="password" id="route53_access_key_id" name="route53_access_key_id" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="AKIAIOSFODNN7EXAMPLE">
+                                </div>
+                                <div>
+                                    <label for="route53_secret_access_key" class="block text-sm font-medium text-gray-700">
+                                        Secret Access Key
+                                    </label>
+                                    <input type="password" id="route53_secret_access_key" name="route53_secret_access_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY">
+                                </div>
+                                <div>
+                                    <label for="route53_region" class="block text-sm font-medium text-gray-700">
+                                        Region (Optional)
+                                    </label>
+                                    <input type="text" id="route53_region" name="route53_region" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="us-east-1" value="us-east-1">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Create IAM credentials with <strong>Route53FullAccess</strong> policy or a custom policy with Route53 DNS permissions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Azure DNS Configuration -->
+                    <div id="azure-config" class="dns-config hidden">
+                        <div class="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fab fa-microsoft mr-2 text-blue-600"></i>
+                                Azure DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="azure_subscription_id" class="block text-sm font-medium text-gray-700">
+                                        Subscription ID
+                                    </label>
+                                    <input type="text" id="azure_subscription_id" name="azure_subscription_id" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="12345678-1234-1234-1234-123456789012">
+                                </div>
+                                <div>
+                                    <label for="azure_resource_group" class="block text-sm font-medium text-gray-700">
+                                        Resource Group
+                                    </label>
+                                    <input type="text" id="azure_resource_group" name="azure_resource_group" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="my-dns-resource-group">
+                                </div>
+                                <div>
+                                    <label for="azure_tenant_id" class="block text-sm font-medium text-gray-700">
+                                        Tenant ID
+                                    </label>
+                                    <input type="text" id="azure_tenant_id" name="azure_tenant_id" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="12345678-1234-1234-1234-123456789012">
+                                </div>
+                                <div>
+                                    <label for="azure_client_id" class="block text-sm font-medium text-gray-700">
+                                        Client ID
+                                    </label>
+                                    <input type="text" id="azure_client_id" name="azure_client_id" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="12345678-1234-1234-1234-123456789012">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="azure_client_secret" class="block text-sm font-medium text-gray-700">
+                                        Client Secret
+                                    </label>
+                                    <input type="password" id="azure_client_secret" name="azure_client_secret" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Azure client secret">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Create a Service Principal with <strong>DNS Zone Contributor</strong> role for your DNS zones.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Google Cloud DNS Configuration -->
+                    <div id="google-config" class="dns-config hidden">
+                        <div class="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fab fa-google mr-2 text-blue-500"></i>
+                                Google Cloud DNS Configuration
+                            </h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="google_project_id" class="block text-sm font-medium text-gray-700">
+                                        Project ID
+                                    </label>
+                                    <input type="text" id="google_project_id" name="google_project_id" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="my-gcp-project-123456">
+                                </div>
+                                <div>
+                                    <label for="google_service_account_key" class="block text-sm font-medium text-gray-700">
+                                        Service Account JSON Key
+                                    </label>
+                                    <textarea id="google_service_account_key" name="google_service_account_key" rows="4"
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder='{"type": "service_account", "project_id": "...", ...}'></textarea>
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Create a Service Account with <strong>DNS Administrator</strong> role and download the JSON key file.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PowerDNS Configuration -->
+                    <div id="powerdns-config" class="dns-config hidden">
+                        <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-server mr-2 text-gray-600"></i>
+                                PowerDNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="powerdns_api_url" class="block text-sm font-medium text-gray-700">
+                                        API URL
+                                    </label>
+                                    <input type="url" id="powerdns_api_url" name="powerdns_api_url" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="https://powerdns.example.com:8081">
+                                </div>
+                                <div>
+                                    <label for="powerdns_api_key" class="block text-sm font-medium text-gray-700">
+                                        API Key
+                                    </label>
+                                    <input type="password" id="powerdns_api_key" name="powerdns_api_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your PowerDNS API key">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Configure your PowerDNS server with API access enabled and provide the API endpoint and key.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Basic Settings -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-medium text-gray-900 mb-4">Basic Settings</h4>
+                        
+                        <!-- Email -->
+                        <div class="mb-6">
+                            <label for="email" class="block text-sm font-medium text-gray-700">
+                                <i class="fas fa-envelope mr-1"></i>
+                                Email Address
+                            </label>
+                            <div class="mt-1">
+                                <input type="email" id="email" name="email" 
+                                       class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                       placeholder="your@email.com" required>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-500">
+                                Used for Let's Encrypt registration and renewal notifications.
+                            </p>
+                        </div>
+
+                        <!-- Domains -->
+                        <div class="mb-6">
+                            <label for="domains" class="block text-sm font-medium text-gray-700">
+                                <i class="fas fa-globe mr-1"></i>
+                                Domains
+                            </label>
+                            <div class="mt-1">
+                                <textarea id="domains" name="domains" rows="3"
+                                       class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                       placeholder="example.com&#10;anotherdomain.com&#10;One domain per line"></textarea>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-500">
+                                Enter one domain per line. Certificates will be created for each domain with wildcard support (*.domain.com).
+                            </p>
+                        </div>
+
+                        <!-- Auto Renewal -->
+                        <div class="mb-6">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="auto_renew" name="auto_renew" 
+                                       class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                <label for="auto_renew" class="ml-2 block text-sm text-gray-900">
+                                    Enable automatic certificate renewal
+                                </label>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-500 ml-6">
+                                Certificates will be automatically renewed when they have 30 days or less until expiration.
+                            </p>
+                        </div>
+
+                        <!-- API Bearer Token -->
+                        <div class="mb-6">
+                            <label for="api_bearer_token" class="block text-sm font-medium text-gray-700">
+                                <i class="fas fa-key mr-1"></i>
+                                API Bearer Token
+                            </label>
+                            <div class="mt-1">
+                                <input type="password" id="api_bearer_token" name="api_bearer_token" 
+                                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+                                       placeholder="Enter API bearer token for authentication">
+                            </div>
+                            <p class="mt-2 text-sm text-gray-500">
+                                This token is required for API access and automated certificate downloads. Keep it secure!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end">
+                        <button type="submit" id="saveBtn" class="bg-primary text-white px-6 py-2 rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors">
                             <i class="fas fa-save mr-2"></i>
                             Save Settings
                         </button>
@@ -160,159 +381,285 @@
             </div>
         </div>
 
-        <!-- API Token Instructions -->
-        <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg">
-            <div class="px-6 py-4">
-                <h3 class="text-lg font-medium text-blue-900 mb-3">
-                    <i class="fas fa-lightbulb mr-2"></i>
-                    How to get your Cloudflare API Token
-                </h3>
-                <ol class="list-decimal list-inside text-sm text-blue-800 space-y-2">
-                    <li>Go to <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" class="underline">Cloudflare API Tokens</a></li>
-                    <li>Click "Create Token"</li>
-                    <li>Use the "Custom token" template</li>
-                    <li>Set the following permissions:
-                        <ul class="list-disc list-inside ml-4 mt-1 space-y-1">
-                            <li><strong>Zone:DNS:Edit</strong> - Required for DNS challenge</li>
-                            <li><strong>Zone:Zone:Read</strong> - Required to list zones</li>
-                        </ul>
-                    </li>
-                    <li>Set "Zone Resources" to include the zones you want to manage</li>
-                    <li>Click "Continue to summary" and then "Create Token"</li>
-                    <li>Copy the generated token and paste it above</li>
-                </ol>
-            </div>
-        </div>
+        <!-- Status Messages -->
+        <div id="statusMessage" class="mt-4 hidden"></div>
     </div>
 
-    <!-- Success/Error Messages -->
-    <div id="messages" class="fixed top-4 right-4 z-50"></div>
-
     <script>
-        // Show message function
-        function showMessage(message, type = 'success') {
-            const messagesContainer = document.getElementById('messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `mb-4 p-4 rounded-md shadow-lg max-w-sm ${
-                type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 
-                'bg-red-50 text-red-800 border border-red-200'
-            }`;
-            messageDiv.innerHTML = `
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium">${message}</p>
-                    </div>
-                </div>
-            `;
-            messagesContainer.appendChild(messageDiv);
-            
-            setTimeout(() => {
-                messageDiv.remove();
-            }, 5000);
-        }
+        // Global variables
+        let currentSettings = {};
+        let dnsProviders = {};
 
-        // Load settings
-        async function loadSettings() {
-            try {
-                const response = await fetch('/api/web/settings');
-                const settings = await response.json();
-                
-                if (settings.email) {
-                    document.getElementById('email').value = settings.email;
-                }
-                
-                if (settings.domains && settings.domains.length > 0) {
-                    document.getElementById('domains').value = settings.domains.join('\n');
-                }
-                
-                if (settings.auto_renew) {
-                    document.getElementById('auto_renew').checked = settings.auto_renew;
-                }
-                
-                // Show token status
-                const tokenStatus = document.getElementById('tokenStatus');
-                if (settings.has_cloudflare_token) {
-                    tokenStatus.innerHTML = `
-                        <div class="flex items-center text-green-600">
-                            <i class="fas fa-check-circle mr-1"></i>
-                            <span class="text-sm">Cloudflare API token is configured</span>
-                        </div>
-                    `;
-                } else {
-                    tokenStatus.innerHTML = `
-                        <div class="flex items-center text-red-600">
-                            <i class="fas fa-exclamation-circle mr-1"></i>
-                            <span class="text-sm">Cloudflare API token is required</span>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                showMessage('Failed to load settings', 'error');
-            }
-        }
-
-        // Save settings
-        document.getElementById('settingsForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = {
-                email: formData.get('email'),
-                auto_renew: formData.get('auto_renew') === 'on'
-            };
-            
-            // Handle domains
-            const domainsText = formData.get('domains');
-            if (domainsText && domainsText.trim()) {
-                data.domains = domainsText.trim().split('\n').map(d => d.trim()).filter(d => d);
-            } else {
-                data.domains = [];
-            }
-            
-            // Only include tokens if they're provided
-            const cloudflareToken = formData.get('cloudflare_token');
-            if (cloudflareToken && cloudflareToken.trim()) {
-                data.cloudflare_token = cloudflareToken.trim();
-            }
-            
-            const apiToken = formData.get('api_bearer_token');
-            if (apiToken && apiToken.trim()) {
-                data.api_bearer_token = apiToken.trim();
-            }
-            
-            try {
-                const response = await fetch('/api/web/settings', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage('Settings saved successfully!');
-                    // Clear the token fields for security
-                    document.getElementById('cloudflare_token').value = '';
-                    document.getElementById('api_bearer_token').value = '';
-                    // Reload to update token status
-                    loadSettings();
-                } else {
-                    showMessage('Failed to save settings', 'error');
-                }
-            } catch (error) {
-                showMessage('Failed to save settings', 'error');
-            }
-        });
+        // DOM Elements
+        const form = document.getElementById('settingsForm');
+        const saveBtn = document.getElementById('saveBtn');
+        const statusMessage = document.getElementById('statusMessage');
 
         // Load settings on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadSettings();
+            loadDNSProviders();
+            setupEventListeners();
         });
+
+        function setupEventListeners() {
+            // DNS provider selection
+            document.querySelectorAll('input[name="dns_provider"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    showDNSConfig(this.value);
+                });
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveSettings();
+            });
+        }
+
+        function showDNSConfig(provider) {
+            // Hide all DNS config sections
+            document.querySelectorAll('.dns-config').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected provider config
+            const configSection = document.getElementById(provider + '-config');
+            if (configSection) {
+                configSection.classList.remove('hidden');
+            }
+        }
+
+        function loadSettings() {
+            const token = localStorage.getItem('api_token');
+            if (!token) {
+                showMessage('Please set your API token first', 'error');
+                return;
+            }
+
+            fetch('/api/settings', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                currentSettings = data;
+                populateForm(data);
+            })
+            .catch(error => {
+                console.error('Error loading settings:', error);
+                showMessage('Error loading settings', 'error');
+            });
+        }
+
+        function loadDNSProviders() {
+            const token = localStorage.getItem('api_token');
+            if (!token) return;
+
+            fetch('/api/settings/dns-providers', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                dnsProviders = data;
+                updateProviderStatus(data);
+            })
+            .catch(error => {
+                console.error('Error loading DNS providers:', error);
+            });
+        }
+
+        function updateProviderStatus(providersData) {
+            const providers = providersData.available_providers || {};
+            
+            Object.keys(providers).forEach(provider => {
+                const statusElement = document.getElementById(provider + '-status');
+                if (statusElement) {
+                    const configured = providers[provider].configured;
+                    statusElement.textContent = configured ? 'Configured' : 'Not configured';
+                    statusElement.className = configured ? 'text-xs text-green-600 mt-1' : 'text-xs text-gray-500 mt-1';
+                }
+            });
+        }
+
+        function populateForm(data) {
+            // Basic settings
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('domains').value = (data.domains || []).join('\n');
+            document.getElementById('auto_renew').checked = data.auto_renew !== false;
+
+            // DNS Provider
+            const dnsProvider = data.dns_provider || 'cloudflare';
+            const providerRadio = document.querySelector(`input[name="dns_provider"][value="${dnsProvider}"]`);
+            if (providerRadio) {
+                providerRadio.checked = true;
+                showDNSConfig(dnsProvider);
+            }
+
+            // DNS Provider configurations
+            const dnsProviders = data.dns_providers || {};
+            
+            // Cloudflare (backward compatibility)
+            if (data.has_cloudflare_token || dnsProviders.cloudflare?.api_token) {
+                document.getElementById('cloudflare_api_token').placeholder = 'Token configured (hidden)';
+            }
+
+            // Populate DNS provider fields
+            Object.keys(dnsProviders).forEach(provider => {
+                const config = dnsProviders[provider];
+                Object.keys(config).forEach(key => {
+                    const fieldId = provider + '_' + key;
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        if (config[key] === '***masked***') {
+                            field.placeholder = 'Value configured (hidden)';
+                        } else if (config[key]) {
+                            field.value = config[key];
+                        }
+                    }
+                });
+            });
+
+            // API Bearer Token
+            if (data.has_api_bearer_token) {
+                document.getElementById('api_bearer_token').placeholder = 'Token configured (hidden)';
+            }
+        }
+
+        function saveSettings() {
+            const token = localStorage.getItem('api_token');
+            if (!token) {
+                showMessage('Please set your API token first', 'error');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+
+            // Collect form data
+            const formData = new FormData(form);
+            const settings = {
+                email: formData.get('email'),
+                domains: formData.get('domains').split('\n').filter(d => d.trim()),
+                auto_renew: formData.has('auto_renew'),
+                dns_provider: formData.get('dns_provider'),
+                dns_providers: {}
+            };
+
+            // Collect DNS provider configurations
+            const providers = ['cloudflare', 'route53', 'azure', 'google', 'powerdns'];
+            providers.forEach(provider => {
+                settings.dns_providers[provider] = {};
+                
+                if (provider === 'cloudflare') {
+                    const token = formData.get('cloudflare_api_token');
+                    if (token) settings.dns_providers[provider].api_token = token;
+                } else if (provider === 'route53') {
+                    const accessKey = formData.get('route53_access_key_id');
+                    const secretKey = formData.get('route53_secret_access_key');
+                    const region = formData.get('route53_region');
+                    if (accessKey) settings.dns_providers[provider].access_key_id = accessKey;
+                    if (secretKey) settings.dns_providers[provider].secret_access_key = secretKey;
+                    if (region) settings.dns_providers[provider].region = region;
+                } else if (provider === 'azure') {
+                    const fields = ['subscription_id', 'resource_group', 'tenant_id', 'client_id', 'client_secret'];
+                    fields.forEach(field => {
+                        const value = formData.get(`azure_${field}`);
+                        if (value) settings.dns_providers[provider][field] = value;
+                    });
+                } else if (provider === 'google') {
+                    const projectId = formData.get('google_project_id');
+                    const serviceKey = formData.get('google_service_account_key');
+                    if (projectId) settings.dns_providers[provider].project_id = projectId;
+                    if (serviceKey) settings.dns_providers[provider].service_account_key = serviceKey;
+                } else if (provider === 'powerdns') {
+                    const apiUrl = formData.get('powerdns_api_url');
+                    const apiKey = formData.get('powerdns_api_key');
+                    if (apiUrl) settings.dns_providers[provider].api_url = apiUrl;
+                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                }
+            });
+
+            // API Bearer Token
+            const apiToken = formData.get('api_bearer_token');
+            if (apiToken) {
+                settings.api_bearer_token = apiToken;
+            }
+
+            // Backward compatibility for Cloudflare
+            if (settings.dns_providers.cloudflare?.api_token) {
+                settings.cloudflare_token = settings.dns_providers.cloudflare.api_token;
+            }
+
+            fetch('/api/settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('Settings saved successfully!', 'success');
+                    loadDNSProviders(); // Refresh provider status
+                } else {
+                    showMessage(data.message || 'Error saving settings', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving settings:', error);
+                showMessage('Error saving settings', 'error');
+            })
+            .finally(() => {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Save Settings';
+            });
+        }
+
+        function showMessage(message, type) {
+            const colors = {
+                success: 'bg-green-100 border-green-400 text-green-700',
+                error: 'bg-red-100 border-red-400 text-red-700',
+                info: 'bg-blue-100 border-blue-400 text-blue-700'
+            };
+
+            statusMessage.className = `border-l-4 p-4 ${colors[type] || colors.info}`;
+            statusMessage.innerHTML = `
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                </div>
+            `;
+            statusMessage.classList.remove('hidden');
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        // API Token Management
+        function promptForApiToken() {
+            const token = prompt('Enter your API Bearer Token:');
+            if (token) {
+                localStorage.setItem('api_token', token);
+                loadSettings();
+            }
+        }
+
+        // Check if API token is set
+        if (!localStorage.getItem('api_token')) {
+            promptForApiToken();
+        }
     </script>
 </body>
 </html>
