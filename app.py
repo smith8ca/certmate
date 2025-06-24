@@ -18,10 +18,16 @@ from urllib.parse import urlparse
 import requests
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+import fcntl  # For file locking
+import re
+import secrets
+import atexit
 
 # Initialize Flask app
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key-here')
+# Generate a secure random secret key if not provided
+default_secret = os.urandom(32).hex() if not os.getenv('SECRET_KEY') else 'your-secret-key-here'
+app.secret_key = os.getenv('SECRET_KEY', default_secret)
 CORS(app)
 
 # Initialize Flask-RESTX
@@ -38,92 +44,158 @@ api = Api(
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Directories
-CERT_DIR = Path("certificates")
-DATA_DIR = Path("data")
-CERT_DIR.mkdir(exist_ok=True)
-DATA_DIR.mkdir(exist_ok=True)
+# Directories with proper error handling
+try:
+    CERT_DIR = Path("certificates")
+    DATA_DIR = Path("data")
+    CERT_DIR.mkdir(exist_ok=True)
+    DATA_DIR.mkdir(exist_ok=True)
+    
+    # Verify directory permissions
+    if not os.access(CERT_DIR, os.W_OK):
+        logger.error(f"No write permission for certificates directory: {CERT_DIR}")
+    if not os.access(DATA_DIR, os.W_OK):
+        logger.error(f"No write permission for data directory: {DATA_DIR}")
+        
+except Exception as e:
+    logger.error(f"Failed to create required directories: {e}")
+    # Use temporary directories as fallback
+    CERT_DIR = Path(tempfile.mkdtemp(prefix="certmate_certs_"))
+    DATA_DIR = Path(tempfile.mkdtemp(prefix="certmate_data_"))
+    logger.warning(f"Using temporary directories - certificates may not persist")
 
 # Settings file
 SETTINGS_FILE = DATA_DIR / "settings.json"
 
-# Initialize scheduler
-scheduler = BackgroundScheduler()
-scheduler.start()
+# Initialize scheduler with error handling
+try:
+    scheduler = BackgroundScheduler()
+    scheduler.start()
+    logger.info("Background scheduler started successfully")
+except Exception as e:
+    logger.error(f"Failed to start background scheduler: {e}")
+    scheduler = None
 
 def load_settings():
-    """Load settings from file"""
-    if SETTINGS_FILE.exists():
-        try:
-            with open(SETTINGS_FILE, 'r') as f:
-                return json.load(f)
-        except Exception as e:
-            logger.error(f"Error loading settings: {e}")
-    return {
+    """Load settings from file with improved error handling"""
+    default_settings = {
         'cloudflare_token': '',
         'domains': [],
         'email': '',
         'auto_renew': True,
-        'api_bearer_token': os.getenv('API_BEARER_TOKEN', 'change-this-token'),
-        # DNS provider settings
-        'dns_provider': 'cloudflare',  # Default to cloudflare for backward compatibility
+        'api_bearer_token': os.getenv('API_BEARER_TOKEN') or generate_secure_token(),
+        'setup_completed': False,  # Track if initial setup is done
+        'dns_provider': 'cloudflare',
         'dns_providers': {
-            'cloudflare': {
-                'api_token': ''
-            },
-            'route53': {
-                'access_key_id': '',
-                'secret_access_key': '',
-                'region': 'us-east-1'
-            },
-            'azure': {
-                'subscription_id': '',
-                'resource_group': '',
-                'tenant_id': '',
-                'client_id': '',
-                'client_secret': ''
-            },
-            'google': {
-                'project_id': '',
-                'service_account_key': ''  # JSON key content
-            },
-            'powerdns': {
-                'api_url': '',
-                'api_key': ''
-            }
+            'cloudflare': {'api_token': ''},
+            'route53': {'access_key_id': '', 'secret_access_key': '', 'region': 'us-east-1'},
+            'azure': {'subscription_id': '', 'resource_group': '', 'tenant_id': '', 'client_id': '', 'client_secret': ''},
+            'google': {'project_id': '', 'service_account_key': ''},
+            'powerdns': {'api_url': '', 'api_key': ''}
         }
     }
+    
+    if not SETTINGS_FILE.exists():
+        # First time setup - create with secure defaults
+        logger.info("Creating initial settings file with secure defaults")
+        save_settings(default_settings)
+        return default_settings
+    
+    try:
+        settings = safe_file_read(SETTINGS_FILE, is_json=True)
+        if settings is None:
+            logger.warning("Failed to read settings, using defaults")
+            return default_settings
+            
+        # Validate and merge with defaults
+        for key, default_value in default_settings.items():
+            if key not in settings:
+                settings[key] = default_value
+                
+        # Validate critical settings
+        if settings.get('api_bearer_token') in ['change-this-token', 'certmate-api-token-12345', '']:
+            logger.warning("Insecure API token detected, generating new one")
+            settings['api_bearer_token'] = generate_secure_token()
+            save_settings(settings)
+            
+        return settings
+        
+    except Exception as e:
+        logger.error(f"Error loading settings: {e}")
+        return default_settings
 
 def save_settings(settings):
-    """Save settings to file"""
+    """Save settings to file with improved error handling and validation"""
     try:
-        with open(SETTINGS_FILE, 'w') as f:
-            json.dump(settings, f, indent=2)
-        return True
+        # Validate critical settings before saving
+        if 'email' in settings and settings['email']:
+            is_valid, email_or_error = validate_email(settings['email'])
+            if not is_valid:
+                logger.error(f"Invalid email in settings: {email_or_error}")
+                return False
+            settings['email'] = email_or_error
+            
+        if 'api_bearer_token' in settings:
+            is_valid, token_or_error = validate_api_token(settings['api_bearer_token'])
+            if not is_valid:
+                logger.error(f"Invalid API token: {token_or_error}")
+                return False
+                
+        # Validate domains
+        if 'domains' in settings:
+            validated_domains = []
+            for domain_entry in settings['domains']:
+                if isinstance(domain_entry, str):
+                    is_valid, domain_or_error = validate_domain(domain_entry)
+                    if is_valid:
+                        validated_domains.append(domain_or_error)
+                    else:
+                        logger.warning(f"Invalid domain skipped: {domain_or_error}")
+                elif isinstance(domain_entry, dict) and 'domain' in domain_entry:
+                    is_valid, domain_or_error = validate_domain(domain_entry['domain'])
+                    if is_valid:
+                        domain_entry['domain'] = domain_or_error
+                        validated_domains.append(domain_entry)
+                    else:
+                        logger.warning(f"Invalid domain in object skipped: {domain_or_error}")
+            settings['domains'] = validated_domains
+        
+        return safe_file_write(SETTINGS_FILE, settings)
+        
     except Exception as e:
         logger.error(f"Error saving settings: {e}")
         return False
 
 def require_auth(f):
-    """Decorator to require bearer token authentication"""
+    """Enhanced decorator to require bearer token authentication"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         auth_header = request.headers.get('Authorization')
         if not auth_header:
-            return {'error': 'Authorization header required'}, 401
+            return {'error': 'Authorization header required', 'code': 'AUTH_HEADER_MISSING'}, 401
         
         try:
             scheme, token = auth_header.split(' ', 1)
             if scheme.lower() != 'bearer':
-                return {'error': 'Invalid authorization scheme'}, 401
+                return {'error': 'Invalid authorization scheme. Use Bearer token', 'code': 'INVALID_AUTH_SCHEME'}, 401
         except ValueError:
-            return {'error': 'Invalid authorization header format'}, 401
+            return {'error': 'Invalid authorization header format. Use: Bearer <token>', 'code': 'INVALID_AUTH_FORMAT'}, 401
         
         settings = load_settings()
-        expected_token = settings.get('api_bearer_token', os.getenv('API_BEARER_TOKEN', 'change-this-token'))
+        expected_token = settings.get('api_bearer_token')
         
-        if token != expected_token:
-            return {'error': 'Invalid token'}, 401
+        if not expected_token:
+            return {'error': 'Server configuration error: no API token configured', 'code': 'SERVER_CONFIG_ERROR'}, 500
+            
+        # Validate token strength
+        is_valid, validation_error = validate_api_token(expected_token)
+        if not is_valid:
+            logger.error(f"Server has weak API token: {validation_error}")
+            return {'error': 'Server security configuration error', 'code': 'WEAK_SERVER_TOKEN'}, 500
+        
+        if not secrets.compare_digest(token, expected_token):
+            logger.warning(f"Invalid token attempt from {request.remote_addr}")
+            return {'error': 'Invalid or expired token', 'code': 'INVALID_TOKEN'}, 401
         
         return f(*args, **kwargs)
     return decorated_function
@@ -285,6 +357,22 @@ def get_certificate_info(domain):
 def create_certificate(domain, email, dns_provider=None, dns_config=None):
     """Create SSL certificate using Let's Encrypt with configurable DNS challenge"""
     try:
+        # Enhanced input validation
+        if not domain or not isinstance(domain, str):
+            return False, "Invalid domain provided"
+            
+        # Validate domain format and security
+        is_valid_domain, domain_error = validate_domain(domain)
+        if not is_valid_domain:
+            return False, f"Domain validation failed: {domain_error}"
+        domain = domain_error  # validated domain
+        
+        # Validate email
+        is_valid_email, email_error = validate_email(email)
+        if not is_valid_email:
+            return False, f"Email validation failed: {email_error}"
+        email = email_error  # validated email
+        
         # Load settings to get DNS provider configuration
         settings = load_settings()
         
@@ -467,14 +555,21 @@ def check_renewals():
                 logger.info(f"Renewing certificate for {domain}")
                 renew_certificate(domain)
 
-# Schedule renewal check every day at 2 AM
-scheduler.add_job(
-    func=check_renewals,
-    trigger="cron",
-    hour=2,
-    minute=0,
-    id='renewal_check'
-)
+# Schedule renewal check every day at 2 AM (only if scheduler is available)
+if scheduler:
+    try:
+        scheduler.add_job(
+            func=check_renewals,
+            trigger="cron",
+            hour=2,
+            minute=0,
+            id='renewal_check'
+        )
+        logger.info("Automatic renewal check scheduled for 2 AM daily")
+    except Exception as e:
+        logger.error(f"Failed to schedule renewal check: {e}")
+else:
+    logger.warning("Background scheduler not available - automatic renewals disabled")
 
 # Define API models
 # DNS Provider models
@@ -879,7 +974,7 @@ def index():
             certificates.append(cert_info)
     
     # Get API token for frontend use
-    api_token = settings.get('api_bearer_token', os.getenv('API_BEARER_TOKEN', 'certmate-api-token-12345'))
+    api_token = settings.get('api_bearer_token', 'token-not-configured')
     return render_template('index.html', certificates=certificates, api_token=api_token)
 
 @app.route('/settings')
@@ -887,14 +982,56 @@ def settings_page():
     """Settings page"""
     settings = load_settings()
     # Get API token for frontend use
-    api_token = settings.get('api_bearer_token', os.getenv('API_BEARER_TOKEN', 'change-this-token'))
+    api_token = settings.get('api_bearer_token', 'token-not-configured')
     return render_template('settings.html', settings=settings, api_token=api_token)
 
 # Health check for Docker
 @app.route('/health')
 def health_check():
-    """Health check endpoint for Docker"""
-    return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
+    """Enhanced health check endpoint for Docker and monitoring"""
+    try:
+        status = 'healthy'
+        checks = {}
+        
+        # Check directory access
+        checks['directories'] = {
+            'cert_dir_writable': os.access(CERT_DIR, os.W_OK),
+            'data_dir_writable': os.access(DATA_DIR, os.W_OK)
+        }
+        
+        # Check settings file
+        checks['settings'] = {
+            'file_exists': SETTINGS_FILE.exists(),
+            'readable': SETTINGS_FILE.exists() and os.access(SETTINGS_FILE, os.R_OK)
+        }
+        
+        # Check scheduler
+        checks['scheduler'] = {
+            'available': scheduler is not None,
+            'running': scheduler.running if scheduler else False
+        }
+        
+        # Determine overall status
+        if not all([
+            checks['directories']['cert_dir_writable'],
+            checks['directories']['data_dir_writable'],
+            checks['settings']['readable']
+        ]):
+            status = 'degraded'
+            
+        return jsonify({
+            'status': status,
+            'timestamp': datetime.now().isoformat(),
+            'checks': checks
+        })
+        
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return jsonify({
+            'status': 'unhealthy',
+            'timestamp': datetime.now().isoformat(),
+            'error': str(e)
+        }), 500
 
 # Web-specific settings endpoints (no auth required for initial setup)
 @app.route('/api/web/settings', methods=['GET', 'POST'])
@@ -1272,6 +1409,120 @@ def migrate_domains_format(settings):
         logger.info("Migrated domains to new format")
     
     return settings
+
+# Input validation utilities
+def validate_domain(domain):
+    """Validate domain name format and security"""
+    if not domain or not isinstance(domain, str):
+        return False, "Domain must be a non-empty string"
+    
+    domain = domain.strip().lower()
+    
+    # Basic format validation
+    domain_pattern = r'^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'
+    if not re.match(domain_pattern, domain):
+        return False, "Invalid domain format"
+    
+    # Length checks
+    if len(domain) > 253:
+        return False, "Domain name too long"
+    
+    # Check for dangerous characters
+    if any(char in domain for char in [' ', '\n', '\r', '\t', ';', '&', '|', '`']):
+        return False, "Domain contains invalid characters"
+    
+    return True, domain
+
+def validate_email(email):
+    """Validate email format"""
+    if not email or not isinstance(email, str):
+        return False, "Email must be a non-empty string"
+    
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(email_pattern, email.strip()):
+        return False, "Invalid email format"
+    
+    return True, email.strip().lower()
+
+def validate_api_token(token):
+    """Validate API token strength"""
+    if not token or not isinstance(token, str):
+        return False, "Token must be a non-empty string"
+    
+    if len(token) < 32:
+        return False, "Token must be at least 32 characters long"
+    
+    if token in ['change-this-token', 'certmate-api-token-12345']:
+        return False, "Please use a secure, unique token"
+    
+    return True, token
+
+def generate_secure_token():
+    """Generate a cryptographically secure token"""
+    return secrets.token_urlsafe(32)
+
+# File locking utilities
+def safe_file_write(file_path, content, mode='w'):
+    """Safely write to file with locking"""
+    try:
+        with open(file_path, mode) as f:
+            fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+            if isinstance(content, dict):
+                json.dump(content, f, indent=2)
+            else:
+                f.write(content)
+            fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+        return True
+    except Exception as e:
+        logger.error(f"Error writing to {file_path}: {e}")
+        return False
+
+def safe_file_read(file_path, is_json=True):
+    """Safely read from file with locking"""
+    try:
+        with open(file_path, 'r') as f:
+            fcntl.flock(f.fileno(), fcntl.LOCK_SH)
+            content = json.load(f) if is_json else f.read()
+            fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+        return content
+    except Exception as e:
+        logger.error(f"Error reading from {file_path}: {e}")
+        return None
+
+def is_setup_completed():
+    """Check if initial setup has been completed"""
+    settings = load_settings()
+    return (
+        settings.get('setup_completed', False) or
+        (settings.get('email') and 
+         settings.get('domains') and 
+         len(settings.get('domains', [])) > 0)
+    )
+
+def require_setup_or_auth(f):
+    """Allow access during setup OR with valid auth"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not is_setup_completed():
+            # Allow access during initial setup
+            return f(*args, **kwargs)
+        else:
+            # Require authentication after setup
+            return require_auth(f)(*args, **kwargs)
+    return decorated_function
+
+# Graceful shutdown for scheduler
+def shutdown_scheduler():
+    """Gracefully shutdown the background scheduler"""
+    if scheduler:
+        try:
+            scheduler.shutdown(wait=True)
+            logger.info("Background scheduler shut down gracefully")
+        except Exception as e:
+            logger.error(f"Error shutting down scheduler: {e}")
+
+# Register shutdown handler
+atexit.register(shutdown_scheduler)
 
 if __name__ == '__main__':
     host = os.getenv('HOST', '127.0.0.1')
