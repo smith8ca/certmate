@@ -513,7 +513,7 @@ certificate_model = api.model('Certificate', {
 
 settings_model = api.model('Settings', {
     'cloudflare_token': fields.String(description='Cloudflare API token (deprecated, use dns_providers)'),
-    'domains': fields.List(fields.String, description='List of domains'),
+    'domains': fields.List(fields.Raw, description='List of domains (can be strings or objects)'),
     'email': fields.String(description='Email for Let\'s Encrypt'),
     'auto_renew': fields.Boolean(description='Enable auto-renewal'),
     'api_bearer_token': fields.String(description='API bearer token for authentication'),
@@ -800,7 +800,17 @@ class RenewCertificate(Resource):
         """Renew a certificate"""
         settings = load_settings()
         
-        if domain not in settings.get('domains', []):
+        # Check if domain exists in settings
+        domain_exists = False
+        for domain_config in settings.get('domains', []):
+            if isinstance(domain_config, dict) and domain_config.get('domain') == domain:
+                domain_exists = True
+                break
+            elif isinstance(domain_config, str) and domain_config == domain:
+                domain_exists = True
+                break
+        
+        if not domain_exists:
             return {'success': False, 'message': 'Domain not found in settings'}, 404
         
         # Renew certificate in background
