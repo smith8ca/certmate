@@ -1,0 +1,32 @@
+[Unit]
+Description=CertMate SSL Certificate Manager
+Documentation=https://github.com/fabriziosalmi/certmate
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=certmate
+Group=certmate
+WorkingDirectory=/opt/certmate
+Environment=PATH=/opt/certmate/venv/bin
+Environment=API_BEARER_TOKEN=change-this-secure-token
+ExecStart=/opt/certmate/venv/bin/gunicorn --bind 0.0.0.0:8000 --workers 4 app:app
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+RestartSec=10
+KillMode=mixed
+TimeoutStopSec=5
+
+# Security settings
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/certmate/certificates /opt/certmate/data
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target
