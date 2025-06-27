@@ -277,13 +277,174 @@ sudo mv certmate /opt/
 cd /opt/certmate
 sudo pip3 install -r requirements.txt
 
-# Create systemd service
+# Create systemd service (see Service Setup section below for detailed instructions)
 sudo cp certmate.service /etc/systemd/system/
 sudo systemctl enable certmate
 sudo systemctl start certmate
 ```
 
 > 📖 **Detailed Instructions**: See [INSTALLATION.md](INSTALLATION.md) for complete setup guides for each method.
+
+## 🛠️ Service Setup
+
+For production deployments, CertMate should run as a system service. This section provides comprehensive instructions for setting up CertMate with systemd on Linux distributions.
+
+### Prerequisites
+
+- Linux system with systemd
+- Python 3.9 or higher
+- Root/sudo access
+
+### 1. Create Dedicated System User
+
+Create a dedicated user for running CertMate:
+
+```bash
+# Create system user and group
+sudo useradd --system --shell /bin/false --home-dir /opt/certmate --create-home certmate
+
+# Set proper ownership
+sudo chown -R certmate:certmate /opt/certmate
+```
+
+### 2. Prepare Application Directory
+
+Set up the application in `/opt/certmate`:
+
+```bash
+# If not already done, clone the repository
+git clone https://github.com/fabriziosalmi/certmate.git
+sudo mv certmate /opt/
+cd /opt/certmate
+
+# Create Python virtual environment
+sudo -u certmate python3 -m venv venv
+sudo -u certmate ./venv/bin/pip install -r requirements.txt
+
+# Create necessary directories
+sudo -u certmate mkdir -p certificates data
+```
+
+### 3. Configure Environment Variables
+
+Create environment file for the service:
+
+```bash
+# Create environment file
+sudo tee /opt/certmate/.env > /dev/null <<EOF
+# 🔒 SECURITY: Change this token!
+API_BEARER_TOKEN=your_super_secure_api_token_here_change_this
+
+# Optional: Set specific host/port
+HOST=127.0.0.1
+PORT=8000
+
+# Optional: Enable debug mode (not recommended for production)
+FLASK_DEBUG=false
+EOF
+
+# Set proper permissions
+sudo chown certmate:certmate /opt/certmate/.env
+sudo chmod 600 /opt/certmate/.env
+```
+
+### 4. Install systemd Service
+
+Install and configure the systemd service:
+
+```bash
+# Copy service file
+sudo cp /opt/certmate/certmate.service /etc/systemd/system/
+
+# Reload systemd configuration
+sudo systemctl daemon-reload
+
+# Enable service to start on boot
+sudo systemctl enable certmate
+
+# Start the service
+sudo systemctl start certmate
+```
+
+### 5. Verify Service Status
+
+Check that the service is running correctly:
+
+```bash
+# Check service status
+sudo systemctl status certmate
+
+# View recent logs
+sudo journalctl -u certmate --lines=50
+
+# Follow logs in real-time
+sudo journalctl -u certmate -f
+```
+
+### 6. Service Management Commands
+
+Common commands for managing the CertMate service:
+
+```bash
+# Start service
+sudo systemctl start certmate
+
+# Stop service
+sudo systemctl stop certmate
+
+# Restart service
+sudo systemctl restart certmate
+
+# Reload service configuration
+sudo systemctl reload certmate
+
+# Check if service is enabled
+sudo systemctl is-enabled certmate
+
+# Check if service is active
+sudo systemctl is-active certmate
+
+# Disable service from starting on boot
+sudo systemctl disable certmate
+```
+
+### 7. File Permissions
+
+Ensure proper file permissions for security:
+
+```bash
+# Set ownership
+sudo chown -R certmate:certmate /opt/certmate
+
+# Set directory permissions
+sudo chmod 755 /opt/certmate
+sudo chmod 750 /opt/certmate/certificates /opt/certmate/data
+
+# Set file permissions
+sudo chmod 644 /opt/certmate/*.py /opt/certmate/*.md
+sudo chmod 600 /opt/certmate/.env
+sudo chmod 755 /opt/certmate/venv/bin/*
+```
+
+### 🔒 Security Notes
+
+- **API Bearer Token**: Always change the default API bearer token in `/opt/certmate/.env`
+- **File Permissions**: The service runs with restricted permissions and limited filesystem access
+- **Network Access**: The service binds to `0.0.0.0:8000` by default - consider using a reverse proxy for production
+- **Environment File**: The `.env` file contains sensitive data and should be readable only by the `certmate` user
+- **Certificates**: Generated certificates are stored in `/opt/certmate/certificates` with restricted access
+
+### 🔍 Troubleshooting Service Setup
+
+If the service fails to start:
+
+1. **Check service status**: `sudo systemctl status certmate`
+2. **View logs**: `sudo journalctl -u certmate --lines=100`
+3. **Verify permissions**: Ensure the `certmate` user can read all necessary files
+4. **Test manually**: `sudo -u certmate /opt/certmate/venv/bin/python /opt/certmate/app.py`
+5. **Check dependencies**: `sudo -u certmate /opt/certmate/venv/bin/python validate_dependencies.py`
+
+For more detailed installation instructions, see [INSTALLATION.md](INSTALLATION.md).
 
 ## 📊 API Usage
 
