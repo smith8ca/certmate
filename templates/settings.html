@@ -90,12 +90,12 @@
                 <form id="settingsForm" class="space-y-8">
                     
                     <!-- DNS Provider Selection -->
-                    <div class="bg-gray-50 dark:bg-gray-700/50 dark:bg-gray-700/50 p-4 rounded-lg">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3" id="dns-provider-label">
                             <i class="fas fa-server mr-1"></i>
                             DNS Provider
                         </label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2" role="radiogroup" aria-labelledby="dns-provider-label">
                             <label class="relative">
                                 <input type="radio" name="dns_provider" value="cloudflare" class="sr-only peer">
                                 <div class="p-2 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 dark:bg-blue-900/20 dark:peer-checked:bg-blue-900/30 hover:border-gray-300 dark:hover:border-gray-500">
@@ -714,7 +714,7 @@
                                         API Key
                                     </label>
                                     <input type="password" id="porkbun_api_key" name="porkbun_api_key" 
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                            placeholder="Your Porkbun API key">
                                 </div>
                                 <div>
@@ -722,7 +722,7 @@
                                         Secret Key
                                     </label>
                                     <input type="password" id="porkbun_secret_key" name="porkbun_secret_key" 
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                            placeholder="Your Porkbun secret key">
                                 </div>
                             </div>
@@ -745,7 +745,7 @@
                                         API Key
                                     </label>
                                     <input type="password" id="godaddy_api_key" name="godaddy_api_key" 
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                            placeholder="Your GoDaddy API key">
                                 </div>
                                 <div>
@@ -753,7 +753,7 @@
                                         API Secret
                                     </label>
                                     <input type="password" id="godaddy_secret" name="godaddy_secret" 
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                            placeholder="Your GoDaddy API secret">
                                 </div>
                             </div>
@@ -776,7 +776,7 @@
                                         Username
                                     </label>
                                     <input type="text" id="he_ddns_username" name="he_ddns_username" 
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                            placeholder="Your Hurricane Electric username">
                                 </div>
                                 <div>
@@ -784,7 +784,7 @@
                                         Password
                                     </label>
                                     <input type="password" id="he_ddns_password" name="he_ddns_password" 
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                            placeholder="Your Hurricane Electric password">
                                 </div>
                             </div>
@@ -806,32 +806,11 @@
                                     API Token
                                 </label>
                                 <input type="password" id="dynudns_token" name="dynudns_token" 
-                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                       class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                        placeholder="Your Dynu API token">
                             </div>
                             <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
                                 Generate an API token at <a href="https://www.dynu.com/en-US/ControlPanel/APICredentials" target="_blank" class="text-primary hover:underline">Dynu Control Panel</a>.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Vultr Configuration -->
-                    <div id="vultr-config" class="dns-config hidden">
-                        <div class="border border-orange-200 dark:border-orange-600 rounded-lg p-4 bg-orange-50 dark:bg-orange-900/20">
-                            <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                                <i class="fas fa-cloud mr-2 text-blue-600"></i>
-                                Vultr DNS Configuration
-                            </h4>
-                            <div>
-                                <label for="vultr_api_key" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    API Key
-                                </label>
-                                <input type="password" id="vultr_api_key" name="vultr_api_key" 
-                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
-                                       placeholder="Your Vultr API key">
-                            </div>
-                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                                Generate an API key in your Vultr account with DNS permissions.
                             </p>
                         </div>
                     </div>
@@ -849,7 +828,7 @@
                                         API Key
                                     </label>
                                     <input type="password" id="dnsmadeeasy_api_key" name="dnsmadeeasy_api_key" 
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                            placeholder="Your DNS Made Easy API key">
                                 </div>
                                 <div>
@@ -857,7 +836,7 @@
                                         Secret Key
                                     </label>
                                     <input type="password" id="dnsmadeeasy_secret_key" name="dnsmadeeasy_secret_key" 
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                            placeholder="Your DNS Made Easy secret key">
                                 </div>
                             </div>
@@ -879,7 +858,7 @@
                                     API Key
                                 </label>
                                 <input type="password" id="nsone_api_key" name="nsone_api_key" 
-                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                       class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
                                        placeholder="Your NS1 API key">
                             </div>
                             <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
@@ -1046,21 +1025,200 @@
             'Content-Type': 'application/json'
         };
 
-        // Global variables
+        // Global variables - properly initialized
         let currentSettings = {};
         let dnsProviders = {};
+        let isLoading = false;
 
         // DOM Elements
         const form = document.getElementById('settingsForm');
         const saveBtn = document.getElementById('saveBtn');
         const statusMessage = document.getElementById('statusMessage');
 
+        // Validation functions
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validateDomain(domain) {
+            const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+            return domainRegex.test(domain) && domain.length <= 253;
+        }
+
+        function validateApiToken(token, provider) {
+            if (!token || token.trim().length === 0) return false;
+            
+            // Provider-specific validation
+            switch(provider) {
+                case 'cloudflare':
+                    return token.length >= 40; // Cloudflare tokens are typically 40 chars
+                case 'route53':
+                    return token.length >= 16; // AWS access keys
+                case 'digitalocean':
+                    return token.length >= 64; // DO tokens are 64 chars
+                default:
+                    return token.length >= 8; // Minimum length for any API token
+            }
+        }
+
+        function validateForm() {
+            const errors = [];
+            
+            // Validate email
+            const email = document.getElementById('email').value;
+            if (!email) {
+                errors.push('Email address is required');
+            } else if (!validateEmail(email)) {
+                errors.push('Please enter a valid email address');
+            }
+
+            // Validate domains
+            const domainsText = document.getElementById('domains').value;
+            if (domainsText) {
+                const domains = domainsText.split('\n').filter(d => d.trim());
+                for (const domain of domains) {
+                    if (!validateDomain(domain.trim())) {
+                        errors.push(`Invalid domain format: ${domain}`);
+                    }
+                }
+            }
+
+            // Validate selected DNS provider configuration
+            const selectedProvider = document.querySelector('input[name="dns_provider"]:checked');
+            if (selectedProvider) {
+                const provider = selectedProvider.value;
+                const isConfigValid = validateProviderConfig(provider);
+                if (!isConfigValid) {
+                    errors.push(`Please configure ${provider} DNS provider settings`);
+                }
+            }
+
+            return errors;
+        }
+
+        function validateProviderConfig(provider) {
+            switch(provider) {
+                case 'cloudflare':
+                    const cfToken = document.getElementById('cloudflare_api_token').value;
+                    return validateApiToken(cfToken, 'cloudflare');
+                case 'route53':
+                    const accessKey = document.getElementById('route53_access_key_id').value;
+                    const secretKey = document.getElementById('route53_secret_access_key').value;
+                    return accessKey && secretKey && accessKey.length >= 16 && secretKey.length >= 32;
+                case 'azure':
+                    const subId = document.getElementById('azure_subscription_id').value;
+                    const resGroup = document.getElementById('azure_resource_group').value;
+                    const tenantId = document.getElementById('azure_tenant_id').value;
+                    const clientId = document.getElementById('azure_client_id').value;
+                    const clientSecret = document.getElementById('azure_client_secret').value;
+                    return subId && resGroup && tenantId && clientId && clientSecret;
+                case 'google':
+                    const projectId = document.getElementById('google_project_id').value;
+                    const serviceKey = document.getElementById('google_service_account_key').value;
+                    return projectId && serviceKey && isValidJSON(serviceKey);
+                case 'digitalocean':
+                    const doToken = document.getElementById('digitalocean_api_token').value;
+                    return validateApiToken(doToken, 'digitalocean');
+                case 'linode':
+                    const linodeKey = document.getElementById('linode_api_key').value;
+                    return validateApiToken(linodeKey, 'linode');
+                case 'gandi':
+                    const gandiToken = document.getElementById('gandi_api_token').value;
+                    return validateApiToken(gandiToken, 'gandi');
+                case 'ovh':
+                    const ovhAppKey = document.getElementById('ovh_application_key').value;
+                    const ovhAppSecret = document.getElementById('ovh_application_secret').value;
+                    const ovhConsumerKey = document.getElementById('ovh_consumer_key').value;
+                    return ovhAppKey && ovhAppSecret && ovhConsumerKey;
+                case 'namecheap':
+                    const namecheapUser = document.getElementById('namecheap_username').value;
+                    const namecheapApiKey = document.getElementById('namecheap_api_key').value;
+                    return namecheapUser && namecheapApiKey;
+                case 'vultr':
+                    const vultrKey = document.getElementById('vultr_api_key').value;
+                    return validateApiToken(vultrKey, 'vultr');
+                case 'nsone':
+                    const nsoneKey = document.getElementById('nsone_api_key').value;
+                    return validateApiToken(nsoneKey, 'nsone');
+                case 'rfc2136':
+                    const rfcNameserver = document.getElementById('rfc2136_nameserver').value;
+                    const rfcTsigKey = document.getElementById('rfc2136_tsig_key').value;
+                    const rfcTsigSecret = document.getElementById('rfc2136_tsig_secret').value;
+                    return rfcNameserver && rfcTsigKey && rfcTsigSecret;
+                case 'hetzner':
+                    const hetznerToken = document.getElementById('hetzner_api_token').value;
+                    return validateApiToken(hetznerToken, 'hetzner');
+                case 'porkbun':
+                    const porkbunApiKey = document.getElementById('porkbun_api_key').value;
+                    const porkbunSecretKey = document.getElementById('porkbun_secret_key').value;
+                    return porkbunApiKey && porkbunSecretKey;
+                case 'godaddy':
+                    const godaddyApiKey = document.getElementById('godaddy_api_key').value;
+                    const godaddySecret = document.getElementById('godaddy_secret').value;
+                    return godaddyApiKey && godaddySecret;
+                case 'he-ddns':
+                    const heUsername = document.getElementById('he_ddns_username').value;
+                    const hePassword = document.getElementById('he_ddns_password').value;
+                    return heUsername && hePassword;
+                case 'dynudns':
+                    const dynudnsToken = document.getElementById('dynudns_token').value;
+                    return validateApiToken(dynudnsToken, 'dynudns');
+                default:
+                    return true; // Assume valid for providers without specific validation
+            }
+        }
+
+        function isValidJSON(str) {
+            try {
+                JSON.parse(str);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Enhanced error handling
+        function handleApiError(error, fallbackMessage = 'An error occurred') {
+            console.error('API Error:', error);
+            
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                return 'Network error: Please check your connection and try again';
+            }
+            
+            if (error.message.includes('HTTP 401')) {
+                return 'Authentication failed: Please check your API token';
+            }
+            
+            if (error.message.includes('HTTP 403')) {
+                return 'Permission denied: Insufficient privileges';
+            }
+            
+            if (error.message.includes('HTTP 429')) {
+                return 'Rate limit exceeded: Please wait and try again';
+            }
+            
+            return error.message || fallbackMessage;
+        }
+
         // Load settings on page load
         document.addEventListener('DOMContentLoaded', function() {
-            loadSettings();
-            loadDNSProviders();
-            setupEventListeners();
+            // Prevent race conditions by loading sequentially
+            initializeApp();
         });
+
+        async function initializeApp() {
+            try {
+                isLoading = true;
+                await loadSettings();
+                await loadDNSProviders();
+                setupEventListeners();
+            } catch (error) {
+                showMessage(handleApiError(error, 'Failed to initialize application'), 'error');
+            } finally {
+                isLoading = false;
+            }
+        }
 
         function setupEventListeners() {
             // DNS provider selection
@@ -1070,10 +1228,66 @@
                 });
             });
 
-            // Form submission
+            // Form submission with validation
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                
+                if (isLoading) {
+                    showMessage('Please wait for the current operation to complete', 'warning');
+                    return;
+                }
+
+                const validationErrors = validateForm();
+                if (validationErrors.length > 0) {
+                    showMessage('Validation errors: ' + validationErrors.join(', '), 'error');
+                    return;
+                }
+
                 saveSettings();
+            });
+
+            // Real-time validation for email
+            const emailField = document.getElementById('email');
+            if (emailField) {
+                emailField.addEventListener('blur', function() {
+                    if (this.value && !validateEmail(this.value)) {
+                        this.classList.add('border-red-500');
+                        this.title = 'Please enter a valid email address';
+                    } else {
+                        this.classList.remove('border-red-500');
+                        this.title = '';
+                    }
+                });
+            }
+
+            // Real-time validation for domains
+            const domainsField = document.getElementById('domains');
+            if (domainsField) {
+                domainsField.addEventListener('blur', function() {
+                    const domains = this.value.split('\n').filter(d => d.trim());
+                    let hasInvalid = false;
+                    
+                    for (const domain of domains) {
+                        if (domain.trim() && !validateDomain(domain.trim())) {
+                            hasInvalid = true;
+                            break;
+                        }
+                    }
+                    
+                    if (hasInvalid) {
+                        this.classList.add('border-red-500');
+                        this.title = 'One or more domains have invalid format';
+                    } else {
+                        this.classList.remove('border-red-500');
+                        this.title = '';
+                    }
+                });
+            }
+
+            // Global error handler
+            window.addEventListener('error', function(e) {
+                console.error('Global error caught:', e.error);
+                showMessage('An unexpected error occurred. Please refresh the page.', 'error');
             });
         }
 
@@ -1090,42 +1304,51 @@
             }
         }
 
-        function loadSettings() {
-            fetch('/api/settings', {
-                headers: API_HEADERS
-            })
-            .then(response => {
+        async function loadSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    headers: API_HEADERS
+                });
+                
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
-                return response.json();
-            })
-            .then(data => {
+                
+                const data = await response.json();
                 console.log('Settings loaded successfully:', data);
                 currentSettings = data;
                 populateForm(data);
-            })
-            .catch(error => {
+                
+            } catch (error) {
+                const errorMessage = handleApiError(error, 'Failed to load settings');
                 console.error('Error loading settings:', error);
-                showMessage('Error loading settings: ' + error.message, 'error');
+                showMessage(errorMessage, 'error');
                 
                 // Try to populate form with empty data to prevent further errors
                 populateForm({});
-            });
+                throw error; // Re-throw to be caught by initializeApp
+            }
         }
 
-        function loadDNSProviders() {
-            fetch('/api/settings/dns-providers', {
-                headers: API_HEADERS
-            })
-            .then(response => response.json())
-            .then(data => {
+        async function loadDNSProviders() {
+            try {
+                const response = await fetch('/api/settings/dns-providers', {
+                    headers: API_HEADERS
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
                 dnsProviders = data;
                 updateProviderStatus(data);
-            })
-            .catch(error => {
+                
+            } catch (error) {
+                const errorMessage = handleApiError(error, 'Failed to load DNS providers');
                 console.error('Error loading DNS providers:', error);
-            });
+                showMessage(errorMessage, 'warning');
+            }
         }
 
         function updateProviderStatus(providersData) {
@@ -1250,189 +1473,222 @@
             }
         }
 
-        function saveSettings() {
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+        // Enhanced message display function
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.getElementById('statusMessage');
+            if (!messageDiv) return;
 
-            // Collect form data
-            const formData = new FormData(form);
-            const settings = {
-                email: formData.get('email'),
-                domains: formData.get('domains').split('\n').filter(d => d.trim()),
-                auto_renew: formData.has('auto_renew'),
-                dns_provider: formData.get('dns_provider'),
-                dns_providers: {}
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-times-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
             };
 
-            // Collect DNS provider configurations
-            const providers = [
-                'cloudflare', 'route53', 'azure', 'google', 'powerdns', 'digitalocean',
-                'linode', 'gandi', 'ovh', 'namecheap', 'rfc2136', 'vultr', 'dnsmadeeasy', 'nsone'
-            ];
-            providers.forEach(provider => {
-                settings.dns_providers[provider] = {};
-                
-                if (provider === 'cloudflare') {
-                    const token = formData.get('cloudflare_api_token');
-                    if (token) settings.dns_providers[provider].api_token = token;
-                } else if (provider === 'route53') {
-                    const accessKey = formData.get('route53_access_key_id');
-                    const secretKey = formData.get('route53_secret_access_key');
-                    const region = formData.get('route53_region');
-                    if (accessKey) settings.dns_providers[provider].access_key_id = accessKey;
-                    if (secretKey) settings.dns_providers[provider].secret_access_key = secretKey;
-                    if (region) settings.dns_providers[provider].region = region;
-                } else if (provider === 'azure') {
-                    const fields = ['subscription_id', 'resource_group', 'tenant_id', 'client_id', 'client_secret'];
-                    fields.forEach(field => {
-                        const value = formData.get(`azure_${field}`);
-                        if (value) settings.dns_providers[provider][field] = value;
-                    });
-                } else if (provider === 'google') {
-                    const projectId = formData.get('google_project_id');
-                    const serviceKey = formData.get('google_service_account_key');
-                    if (projectId) settings.dns_providers[provider].project_id = projectId;
-                    if (serviceKey) settings.dns_providers[provider].service_account_key = serviceKey;
-                } else if (provider === 'powerdns') {
-                    const apiUrl = formData.get('powerdns_api_url');
-                    const apiKey = formData.get('powerdns_api_key');
-                    if (apiUrl) settings.dns_providers[provider].api_url = apiUrl;
-                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
-                } else if (provider === 'digitalocean') {
-                    const token = formData.get('digitalocean_api_token');
-                    if (token) settings.dns_providers[provider].api_token = token;
-                } else if (provider === 'linode') {
-                    const key = formData.get('linode_api_key');
-                    if (key) settings.dns_providers[provider].api_key = key;
-                } else if (provider === 'gandi') {
-                    const token = formData.get('gandi_api_token');
-                    if (token) settings.dns_providers[provider].api_token = token;
-                } else if (provider === 'vultr') {
-                    const key = formData.get('vultr_api_key');
-                    if (key) settings.dns_providers[provider].api_key = key;
-                } else if (provider === 'nsone') {
-                    const key = formData.get('nsone_api_key');
-                    if (key) settings.dns_providers[provider].api_key = key;
-                } else if (provider === 'ovh') {
-                    const endpoint = formData.get('ovh_endpoint');
-                    const appKey = formData.get('ovh_application_key');
-                    const appSecret = formData.get('ovh_application_secret');
-                    const consumerKey = formData.get('ovh_consumer_key');
-                    if (endpoint) settings.dns_providers[provider].endpoint = endpoint;
-                    if (appKey) settings.dns_providers[provider].application_key = appKey;
-                    if (appSecret) settings.dns_providers[provider].application_secret = appSecret;
-                    if (consumerKey) settings.dns_providers[provider].consumer_key = consumerKey;
-                } else if (provider === 'namecheap') {
-                    const username = formData.get('namecheap_username');
-                    const apiKey = formData.get('namecheap_api_key');
-                    if (username) settings.dns_providers[provider].username = username;
-                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
-                } else if (provider === 'dnsmadeeasy') {
-                    const apiKey = formData.get('dnsmadeeasy_api_key');
-                    const secretKey = formData.get('dnsmadeeasy_secret_key');
-                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
-                    if (secretKey) settings.dns_providers[provider].secret_key = secretKey;
-                } else if (provider === 'rfc2136') {
-                    const nameserver = formData.get('rfc2136_nameserver');
-                    const tsigKey = formData.get('rfc2136_tsig_key');
-                    const tsigSecret = formData.get('rfc2136_tsig_secret');
-                    const tsigAlgorithm = formData.get('rfc2136_tsig_algorithm');
-                    if (nameserver) settings.dns_providers[provider].nameserver = nameserver;
-                    if (tsigKey) settings.dns_providers[provider].tsig_key = tsigKey;
-                    if (tsigSecret) settings.dns_providers[provider].tsig_secret = tsigSecret;
-                    if (tsigAlgorithm) settings.dns_providers[provider].tsig_algorithm = tsigAlgorithm;
-                } else if (provider === 'hetzner') {
-                    const token = formData.get('hetzner_api_token');
-                    if (token) settings.dns_providers[provider].api_token = token;
-                } else if (provider === 'porkbun') {
-                    const apiKey = formData.get('porkbun_api_key');
-                    const secretKey = formData.get('porkbun_secret_key');
-                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
-                    if (secretKey) settings.dns_providers[provider].secret_key = secretKey;
-                } else if (provider === 'godaddy') {
-                    const apiKey = formData.get('godaddy_api_key');
-                    const secret = formData.get('godaddy_secret');
-                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
-                    if (secret) settings.dns_providers[provider].secret = secret;
-                } else if (provider === 'he-ddns') {
-                    const username = formData.get('he_ddns_username');
-                    const password = formData.get('he_ddns_password');
-                    if (username) settings.dns_providers[provider].username = username;
-                    if (password) settings.dns_providers[provider].password = password;
-                } else if (provider === 'dynudns') {
-                    const token = formData.get('dynudns_token');
-                    if (token) settings.dns_providers[provider].token = token;
-                }
-            });
-
-            // API Bearer Token
-            const apiToken = formData.get('api_bearer_token');
-            if (apiToken) {
-                settings.api_bearer_token = apiToken;
-            }
-
-            // Backward compatibility for Cloudflare
-            if (settings.dns_providers.cloudflare?.api_token) {
-                settings.cloudflare_token = settings.dns_providers.cloudflare.api_token;
-            }
-
-            fetch('/api/settings', {
-                method: 'POST',
-                headers: API_HEADERS,
-                body: JSON.stringify(settings)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage('Settings saved successfully!', 'success');
-                    loadDNSProviders(); // Refresh provider status
-                } else {
-                    showMessage(data.message || 'Error saving settings', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error saving settings:', error);
-                showMessage('Error saving settings', 'error');
-            })
-            .finally(() => {
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Save Settings';
-            });
-        }
-
-        function showMessage(message, type) {
             const colors = {
-                success: 'bg-green-100 border-green-400 text-green-700',
-                error: 'bg-red-100 border-red-400 text-red-700',
-                info: 'bg-blue-100 border-blue-400 text-blue-700'
+                success: 'bg-green-100 border-green-400 text-green-700 dark:bg-green-900/20 dark:border-green-600 dark:text-green-400',
+                error: 'bg-red-100 border-red-400 text-red-700 dark:bg-red-900/20 dark:border-red-600 dark:text-red-400',
+                warning: 'bg-yellow-100 border-yellow-400 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-600 dark:text-yellow-400',
+                info: 'bg-blue-100 border-blue-400 text-blue-700 dark:bg-blue-900/20 dark:border-blue-600 dark:text-blue-400'
             };
 
-            statusMessage.className = `border-l-4 p-4 transform transition-all duration-300 ${colors[type] || colors.info}`;
-            statusMessage.innerHTML = `
+            messageDiv.className = `mt-4 p-4 border rounded-md ${colors[type] || colors.info}`;
+            messageDiv.innerHTML = `
                 <div class="flex">
                     <div class="flex-shrink-0">
-                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                        <i class="fas ${icons[type] || icons.info}"></i>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm font-medium dark:text-white">${message}</p>
-                        ${type === 'success' ? '<p class="text-xs mt-1 opacity-75">Changes have been saved successfully</p>' : ''}
+                        <p class="text-sm font-medium">${message}</p>
                     </div>
                 </div>
             `;
-            statusMessage.classList.remove('hidden');
+            messageDiv.classList.remove('hidden');
 
-            // Add subtle animation
-            setTimeout(() => {
-                statusMessage.style.transform = 'translateX(0)';
-            }, 10);
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                statusMessage.style.transform = 'translateX(100%)';
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success') {
                 setTimeout(() => {
-                    statusMessage.classList.add('hidden');
-                }, 300);
-            }, 5000);
+                    messageDiv.classList.add('hidden');
+                }, 5000);
+            }
+
+            // Add ARIA live region for screen readers
+            messageDiv.setAttribute('role', 'alert');
+            messageDiv.setAttribute('aria-live', 'polite');
+        }
+
+        // Enhanced save function with comprehensive error handling
+        async function saveSettings() {
+            if (isLoading) {
+                showMessage('Save operation already in progress', 'warning');
+                return;
+            }
+
+            try {
+                isLoading = true;
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+
+                // Validate form before sending
+                const validationErrors = validateForm();
+                if (validationErrors.length > 0) {
+                    throw new Error('Validation failed: ' + validationErrors.join(', '));
+                }
+
+                // Collect form data
+                const formData = new FormData(form);
+                const settings = {
+                    email: formData.get('email'),
+                    domains: formData.get('domains').split('\n').filter(d => d.trim()),
+                    auto_renew: formData.has('auto_renew'),
+                    dns_provider: formData.get('dns_provider'),
+                    dns_providers: {}
+                };
+
+                // Collect DNS provider configurations
+                const providers = [
+                    'cloudflare', 'route53', 'azure', 'google', 'powerdns', 'digitalocean',
+                    'linode', 'gandi', 'ovh', 'namecheap', 'rfc2136', 'vultr', 'dnsmadeeasy', 
+                    'nsone', 'hetzner', 'porkbun', 'godaddy', 'he-ddns', 'dynudns'
+                ];
+
+                providers.forEach(provider => {
+                    settings.dns_providers[provider] = {};
+                    
+                    if (provider === 'cloudflare') {
+                        const token = formData.get('cloudflare_api_token');
+                        if (token) settings.dns_providers[provider].api_token = token;
+                    } else if (provider === 'route53') {
+                        const accessKey = formData.get('route53_access_key_id');
+                        const secretKey = formData.get('route53_secret_access_key');
+                        const region = formData.get('route53_region');
+                        if (accessKey) settings.dns_providers[provider].access_key_id = accessKey;
+                        if (secretKey) settings.dns_providers[provider].secret_access_key = secretKey;
+                        if (region) settings.dns_providers[provider].region = region;
+                    } else if (provider === 'azure') {
+                        const fields = ['subscription_id', 'resource_group', 'tenant_id', 'client_id', 'client_secret'];
+                        fields.forEach(field => {
+                            const value = formData.get(`azure_${field}`);
+                            if (value) settings.dns_providers[provider][field] = value;
+                        });
+                    } else if (provider === 'google') {
+                        const projectId = formData.get('google_project_id');
+                        const serviceKey = formData.get('google_service_account_key');
+                        if (projectId) settings.dns_providers[provider].project_id = projectId;
+                        if (serviceKey) settings.dns_providers[provider].service_account_key = serviceKey;
+                    } else if (provider === 'powerdns') {
+                        const apiUrl = formData.get('powerdns_api_url');
+                        const apiKey = formData.get('powerdns_api_key');
+                        if (apiUrl) settings.dns_providers[provider].api_url = apiUrl;
+                        if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                    } else if (provider === 'digitalocean') {
+                        const token = formData.get('digitalocean_api_token');
+                        if (token) settings.dns_providers[provider].api_token = token;
+                    } else if (provider === 'linode') {
+                        const key = formData.get('linode_api_key');
+                        if (key) settings.dns_providers[provider].api_key = key;
+                    } else if (provider === 'gandi') {
+                        const token = formData.get('gandi_api_token');
+                        if (token) settings.dns_providers[provider].api_token = token;
+                    } else if (provider === 'ovh') {
+                        const endpoint = formData.get('ovh_endpoint');
+                        const appKey = formData.get('ovh_application_key');
+                        const appSecret = formData.get('ovh_application_secret');
+                        const consumerKey = formData.get('ovh_consumer_key');
+                        if (endpoint) settings.dns_providers[provider].endpoint = endpoint;
+                        if (appKey) settings.dns_providers[provider].application_key = appKey;
+                        if (appSecret) settings.dns_providers[provider].application_secret = appSecret;
+                        if (consumerKey) settings.dns_providers[provider].consumer_key = consumerKey;
+                    } else if (provider === 'namecheap') {
+                        const username = formData.get('namecheap_username');
+                        const apiKey = formData.get('namecheap_api_key');
+                        if (username) settings.dns_providers[provider].username = username;
+                        if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                    } else if (provider === 'rfc2136') {
+                        const nameserver = formData.get('rfc2136_nameserver');
+                        const tsigKey = formData.get('rfc2136_tsig_key');
+                        const tsigSecret = formData.get('rfc2136_tsig_secret');
+                        const tsigAlgorithm = formData.get('rfc2136_tsig_algorithm');
+                        if (nameserver) settings.dns_providers[provider].nameserver = nameserver;
+                        if (tsigKey) settings.dns_providers[provider].tsig_key = tsigKey;
+                        if (tsigSecret) settings.dns_providers[provider].tsig_secret = tsigSecret;
+                        if (tsigAlgorithm) settings.dns_providers[provider].tsig_algorithm = tsigAlgorithm;
+                    } else if (provider === 'hetzner') {
+                        const token = formData.get('hetzner_api_token');
+                        if (token) settings.dns_providers[provider].api_token = token;
+                    } else if (provider === 'porkbun') {
+                        const apiKey = formData.get('porkbun_api_key');
+                        const secretKey = formData.get('porkbun_secret_key');
+                        if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                        if (secretKey) settings.dns_providers[provider].secret_key = secretKey;
+                    } else if (provider === 'godaddy') {
+                        const apiKey = formData.get('godaddy_api_key');
+                        const secret = formData.get('godaddy_secret');
+                        if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                        if (secret) settings.dns_providers[provider].secret = secret;
+                    } else if (provider === 'he-ddns') {
+                        const username = formData.get('he_ddns_username');
+                        const password = formData.get('he_ddns_password');
+                        if (username) settings.dns_providers[provider].username = username;
+                        if (password) settings.dns_providers[provider].password = password;
+                    } else if (provider === 'dynudns') {
+                        const token = formData.get('dynudns_token');
+                        if (token) settings.dns_providers[provider].token = token;
+                    } else if (provider === 'dnsmadeeasy') {
+                        const apiKey = formData.get('dnsmadeeasy_api_key');
+                        const secretKey = formData.get('dnsmadeeasy_secret_key');
+                        if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                        if (secretKey) settings.dns_providers[provider].secret_key = secretKey;
+                    } else if (provider === 'nsone') {
+                        const key = formData.get('nsone_api_key');
+                        if (key) settings.dns_providers[provider].api_key = key;
+                    }
+                });
+
+                // API Bearer Token
+                const apiToken = formData.get('api_bearer_token');
+                if (apiToken) {
+                    settings.api_bearer_token = apiToken;
+                }
+
+                // Save cache settings separately
+                saveCacheSettings();
+
+                // Backward compatibility for Cloudflare
+                if (settings.dns_providers.cloudflare?.api_token) {
+                    settings.cloudflare_token = settings.dns_providers.cloudflare.api_token;
+                }
+
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: API_HEADERS,
+                    body: JSON.stringify(settings)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('Settings saved successfully!', 'success');
+                    currentSettings = settings; // Update cached settings
+                    await loadDNSProviders(); // Refresh provider status
+                } else {
+                    throw new Error(data.message || 'Failed to save settings');
+                }
+
+            } catch (error) {
+                const errorMessage = handleApiError(error, 'Failed to save settings');
+                console.error('Error saving settings:', error);
+                showMessage(errorMessage, 'error');
+            } finally {
+                isLoading = false;
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Save Settings';
+            }
         }
 
         // Cache Management Functions
@@ -1510,185 +1766,6 @@
                 }
             }
         }
-
-        // Update the saveSettings function to include cache settings
-        function saveSettings() {
-            const formData = new FormData(form);
-            
-            const saveBtn = document.getElementById('saveBtn');
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
-
-            // Convert form data to object
-            const settings = {};
-            
-            // Basic settings
-            settings.email = formData.get('email');
-            settings.domains = formData.get('domains').split('\n').filter(domain => domain.trim());
-            settings.auto_renew = formData.has('auto_renew');
-            settings.dns_provider = formData.get('dns_provider');
-
-            // DNS provider configurations
-            settings.dns_providers = {};
-            const dnsProvider = settings.dns_provider;
-            
-            if (dnsProvider === 'cloudflare') {
-                const token = formData.get('cloudflare_api_token');
-                if (token) {
-                    settings.dns_providers.cloudflare = { api_token: token };
-                }
-            } else if (dnsProvider === 'route53') {
-                const accessKey = formData.get('route53_access_key_id');
-                const secretKey = formData.get('route53_secret_access_key');
-                const region = formData.get('route53_region');
-                if (accessKey && secretKey) {
-                    settings.dns_providers.route53 = {
-                        access_key_id: accessKey,
-                        secret_access_key: secretKey,
-                        region: region || 'us-east-1'
-                    };
-                }
-            } else if (dnsProvider === 'azure') {
-                const subscriptionId = formData.get('azure_subscription_id');
-                const resourceGroup = formData.get('azure_resource_group');
-                const tenantId = formData.get('azure_tenant_id');
-                const clientId = formData.get('azure_client_id');
-                const clientSecret = formData.get('azure_client_secret');
-                if (subscriptionId && resourceGroup && tenantId && clientId && clientSecret) {
-                    settings.dns_providers.azure = {
-                        subscription_id: subscriptionId,
-                        resource_group: resourceGroup,
-                        tenant_id: tenantId,
-                        client_id: clientId,
-                        client_secret: clientSecret
-                    };
-                }
-            } else if (dnsProvider === 'google') {
-                const projectId = formData.get('google_project_id');
-                const serviceAccountKey = formData.get('google_service_account_key');
-                if (projectId && serviceAccountKey) {
-                    settings.dns_providers.google = {
-                        project_id: projectId,
-                        service_account_key: serviceAccountKey
-                    };
-                }
-            } else if (dnsProvider === 'powerdns') {
-                const apiUrl = formData.get('powerdns_api_url');
-                const apiKey = formData.get('powerdns_api_key');
-                if (apiUrl && apiKey) {
-                    settings.dns_providers.powerdns = {
-                        api_url: apiUrl,
-                        api_key: apiKey
-                    };
-                }
-            } else if (dnsProvider === 'digitalocean') {
-                const token = formData.get('digitalocean_api_token');
-                if (token) {
-                    settings.dns_providers.digitalocean = { api_token: token };
-                }
-            } else if (dnsProvider === 'linode') {
-                const key = formData.get('linode_api_key');
-                if (key) {
-                    settings.dns_providers.linode = { api_key: key };
-                }
-            } else if (dnsProvider === 'gandi') {
-                const token = formData.get('gandi_api_token');
-                if (token) {
-                    settings.dns_providers.gandi = { api_token: token };
-                }
-            } else if (dnsProvider === 'ovh') {
-                const endpoint = formData.get('ovh_endpoint');
-                const appKey = formData.get('ovh_application_key');
-                const appSecret = formData.get('ovh_application_secret');
-                const consumerKey = formData.get('ovh_consumer_key');
-                if (endpoint && appKey && appSecret && consumerKey) {
-                    settings.dns_providers.ovh = {
-                        endpoint: endpoint,
-                        application_key: appKey,
-                        application_secret: appSecret,
-                        consumer_key: consumerKey
-                    };
-                }
-            } else if (dnsProvider === 'namecheap') {
-                const username = formData.get('namecheap_username');
-                const apiKey = formData.get('namecheap_api_key');
-                if (username && apiKey) {
-                    settings.dns_providers.namecheap = {
-                        username: username,
-                        api_key: apiKey
-                    };
-                }
-            } else if (dnsProvider === 'vultr') {
-                const key = formData.get('vultr_api_key');
-                if (key) {
-                    settings.dns_providers.vultr = { api_key: key };
-                }
-            } else if (dnsProvider === 'dnsmadeeasy') {
-                const apiKey = formData.get('dnsmadeeasy_api_key');
-                const secretKey = formData.get('dnsmadeeasy_secret_key');
-                if (apiKey && secretKey) {
-                    settings.dns_providers.dnsmadeeasy = {
-                        api_key: apiKey,
-                        secret_key: secretKey
-                    };
-                }
-            } else if (dnsProvider === 'nsone') {
-                const key = formData.get('nsone_api_key');
-                if (key) {
-                    settings.dns_providers.nsone = { api_key: key };
-                }
-            } else if (dnsProvider === 'rfc2136') {
-                const nameserver = formData.get('rfc2136_nameserver');
-                const tsigKey = formData.get('rfc2136_tsig_key');
-                const tsigSecret = formData.get('rfc2136_tsig_secret');
-                const tsigAlgorithm = formData.get('rfc2136_tsig_algorithm');
-                if (nameserver && tsigKey && tsigSecret) {
-                    settings.dns_providers.rfc2136 = {
-                        nameserver: nameserver,
-                        tsig_key: tsigKey,
-                        tsig_secret: tsigSecret
-                    };
-                    if (tsigAlgorithm) {
-                        settings.dns_providers.rfc2136.tsig_algorithm = tsigAlgorithm;
-                    }
-                }
-            }
-
-            // API Bearer Token
-            const apiToken = formData.get('api_bearer_token');
-            if (apiToken) {
-                settings.api_bearer_token = apiToken;
-            }
-
-            // Save cache settings separately (they're handled on client-side)
-            saveCacheSettings();
-
-            fetch('/api/settings', {
-                method: 'POST',
-                headers: API_HEADERS,
-                body: JSON.stringify(settings)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage('Settings saved successfully!', 'success');
-                    loadDNSProviders(); // Refresh provider status
-                } else {
-                    showMessage(data.message || 'Error saving settings', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error saving settings:', error);
-                showMessage('Error saving settings', 'error');
-            })
-            .finally(() => {
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Save Settings';
-            });
-        }
-
-        // Load settings when page loads
-        loadSettings();
     </script>
 </body>
 </html>
