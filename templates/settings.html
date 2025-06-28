@@ -6,6 +6,14 @@
     <title>Settings - CertMate</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Prevent flash of white background in dark mode */
+        @media (prefers-color-scheme: dark) {
+            html {
+                background-color: #111827 !important;
+            }
+        }
+    </style>
     <script>
         tailwind.config = {
             darkMode: 'media', // Automatically respects system preference
