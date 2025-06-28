@@ -1,0 +1,24 @@
+# Minimal CertMate installation - Cloudflare only (fastest install)
+# Use this for quick testing or Cloudflare-only deployments
+
+# Core Flask dependencies
+Flask==3.0.3
+Flask-CORS==4.0.1
+flask-restx==1.3.0
+
+# Certificate management
+certbot==2.11.0
+certbot-dns-cloudflare==2.11.0
+
+# Cloudflare API support
+cloudflare==2.19.4
+
+# Core application dependencies
+requests==2.32.3
+python-dotenv==1.0.1
+APScheduler==3.10.4
+cryptography==42.0.8
+pyopenssl==24.1.0
+
+# Production server
+gunicorn==22.0.0

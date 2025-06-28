@@ -1,0 +1,6 @@
+# Azure DNS specific requirements
+# Install this in addition to requirements-minimal.txt for Azure support
+
+azure-identity==1.17.1
+azure-mgmt-dns==8.1.0
+certbot-dns-azure==2.11.0

@@ -1428,6 +1428,11 @@ def settings_page():
     api_token = settings.get('api_bearer_token', 'token-not-configured')
     return render_template('settings.html', settings=settings, api_token=api_token)
 
+@app.route('/help')
+def help_page():
+    """Help and documentation page"""
+    return render_template('help.html')
+
 # Health check for Docker
 @app.route('/health')
 def health_check():

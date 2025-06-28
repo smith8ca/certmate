@@ -1,0 +1,24 @@
+# Extended DNS providers for specialized use cases
+# Install this in addition to requirements-minimal.txt for additional DNS providers
+
+# Self-hosted and enterprise DNS
+certbot-dns-powerdns==2.11.0
+certbot-dns-rfc2136==2.11.0
+
+# Popular hosting providers
+certbot-dns-linode==2.11.0
+certbot-dns-vultr==2.11.0
+certbot-dns-hetzner==2.11.0
+
+# Domain registrars with DNS
+certbot-dns-gandi==2.11.0
+certbot-dns-ovh==2.11.0
+certbot-dns-namecheap==2.11.0
+certbot-dns-porkbun==2.11.0
+certbot-dns-godaddy==2.11.0
+
+# Specialized DNS services
+certbot-dns-dnsmadeeasy==2.11.0
+certbot-dns-nsone==2.11.0
+certbot-dns-he-ddns==2.11.0
+certbot-dns-dynudns==2.11.0

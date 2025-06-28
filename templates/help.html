@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - CertMate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'media', // Automatically respects system preference
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-shield-alt text-primary text-2xl"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">CertMate</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">SSL Certificate Manager</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fas fa-certificate mr-1"></i> Certificates
+                    </a>
+                    <a href="/settings" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fas fa-cog mr-1"></i> Settings
+                    </a>
+                    <a href="/help" class="px-3 py-2 rounded-md text-sm font-medium text-primary bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700">
+                        <i class="fas fa-question-circle mr-1"></i> Help
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg mb-6">
+            <div class="px-6 py-4">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                    <i class="fas fa-question-circle text-primary mr-2"></i>
+                    Help & Documentation
+                </h2>
+                <p class="text-gray-600 dark:text-gray-300 mt-1">Learn how to use CertMate and manage your SSL certificates</p>
+                <div class="mt-3 flex items-center text-sm">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        <i class="fas fa-check-circle mr-1"></i>
+                        CertMate Active
+                    </span>
+                    <span class="ml-4 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-link mr-1"></i>
+                        API Available at <a href="/docs/" target="_blank" class="text-primary hover:underline">/docs/</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <a href="#getting-started" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                <div class="flex items-center">
+                    <i class="fas fa-rocket text-green-600 text-xl mr-3"></i>
+                    <div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">Getting Started</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Quick start guide</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#dns-providers" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                <div class="flex items-center">
+                    <i class="fas fa-server text-blue-600 text-xl mr-3"></i>
+                    <div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">DNS Providers</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Supported providers</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#api-usage" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                <div class="flex items-center">
+                    <i class="fas fa-code text-purple-600 text-xl mr-3"></i>
+                    <div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">API Usage</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">REST API examples</p>
+                    </div>
+                </div>
+            </a>
+            <a href="#troubleshooting" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-md transition-shadow">
+                <div class="flex items-center">
+                    <i class="fas fa-tools text-orange-600 text-xl mr-3"></i>
+                    <div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">Troubleshooting</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Common issues</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="space-y-6">
+            <!-- About CertMate -->
+            <div id="about" class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                <div class="px-6 py-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <i class="fas fa-shield-alt text-primary mr-2"></i>
+                        About CertMate
+                    </h3>
+                    <div class="prose prose-gray dark:prose-invert max-w-none">
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            <strong>CertMate</strong> is a powerful SSL certificate management system designed for modern infrastructure. 
+                            Built with multi-DNS provider support, Docker containerization, and comprehensive REST API, it's the perfect solution 
+                            for managing certificates across multiple datacenters and cloud environments.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">
+                                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                    Key Features
+                                </h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Zero-Downtime Automation</li>
+                                    <li>• Multi-Cloud Support (19 DNS providers)</li>
+                                    <li>• Enterprise-Ready with REST API</li>
+                                    <li>• Security-First approach</li>
+                                    <li>• Wildcard & Multi-Domain support</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">
+                                    <i class="fas fa-star text-yellow-600 mr-2"></i>
+                                    Benefits
+                                </h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Automatic certificate renewal</li>
+                                    <li>• Let's Encrypt integration</li>
+                                    <li>• Modern web dashboard</li>
+                                    <li>• Complete API control</li>
+                                    <li>• Docker & Kubernetes ready</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Getting Started -->
+            <div id="getting-started" class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                <div class="px-6 py-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <i class="fas fa-rocket text-green-600 mr-2"></i>
+                        Getting Started
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <h4 class="font-medium text-blue-900 dark:text-blue-100 mb-2">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                First Steps
+                            </h4>
+                            <ol class="text-sm text-blue-800 dark:text-blue-200 space-y-2 ml-4 list-decimal">
+                                <li>Configure your DNS provider in <a href="/settings" class="underline hover:no-underline">Settings</a></li>
+                                <li>Add your domain(s) to manage</li>
+                                <li>Create your first SSL certificate</li>
+                                <li>Set up automatic renewal</li>
+                            </ol>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">
+                                    <i class="fas fa-certificate text-primary mr-2"></i>
+                                    Creating Certificates
+                                </h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    Use the <a href="/" class="text-primary hover:underline">Certificates</a> page to:
+                                </p>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Add new domains</li>
+                                    <li>• Generate SSL certificates</li>
+                                    <li>• Monitor certificate status</li>
+                                    <li>• Download certificate files</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">
+                                    <i class="fas fa-sync-alt text-primary mr-2"></i>
+                                    Automatic Renewal
+                                </h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                    CertMate automatically:
+                                </p>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Checks certificates daily</li>
+                                    <li>• Renews 30 days before expiry</li>
+                                    <li>• Updates certificate files</li>
+                                    <li>• Maintains service availability</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DNS Providers -->
+            <div id="dns-providers" class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                <div class="px-6 py-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <i class="fas fa-server text-blue-600 mr-2"></i>
+                        Supported DNS Providers
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        CertMate supports <strong>19 DNS providers</strong> for automated certificate validation. The most popular providers are listed first.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <!-- Primary Providers -->
+                        <div>
+                            <h4 class="font-medium text-gray-900 dark:text-white mb-4">
+                                <i class="fas fa-star text-blue-500 mr-2"></i>
+                                Supported DNS Providers
+                            </h4>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                                <div class="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                                    <i class="fab fa-cloudflare text-orange-500 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Cloudflare</div>
+                                </div>
+                                <div class="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                                    <i class="fab fa-aws text-orange-400 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Route53</div>
+                                </div>
+                                <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                    <i class="fab fa-digital-ocean text-blue-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">DigitalOcean</div>
+                                </div>
+                                <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                                    <i class="fab fa-microsoft text-blue-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Azure DNS</div>
+                                </div>
+                                <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                                    <i class="fab fa-google text-blue-500 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Google DNS</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-server text-gray-600 dark:text-gray-400 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">PowerDNS</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-exchange-alt text-gray-600 dark:text-gray-400 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">RFC2136</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-cloud text-green-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Linode</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-cloud text-blue-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Vultr</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-server text-red-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Hetzner</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-globe text-orange-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Gandi</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-server text-purple-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">OVH</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-shopping-cart text-red-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Namecheap</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-paw text-pink-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Porkbun</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-globe text-green-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">GoDaddy</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-cogs text-green-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">DNS Made Easy</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-network-wired text-indigo-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">NS1</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-bolt text-yellow-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Hurricane Electric</div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                                    <i class="fas fa-sync-alt text-purple-600 text-lg mb-1"></i>
+                                    <div class="text-xs font-medium text-gray-900 dark:text-white">Dynu</div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                All 19 providers are available - install additional providers via requirements-extended.txt
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Usage -->
+            <div id="api-usage" class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                <div class="px-6 py-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <i class="fas fa-code text-purple-600 mr-2"></i>
+                        API Usage & Examples
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+                            <h4 class="font-medium text-purple-900 dark:text-purple-100 mb-2">
+                                <i class="fas fa-key mr-2"></i>
+                                Authentication
+                            </h4>
+                            <p class="text-sm text-purple-800 dark:text-purple-200 mb-2">
+                                All API requests require a Bearer token in the Authorization header:
+                            </p>
+                            <code class="block bg-purple-100 dark:bg-purple-900 text-purple-900 dark:text-purple-100 p-2 rounded text-sm">
+                                Authorization: Bearer your_api_token_here
+                            </code>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-3">
+                                    <i class="fas fa-certificate text-primary mr-2"></i>
+                                    Certificate Operations
+                                </h4>
+                                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg space-y-3">
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">List Certificates</div>
+                                        <code class="text-xs text-gray-600 dark:text-gray-300">GET /api/certificates</code>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">Create Certificate</div>
+                                        <code class="text-xs text-gray-600 dark:text-gray-300">POST /api/certificates/create</code>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">Renew Certificate</div>
+                                        <code class="text-xs text-gray-600 dark:text-gray-300">POST /api/certificates/{domain}/renew</code>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">Download Certificate</div>
+                                        <code class="text-xs text-gray-600 dark:text-gray-300">GET /{domain}/tls</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-3">
+                                    <i class="fas fa-terminal text-primary mr-2"></i>
+                                    cURL Examples
+                                </h4>
+                                <div class="bg-gray-900 text-green-400 p-4 rounded-lg text-xs space-y-2 font-mono">
+                                    <div># Create certificate</div>
+                                    <div>curl -X POST "http://localhost:8000/api/certificates/create" \</div>
+                                    <div class="ml-2">-H "Authorization: Bearer YOUR_TOKEN" \</div>
+                                    <div class="ml-2">-H "Content-Type: application/json" \</div>
+                                    <div class="ml-2">-d '{"domain": "example.com"}'</div>
+                                    <div class="mt-3"># Download certificate</div>
+                                    <div>curl -H "Authorization: Bearer YOUR_TOKEN" \</div>
+                                    <div class="ml-2">-o example.com.zip \</div>
+                                    <div class="ml-2">http://localhost:8000/example.com/tls</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                            <h4 class="font-medium text-yellow-900 dark:text-yellow-100 mb-2">
+                                <i class="fas fa-book mr-2"></i>
+                                Complete API Documentation
+                            </h4>
+                            <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                Explore the full interactive API documentation with examples and testing capabilities:
+                            </p>
+                            <div class="mt-3 space-x-4">
+                                <a href="/docs/" target="_blank" class="inline-flex items-center px-3 py-1 bg-yellow-200 dark:bg-yellow-800 text-yellow-900 dark:text-yellow-100 rounded-md text-sm hover:bg-yellow-300 dark:hover:bg-yellow-700">
+                                    <i class="fas fa-external-link-alt mr-1"></i>
+                                    Swagger UI (/docs/)
+                                </a>
+                                <a href="/redoc/" target="_blank" class="inline-flex items-center px-3 py-1 bg-yellow-200 dark:bg-yellow-800 text-yellow-900 dark:text-yellow-100 rounded-md text-sm hover:bg-yellow-300 dark:hover:bg-yellow-700">
+                                    <i class="fas fa-external-link-alt mr-1"></i>
+                                    ReDoc (/redoc/)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div id="troubleshooting" class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                <div class="px-6 py-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <i class="fas fa-tools text-orange-600 mr-2"></i>
+                        Troubleshooting
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
+                            <h4 class="font-medium text-red-900 dark:text-red-100 mb-2">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                Common Issues
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <div class="font-medium text-red-800 dark:text-red-200">DNS Provider Authentication Failed</div>
+                                    <div class="text-red-700 dark:text-red-300">
+                                        • Double-check your API credentials in <a href="/settings" class="underline">Settings</a><br>
+                                        • Ensure API tokens have proper DNS permissions<br>
+                                        • Verify domain is managed by the configured DNS provider
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-red-800 dark:text-red-200">Certificate Creation Timeout</div>
+                                    <div class="text-red-700 dark:text-red-300">
+                                        • DNS propagation can take up to 10 minutes<br>
+                                        • Check DNS records are properly configured<br>
+                                        • Ensure domain points to correct nameservers
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-red-800 dark:text-red-200">Let's Encrypt Rate Limits</div>
+                                    <div class="text-red-700 dark:text-red-300">
+                                        • Maximum 20 certificates per domain per week<br>
+                                        • Wait for rate limit window to reset<br>
+                                        • Use staging environment for testing
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+                                <h4 class="font-medium text-green-900 dark:text-green-100 mb-2">
+                                    <i class="fas fa-check-circle mr-2"></i>
+                                    Health Checks
+                                </h4>
+                                <div class="text-sm text-green-800 dark:text-green-200 space-y-1">
+                                    <div>• Service Status: <a href="/health" target="_blank" class="underline">/health</a></div>
+                                    <div>• API Connectivity: <a href="/docs/" target="_blank" class="underline">/docs/</a></div>
+                                    <div>• Certificate Status: <a href="/" class="underline">Dashboard</a></div>
+                                </div>
+                            </div>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                                <h4 class="font-medium text-blue-900 dark:text-blue-100 mb-2">
+                                    <i class="fas fa-question-circle mr-2"></i>
+                                    Getting Help
+                                </h4>
+                                <div class="text-sm text-blue-800 dark:text-blue-200 space-y-1 mb-3">
+                                    <div>• Check logs in Docker/service manager</div>
+                                    <div>• Verify DNS provider connectivity</div>
+                                    <div>• Test with simple domain first</div>
+                                    <div>• Review API documentation</div>
+                                </div>
+                                <div class="pt-2 border-t border-blue-200 dark:border-blue-700">
+                                    <a href="https://github.com/fabriziosalmi/certmate/issues/new/choose" 
+                                       target="_blank" 
+                                       class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors duration-200 shadow-sm hover:shadow-md">
+                                        <i class="fab fa-github mr-2"></i>
+                                        Report Issue on GitHub
+                                        <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Features -->
+            <div id="advanced" class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                <div class="px-6 py-6">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                        <i class="fas fa-cogs text-gray-600 mr-2"></i>
+                        Advanced Features
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">
+                                    <i class="fas fa-certificate text-primary mr-2"></i>
+                                    Certificate Types
+                                </h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• <strong>Single Domain:</strong> example.com</li>
+                                    <li>• <strong>Wildcard:</strong> *.example.com</li>
+                                    <li>• <strong>Multi-Domain (SAN):</strong> example.com, www.example.com</li>
+                                    <li>• <strong>Combined:</strong> example.com, *.example.com</li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">
+                                    <i class="fas fa-sync-alt text-primary mr-2"></i>
+                                    Automation Features
+                                </h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Automatic renewal 30 days before expiry</li>
+                                    <li>• Health monitoring and deployment checks</li>
+                                    <li>• API-driven certificate management</li>
+                                    <li>• Bulk operations for multiple domains</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">
+                                    <i class="fas fa-download text-primary mr-2"></i>
+                                    Certificate Downloads
+                                </h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• <strong>ZIP Bundle:</strong> All files in one archive</li>
+                                    <li>• <strong>Individual Files:</strong> cert.pem, chain.pem, etc.</li>
+                                    <li>• <strong>Full Chain:</strong> Certificate + intermediate</li>
+                                    <li>• <strong>Private Key:</strong> Secure key file</li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white mb-2">
+                                    <i class="fas fa-shield-alt text-primary mr-2"></i>
+                                    Security Features
+                                </h4>
+                                <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                                    <li>• Bearer token API authentication</li>
+                                    <li>• Secure file permissions (600/700)</li>
+                                    <li>• Environment variable credential storage</li>
+                                    <li>• Audit logging for all operations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

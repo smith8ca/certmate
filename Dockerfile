@@ -1,29 +1,57 @@
+# Multi-stage build for optimized image size and faster builds
+FROM python:3.11-slim as builder
+
+# Set working directory for build stage
+WORKDIR /build
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt requirements-minimal.txt ./
+
+# Create virtual environment and install dependencies
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install minimal requirements by default (fastest build)
+# Override with --build-arg REQUIREMENTS_FILE=requirements.txt for full install
+ARG REQUIREMENTS_FILE=requirements-minimal.txt
+RUN pip install -U pip wheel && \
+    pip install --no-cache-dir -r ${REQUIREMENTS_FILE}
+
+# Production stage
 FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install runtime dependencies only
 RUN apt-get update && apt-get install -y \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --create-home --shell /bin/bash certmate
 
-# Copy requirements first for better caching
-COPY requirements.txt .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy virtual environment from builder stage
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy application code
 COPY . .
 
-# Create necessary directories
-RUN mkdir -p certificates logs
+# Create necessary directories with proper permissions
+RUN mkdir -p certificates data logs && \
+    chown -R certmate:certmate /app
 
 # Set environment variables
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 ENV PYTHONPATH=/app
+
+# Switch to non-root user
+USER certmate
 
 # Expose port
 EXPOSE 8000

@@ -41,6 +41,9 @@
                     <a href="/settings" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-cog mr-1"></i> Settings
                     </a>
+                    <a href="/help" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fas fa-question-circle mr-1"></i> Help
+                    </a>
                 </div>
             </div>
         </div>
@@ -77,9 +80,9 @@
                 <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">Generate a new SSL certificate for your domain</p>
             </div>
             <div class="px-6 py-6">
-                <form id="createCertForm" class="space-y-6">
-                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div>
+                <form id="createCertForm" class="space-y-4">
+                    <div class="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-end">
+                        <div class="lg:col-span-4">
                             <label for="domain" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 <i class="fas fa-globe mr-1 text-gray-400"></i>
                                 Domain
@@ -88,7 +91,7 @@
                                    class="block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200"
                                    placeholder="example.com" required>
                         </div>
-                        <div>
+                        <div class="lg:col-span-5">
                             <label for="dns_provider_select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 <i class="fas fa-server mr-1 text-gray-400"></i>
                                 DNS Provider (Optional)
@@ -96,46 +99,39 @@
                             <select id="dns_provider_select" name="dns_provider" 
                                     class="block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200">
                                 <option value="">Use default from settings</option>
-                                <!-- Tier 1: Core Providers (Individual Plugins) -->
-                                <optgroup label="Tier 1: Core Providers">
-                                    <option value="cloudflare">Cloudflare</option>
-                                    <option value="route53">AWS Route53</option>
-                                    <option value="azure">Azure DNS</option>
-                                    <option value="google">Google Cloud DNS</option>
-                                    <option value="powerdns">PowerDNS</option>
-                                    <option value="digitalocean">DigitalOcean</option>
-                                    <option value="linode">Linode</option>
-                                    <option value="gandi">Gandi</option>
-                                    <option value="ovh">OVH</option>
-                                    <option value="namecheap">Namecheap</option>
-                                </optgroup>
-                                <!-- Tier 2: Additional Providers (Individual Plugins) -->
-                                <optgroup label="Tier 2: Additional Providers">
-                                    <option value="vultr">Vultr</option>
-                                    <option value="dnsmadeeasy">DNS Made Easy</option>
-                                    <option value="nsone">NS1</option>
-                                    <option value="rfc2136">RFC2136 (Generic DNS Update)</option>
-                                </optgroup>
-                                <!-- Tier 3: Extended Providers (Individual Plugins) -->
-                                <optgroup label="Tier 3: Extended Providers">
-                                    <option value="hetzner">Hetzner</option>
-                                    <option value="porkbun">Porkbun</option>
-                                    <option value="godaddy">GoDaddy</option>
-                                    <option value="he-ddns">Hurricane Electric</option>
-                                    <option value="dynudns">Dynu</option>
-                                </optgroup>
+                                <option value="cloudflare">Cloudflare</option>
+                                <option value="route53">AWS Route53</option>
+                                <option value="digitalocean">DigitalOcean</option>
+                                <option value="azure">Azure DNS</option>
+                                <option value="google">Google Cloud DNS</option>
+                                <option value="powerdns">PowerDNS</option>
+                                <option value="rfc2136">RFC2136 (Generic DNS Update)</option>
+                                <option value="linode">Linode</option>
+                                <option value="vultr">Vultr</option>
+                                <option value="hetzner">Hetzner</option>
+                                <option value="gandi">Gandi</option>
+                                <option value="ovh">OVH</option>
+                                <option value="namecheap">Namecheap</option>
+                                <option value="porkbun">Porkbun</option>
+                                <option value="godaddy">GoDaddy</option>
+                                <option value="dnsmadeeasy">DNS Made Easy</option>
+                                <option value="nsone">NS1</option>
+                                <option value="he-ddns">Hurricane Electric</option>
+                                <option value="dynudns">Dynu</option>
                             </select>
-                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                Leave empty to use the default DNS provider from settings
-                            </p>
+                        </div>
+                        <div class="lg:col-span-3">
+                            <button type="submit" 
+                                    class="w-full lg:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                                <i class="fas fa-plus mr-2"></i>
+                                Create Certificate
+                            </button>
                         </div>
                     </div>
-                    <div class="flex justify-end">
-                        <button type="submit" 
-                                class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-primary hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
-                            <i class="fas fa-plus mr-2"></i>
-                            Create Certificate
-                        </button>
+                    <div class="lg:hidden">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Leave DNS provider empty to use the default from settings
+                        </p>
                     </div>
                 </form>
             </div>
@@ -144,12 +140,12 @@
         <!-- Certificates List -->
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-t-lg">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Your Certificates</h3>
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 lg:space-x-3">
                         <div class="relative">
                             <input type="text" id="certificateSearch" placeholder="Search certificates..." 
-                                   class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm bg-white shadow-sm transition-shadow duration-200">
+                                   class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm bg-white shadow-sm transition-shadow duration-200 w-full sm:w-48">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-search text-gray-400"></i>
                             </div>
@@ -161,14 +157,16 @@
                             <option value="expired">Expired</option>
                         </select>
                         <button onclick="checkAllDeploymentStatuses()" 
-                                class="inline-flex items-center px-3 py-2 border border-indigo-300 dark:border-indigo-600 shadow-sm text-sm font-medium rounded-lg text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
-                            <i class="fas fa-sync mr-2"></i>
-                            Check All
+                                class="inline-flex items-center px-3 py-2 border border-indigo-300 dark:border-indigo-600 shadow-sm text-sm font-medium rounded-lg text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 whitespace-nowrap">
+                            <i class="fas fa-sync mr-1 sm:mr-2"></i>
+                            <span class="hidden sm:inline">Check All</span>
+                            <span class="sm:hidden">Check</span>
                         </button>
                         <button onclick="toggleDebugConsole()" 
-                                class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-lg text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
-                            <i class="fas fa-terminal mr-2"></i>
-                            Debug
+                                class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-lg text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200 whitespace-nowrap">
+                            <i class="fas fa-terminal mr-1 sm:mr-2"></i>
+                            <span class="hidden sm:inline">Debug</span>
+                            <span class="sm:hidden">Debug</span>
                         </button>
                     </div>
                 </div>
@@ -374,65 +372,65 @@
             
             const statsContainer = document.getElementById('statsCards');
             statsContainer.innerHTML = `
-                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
-                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-certificate text-blue-600 text-xl"></i>
+                                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-certificate text-blue-600 dark:text-blue-400 text-xl"></i>
                                 </div>
                             </div>
                             <div class="ml-4 flex-1">
-                                <p class="text-sm font-medium text-gray-600">Total Certificates</p>
-                                <p class="text-2xl font-bold text-gray-900">${total}</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Certificates</p>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-white">${total}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
-                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-xl"></i>
                                 </div>
                             </div>
                             <div class="ml-4 flex-1">
-                                <p class="text-sm font-medium text-gray-600">Valid</p>
-                                <p class="text-2xl font-bold text-green-600">${valid}</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Valid</p>
+                                <p class="text-2xl font-bold text-green-600 dark:text-green-400">${valid}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
-                                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                                <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-yellow-600 dark:text-yellow-400 text-xl"></i>
                                 </div>
                             </div>
                             <div class="ml-4 flex-1">
-                                <p class="text-sm font-medium text-gray-600">Expiring Soon</p>
-                                <p class="text-2xl font-bold text-yellow-600">${expiring}</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Expiring Soon</p>
+                                <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">${expiring}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
-                                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-globe text-indigo-600 text-xl"></i>
+                                <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-globe text-indigo-600 dark:text-indigo-400 text-xl"></i>
                                 </div>
                             </div>
                             <div class="ml-4 flex-1">
-                                <p class="text-sm font-medium text-gray-600">Deployment</p>
-                                <p class="text-2xl font-bold text-indigo-600" id="deploymentCount">--</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Deployment</p>
+                                <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400" id="deploymentCount">--</p>
                             </div>
                         </div>
                     </div>
@@ -630,133 +628,108 @@
                 const isExpired = cert.days_until_expiry <= 0;
                 
                 return `
-                    <div class="px-6 py-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
-                        <div class="flex flex-col space-y-4">
-                            <!-- Certificate Header -->
-                            <div class="flex flex-wrap items-start justify-between gap-3">
-                                <div class="flex items-center space-x-3 min-w-0 flex-1">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-certificate text-blue-600 dark:text-blue-400"></i>
-                                        </div>
+                    <div class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0 lg:space-x-4">
+                            <!-- Certificate Header Info -->
+                            <div class="flex items-center space-x-3 min-w-0 flex-1">
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-certificate text-blue-600 dark:text-blue-400"></i>
                                     </div>
-                                    <div class="min-w-0 flex-1">
-                                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white truncate">${cert.domain}</h4>
-                                        <div class="flex items-center space-x-2 mt-1">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                                isExpired ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400' : 
-                                                isExpiringSoon ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400' : 
-                                                'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
-                                            }">
-                                                <i class="fas ${isExpired ? 'fa-times-circle' : isExpiringSoon ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-1"></i>
-                                                ${isExpired ? 'Expired' : isExpiringSoon ? 'Expiring Soon' : 'Valid'}
-                                            </span>
-                                            <span id="deployment-status-${cert.domain.replace(/\./g, '-')}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                                                <i class="fas fa-spinner fa-spin mr-1"></i>
-                                                Checking...
-                                            </span>
-                                        </div>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white truncate">${cert.domain}</h4>
+                                    <div class="flex flex-wrap items-center gap-2 mt-1">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                            isExpired ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400' : 
+                                            isExpiringSoon ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400' : 
+                                            'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
+                                        }">
+                                            <i class="fas ${isExpired ? 'fa-times-circle' : isExpiringSoon ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-1"></i>
+                                            ${isExpired ? 'Expired' : isExpiringSoon ? 'Expiring Soon' : 'Valid'}
+                                        </span>
+                                        <span id="deployment-status-${cert.domain.replace(/\./g, '-')}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                                            <i class="fas fa-spinner fa-spin mr-1"></i>
+                                            Checking...
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- Certificate Details Grid -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                                <div class="flex items-center space-x-3">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-calendar text-blue-600 dark:text-blue-400 text-sm"></i>
-                                        </div>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Expires</p>
+                            <!-- Certificate Details (Compact) -->
+                            <div class="flex flex-wrap items-center gap-4 lg:gap-6">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-calendar text-gray-400 text-sm"></i>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Expires</p>
                                         <p class="text-sm font-medium text-gray-900 dark:text-white">${expiryDate.toLocaleDateString()}</p>
                                     </div>
                                 </div>
                                 
-                                <div class="flex items-center space-x-3">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-8 h-8 ${isExpired ? 'bg-red-100 dark:bg-red-900/30' : isExpiringSoon ? 'bg-yellow-100 dark:bg-yellow-900/30' : 'bg-green-100 dark:bg-green-900/30'} rounded-full flex items-center justify-center">
-                                            <i class="fas fa-clock ${isExpired ? 'text-red-600 dark:text-red-400' : isExpiringSoon ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400'} text-sm"></i>
-                                        </div>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Days Left</p>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-clock ${isExpired ? 'text-red-600 dark:text-red-400' : isExpiringSoon ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400'} text-sm"></i>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Days Left</p>
                                         <p class="text-sm font-medium ${isExpired ? 'text-red-600 dark:text-red-400' : isExpiringSoon ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400'}">${cert.days_until_expiry}</p>
                                     </div>
                                 </div>
                                 
                                 ${cert.dns_provider ? `
-                                    <div class="flex items-center space-x-3">
-                                        <div class="flex-shrink-0">
-                                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center">
-                                                <i class="fas fa-server text-purple-600 dark:text-purple-400 text-sm"></i>
-                                            </div>
-                                        </div>
-                                        <div class="min-w-0">
-                                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400">DNS Provider</p>
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-server text-purple-600 dark:text-purple-400 text-sm"></i>
+                                        <div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">DNS</p>
                                             <p class="text-sm font-medium text-gray-900 dark:text-white">${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>
                                         </div>
                                     </div>
                                 ` : ''}
                                 
-                                <div class="flex items-center space-x-3">
-                                    <div class="flex-shrink-0">
-                                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-globe text-indigo-600 text-sm"></i>
-                                        </div>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <p class="text-xs font-medium text-gray-500">Deployment</p>
-                                        <p id="deployment-text-${cert.domain.replace(/\./g, '-')}" class="text-sm font-medium text-gray-600">Checking...</p>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-globe text-indigo-600 dark:text-indigo-400 text-sm"></i>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Deployment</p>
+                                        <p id="deployment-text-${cert.domain.replace(/\./g, '-')}" class="text-sm font-medium text-gray-600 dark:text-gray-300">Checking...</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- Auto-renewal Notice -->
-                            ${cert.days_until_expiry > 0 && cert.days_until_expiry <= 30 ? `
-                                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                                    <div class="flex items-start space-x-2">
-                                        <i class="fas fa-exclamation-triangle text-yellow-600 mt-0.5"></i>
-                                        <div class="text-sm text-yellow-800">
-                                            <p class="font-medium">Auto-renewal scheduled</p>
-                                            <p class="mt-1">Certificate will be renewed automatically within ${Math.max(cert.days_until_expiry - 30, 0)} days</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ` : ''}
-                            
-                            <!-- Action Buttons -->
-                            <div class="flex flex-wrap gap-3 pt-2">
-                                <!-- Primary Actions -->
-                                <div class="flex gap-2">
-                                    <button onclick="renewCertificate('${cert.domain}')" 
-                                            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
-                                        <i class="fas fa-sync-alt mr-2 text-green-600"></i>
-                                        Renew
-                                    </button>
-                                    <button onclick="checkDeploymentStatus('${cert.domain}')" 
-                                            class="inline-flex items-center px-4 py-2 border border-indigo-300 shadow-sm text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
-                                        <i class="fas fa-globe mr-2"></i>
-                                        Check Deployment
-                                    </button>
-                                </div>
-                                
-                                <!-- Download Actions -->
-                                <div class="flex gap-2">
-                                    <button onclick="downloadCertificate('${cert.domain}')" 
-                                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
-                                        <i class="fas fa-download mr-2 text-blue-600"></i>
-                                        Bundle
-                                    </button>
-                                    <button onclick="copyCurlCommand('${cert.domain}')" 
-                                            class="inline-flex items-center px-3 py-2 border border-blue-300 shadow-sm text-sm font-medium rounded-lg text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-                                        <i class="fas fa-code mr-2"></i>
-                                        API
-                                    </button>
-                                </div>
+                            <!-- Action Buttons (Compact) -->
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button onclick="renewCertificate('${cert.domain}')" 
+                                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                                    <i class="fas fa-sync-alt mr-1 text-green-600"></i>
+                                    Renew
+                                </button>
+                                <button onclick="checkDeploymentStatus('${cert.domain}')" 
+                                        class="inline-flex items-center px-3 py-1.5 border border-indigo-300 dark:border-indigo-600 shadow-sm text-xs font-medium rounded-md text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                    <i class="fas fa-globe mr-1"></i>
+                                    Check
+                                </button>
+                                <button onclick="downloadCertificate('${cert.domain}')" 
+                                        class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-xs font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                                    <i class="fas fa-download mr-1 text-blue-600"></i>
+                                    Download
+                                </button>
+                                <button onclick="copyCurlCommand('${cert.domain}')" 
+                                        class="inline-flex items-center px-3 py-1.5 border border-blue-300 dark:border-blue-600 shadow-sm text-xs font-medium rounded-md text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                    <i class="fas fa-code mr-1"></i>
+                                    API
+                                </button>
                             </div>
                         </div>
+                        
+                        <!-- Auto-renewal Notice (if needed) -->
+                        ${cert.days_until_expiry > 0 && cert.days_until_expiry <= 30 ? `
+                            <div class="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-600 rounded-lg">
+                                <div class="flex items-start space-x-2">
+                                    <i class="fas fa-exclamation-triangle text-yellow-600 dark:text-yellow-400 mt-0.5"></i>
+                                    <div class="text-sm text-yellow-800 dark:text-yellow-200">
+                                        <p class="font-medium">Auto-renewal scheduled</p>
+                                        <p class="mt-1">Certificate will be renewed automatically within ${Math.max(cert.days_until_expiry - 30, 0)} days</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             }).join('');
@@ -988,8 +961,8 @@
             const statusElement = document.getElementById(`deployment-status-${domain.replace(/\./g, '-')}`);
             const textElement = document.getElementById(`deployment-text-${domain.replace(/\./g, '-')}`);
             
-            if (!statusElement || !textElement) {
-                console.warn(`[DEPLOYMENT CHECK] Elements not found for domain: ${domain}`);
+            if (!statusElement) {
+                console.warn(`[DEPLOYMENT CHECK] Status element not found for domain: ${domain}`);
                 return;
             }
             
@@ -999,15 +972,17 @@
             const cachedResult = deploymentCache.get(domain);
             if (cachedResult) {
                 console.log(`[DEPLOYMENT CHECK] Using cached result for ${domain}`);
-                updateDeploymentUI(domain, cachedResult, statusElement, textElement);
+                updateDeploymentUI(domain, cachedResult, statusElement);
                 return;
             }
             
             // Update UI to show checking state
             statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-600';
             statusElement.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Checking...';
-            textElement.textContent = 'Checking...';
-            textElement.className = 'text-sm font-medium text-blue-600';
+            if (textElement) {
+                textElement.textContent = 'Checking...';
+                textElement.className = 'text-sm font-medium text-blue-600';
+            }
             
             try {
                 // Method 1: Try dedicated deployment status endpoint (real API)
@@ -1055,15 +1030,13 @@
                 deploymentCache.set(domain, result);
                 
                 // Update UI based on result
-                updateDeploymentUI(domain, result, statusElement, textElement);
+                updateDeploymentUI(domain, result, statusElement);
                 
             } catch (error) {
                 console.error(`[DEPLOYMENT CHECK] Fatal error for ${domain}:`, error);
                 // Error occurred during check
-                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600';
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300';
                 statusElement.innerHTML = '<i class="fas fa-question-circle mr-1"></i>Error';
-                textElement.textContent = 'Check Failed';
-                textElement.className = 'text-sm font-medium text-gray-600';
             }
         }
 
@@ -1114,46 +1087,58 @@
         }
 
         // Update deployment UI based on check result
-        function updateDeploymentUI(domain, result, statusElement, textElement) {
+        function updateDeploymentUI(domain, result, statusElement) {
             console.log(`[DEPLOYMENT CHECK] Updating UI for ${domain}:`, result);
+            
+            const textElement = document.getElementById(`deployment-text-${domain.replace(/\./g, '-')}`);
             
             if (result.deployed && result.certificate_match !== false) {
                 // Certificate is deployed and matches (or match unknown but deployed)
-                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800';
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400';
                 statusElement.innerHTML = '<i class="fas fa-check-circle mr-1"></i>Deployed';
-                textElement.textContent = 'Active';
-                textElement.className = 'text-sm font-medium text-green-600';
+                if (textElement) {
+                    textElement.textContent = 'Active';
+                    textElement.className = 'text-sm font-medium text-green-600 dark:text-green-400';
+                }
                 console.log(`[DEPLOYMENT CHECK] ${domain}: Status set to DEPLOYED`);
                 
             } else if (result.reachable && result.certificate_match === false) {
                 // Domain is reachable but certificate doesn't match
-                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800';
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400';
                 statusElement.innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i>Mismatch';
-                textElement.textContent = 'Cert Mismatch';
-                textElement.className = 'text-sm font-medium text-yellow-600';
+                if (textElement) {
+                    textElement.textContent = 'Mismatch';
+                    textElement.className = 'text-sm font-medium text-yellow-600 dark:text-yellow-400';
+                }
                 console.log(`[DEPLOYMENT CHECK] ${domain}: Status set to MISMATCH`);
                 
             } else if (result.reachable) {
                 // Domain is reachable but certificate status unknown
-                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800';
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400';
                 statusElement.innerHTML = '<i class="fas fa-info-circle mr-1"></i>Unknown';
-                textElement.textContent = 'Cert Unknown';
-                textElement.className = 'text-sm font-medium text-blue-600';
+                if (textElement) {
+                    textElement.textContent = 'Unknown';
+                    textElement.className = 'text-sm font-medium text-blue-600 dark:text-blue-400';
+                }
                 console.log(`[DEPLOYMENT CHECK] ${domain}: Status set to UNKNOWN`);
                 
             } else {
                 // Domain is not reachable
-                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800';
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400';
                 statusElement.innerHTML = '<i class="fas fa-times-circle mr-1"></i>Unreachable';
-                textElement.textContent = 'Not Reachable';
-                textElement.className = 'text-sm font-medium text-red-600';
+                if (textElement) {
+                    textElement.textContent = 'Unreachable';
+                    textElement.className = 'text-sm font-medium text-red-600 dark:text-red-400';
+                }
                 console.log(`[DEPLOYMENT CHECK] ${domain}: Status set to UNREACHABLE`);
             }
             
             // Add method info to title for debugging
             if (result.method) {
                 statusElement.title = `Checked via: ${result.method} at ${result.timestamp}`;
-                textElement.title = statusElement.title;
+                if (textElement) {
+                    textElement.title = statusElement.title;
+                }
             }
         }
 
