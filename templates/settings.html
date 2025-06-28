@@ -134,6 +134,154 @@
                                     </div>
                                 </div>
                             </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="digitalocean" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fab fa-digital-ocean text-2xl text-blue-600 mb-2"></i>
+                                        <div class="text-sm font-medium">DigitalOcean</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="digitalocean-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="linode" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-cloud text-2xl text-green-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Linode</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="linode-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="gandi" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-globe text-2xl text-orange-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Gandi</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="gandi-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="ovh" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-server text-2xl text-purple-600 mb-2"></i>
+                                        <div class="text-sm font-medium">OVH</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="ovh-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="namecheap" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-shopping-cart text-2xl text-red-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Namecheap</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="namecheap-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="vultr" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-cloud text-2xl text-blue-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Vultr</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="vultr-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="dnsmadeeasy" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-cogs text-2xl text-green-600 mb-2"></i>
+                                        <div class="text-sm font-medium">DNS Made Easy</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="dnsmadeeasy-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="nsone" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-network-wired text-2xl text-indigo-600 mb-2"></i>
+                                        <div class="text-sm font-medium">NS1</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="nsone-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="rfc2136" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-exchange-alt text-2xl text-gray-600 mb-2"></i>
+                                        <div class="text-sm font-medium">RFC2136</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="rfc2136-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Tier 3: Extended Providers -->
+                        <h3 class="text-sm font-medium text-gray-900 mb-3 border-b border-gray-200 pb-2 mt-6">
+                            <i class="fas fa-expand-arrows-alt mr-2 text-blue-600"></i>
+                            Tier 3: Extended Providers
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="hetzner" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-server text-2xl text-red-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Hetzner</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="hetzner-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="porkbun" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-paw text-2xl text-pink-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Porkbun</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="porkbun-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="godaddy" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-globe text-2xl text-green-600 mb-2"></i>
+                                        <div class="text-sm font-medium">GoDaddy</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="godaddy-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="he-ddns" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-bolt text-2xl text-yellow-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Hurricane Electric</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="he-ddns-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="relative">
+                                <input type="radio" name="dns_provider" value="dynudns" class="sr-only peer">
+                                <div class="p-3 border-2 border-gray-200 rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-blue-50 hover:border-gray-300">
+                                    <div class="text-center">
+                                        <i class="fas fa-sync-alt text-2xl text-purple-600 mb-2"></i>
+                                        <div class="text-sm font-medium">Dynu</div>
+                                        <div class="text-xs text-gray-500 mt-1" id="dynudns-status">Not configured</div>
+                                    </div>
+                                </div>
+                            </label>
                         </div>
                     </div>
 
@@ -313,6 +461,425 @@
                             </div>
                             <p class="mt-2 text-sm text-gray-600">
                                 Configure your PowerDNS server with API access enabled and provide the API endpoint and key.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- DigitalOcean Configuration -->
+                    <div id="digitalocean-config" class="dns-config hidden">
+                        <div class="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fab fa-digital-ocean mr-2 text-blue-600"></i>
+                                DigitalOcean DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label for="digitalocean_api_token" class="block text-sm font-medium text-gray-700">
+                                        API Token
+                                    </label>
+                                    <input type="password" id="digitalocean_api_token" name="digitalocean_api_token" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your DigitalOcean API token">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Generate a personal access token from your DigitalOcean control panel with read/write permissions for DNS.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Linode Configuration -->
+                    <div id="linode-config" class="dns-config hidden">
+                        <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-cloud mr-2 text-green-600"></i>
+                                Linode DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label for="linode_api_key" class="block text-sm font-medium text-gray-700">
+                                        API Key
+                                    </label>
+                                    <input type="password" id="linode_api_key" name="linode_api_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Linode API key">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Create a personal access token from your Linode account with read/write access to DNS records.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Gandi Configuration -->
+                    <div id="gandi-config" class="dns-config hidden">
+                        <div class="border border-orange-200 rounded-lg p-4 bg-orange-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-globe mr-2 text-orange-600"></i>
+                                Gandi DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label for="gandi_api_token" class="block text-sm font-medium text-gray-700">
+                                        API Token
+                                    </label>
+                                    <input type="password" id="gandi_api_token" name="gandi_api_token" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Gandi LiveDNS API token">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Generate a personal access token from your Gandi account with DNS access permissions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- OVH Configuration -->
+                    <div id="ovh-config" class="dns-config hidden">
+                        <div class="border border-purple-200 rounded-lg p-4 bg-purple-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-server mr-2 text-purple-600"></i>
+                                OVH DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="ovh_endpoint" class="block text-sm font-medium text-gray-700">
+                                        Endpoint
+                                    </label>
+                                    <select id="ovh_endpoint" name="ovh_endpoint" 
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary">
+                                        <option value="">Select endpoint</option>
+                                        <option value="ovh-eu">ovh-eu (Europe)</option>
+                                        <option value="ovh-us">ovh-us (US)</option>
+                                        <option value="ovh-ca">ovh-ca (Canada)</option>
+                                        <option value="kimsufi-eu">kimsufi-eu</option>
+                                        <option value="kimsufi-ca">kimsufi-ca</option>
+                                        <option value="soyoustart-eu">soyoustart-eu</option>
+                                        <option value="soyoustart-ca">soyoustart-ca</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="ovh_application_key" class="block text-sm font-medium text-gray-700">
+                                        Application Key
+                                    </label>
+                                    <input type="password" id="ovh_application_key" name="ovh_application_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your application key">
+                                </div>
+                                <div>
+                                    <label for="ovh_application_secret" class="block text-sm font-medium text-gray-700">
+                                        Application Secret
+                                    </label>
+                                    <input type="password" id="ovh_application_secret" name="ovh_application_secret" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your application secret">
+                                </div>
+                                <div>
+                                    <label for="ovh_consumer_key" class="block text-sm font-medium text-gray-700">
+                                        Consumer Key
+                                    </label>
+                                    <input type="password" id="ovh_consumer_key" name="ovh_consumer_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your consumer key">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Create an OVH application with DNS access permissions and configure the API credentials.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Namecheap Configuration -->
+                    <div id="namecheap-config" class="dns-config hidden">
+                        <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-shopping-cart mr-2 text-red-600"></i>
+                                Namecheap DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="namecheap_username" class="block text-sm font-medium text-gray-700">
+                                        Username
+                                    </label>
+                                    <input type="text" id="namecheap_username" name="namecheap_username" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Namecheap username">
+                                </div>
+                                <div>
+                                    <label for="namecheap_api_key" class="block text-sm font-medium text-gray-700">
+                                        API Key
+                                    </label>
+                                    <input type="password" id="namecheap_api_key" name="namecheap_api_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Namecheap API key">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Enable API access in your Namecheap account and provide your username and API key.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- RFC2136 Configuration -->
+                    <div id="rfc2136-config" class="dns-config hidden">
+                        <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-exchange-alt mr-2 text-gray-600"></i>
+                                RFC2136 DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="rfc2136_nameserver" class="block text-sm font-medium text-gray-700">
+                                        Nameserver
+                                    </label>
+                                    <input type="text" id="rfc2136_nameserver" name="rfc2136_nameserver" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="ns.example.com">
+                                </div>
+                                <div>
+                                    <label for="rfc2136_tsig_key" class="block text-sm font-medium text-gray-700">
+                                        TSIG Key Name
+                                    </label>
+                                    <input type="text" id="rfc2136_tsig_key" name="rfc2136_tsig_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="mykey">
+                                </div>
+                                <div>
+                                    <label for="rfc2136_tsig_secret" class="block text-sm font-medium text-gray-700">
+                                        TSIG Secret
+                                    </label>
+                                    <input type="password" id="rfc2136_tsig_secret" name="rfc2136_tsig_secret" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Base64-encoded secret">
+                                </div>
+                                <div>
+                                    <label for="rfc2136_tsig_algorithm" class="block text-sm font-medium text-gray-700">
+                                        TSIG Algorithm (Optional)
+                                    </label>
+                                    <select id="rfc2136_tsig_algorithm" name="rfc2136_tsig_algorithm" 
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary">
+                                        <option value="">Default (HMAC-MD5)</option>
+                                        <option value="HMAC-MD5">HMAC-MD5</option>
+                                        <option value="HMAC-SHA1">HMAC-SHA1</option>
+                                        <option value="HMAC-SHA224">HMAC-SHA224</option>
+                                        <option value="HMAC-SHA256">HMAC-SHA256</option>
+                                        <option value="HMAC-SHA384">HMAC-SHA384</option>
+                                        <option value="HMAC-SHA512">HMAC-SHA512</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Configure RFC2136 dynamic DNS updates for BIND or compatible DNS servers.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tier 3 Provider Configurations -->
+                    
+                    <!-- Hetzner Configuration -->
+                    <div id="hetzner-config" class="dns-config hidden">
+                        <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-server mr-2 text-red-600"></i>
+                                Hetzner DNS Configuration
+                            </h4>
+                            <div>
+                                <label for="hetzner_api_token" class="block text-sm font-medium text-gray-700">
+                                    API Token
+                                </label>
+                                <input type="password" id="hetzner_api_token" name="hetzner_api_token" 
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                       placeholder="Your Hetzner DNS API token">
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Create an API token at <a href="https://dns.hetzner.com/" target="_blank" class="text-primary hover:underline">Hetzner DNS Console</a> with DNS zone permissions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Porkbun Configuration -->
+                    <div id="porkbun-config" class="dns-config hidden">
+                        <div class="border border-pink-200 rounded-lg p-4 bg-pink-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-paw mr-2 text-pink-600"></i>
+                                Porkbun DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="porkbun_api_key" class="block text-sm font-medium text-gray-700">
+                                        API Key
+                                    </label>
+                                    <input type="password" id="porkbun_api_key" name="porkbun_api_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Porkbun API key">
+                                </div>
+                                <div>
+                                    <label for="porkbun_secret_key" class="block text-sm font-medium text-gray-700">
+                                        Secret Key
+                                    </label>
+                                    <input type="password" id="porkbun_secret_key" name="porkbun_secret_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Porkbun secret key">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Get your API credentials from <a href="https://porkbun.com/account/api" target="_blank" class="text-primary hover:underline">Porkbun API page</a>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- GoDaddy Configuration -->
+                    <div id="godaddy-config" class="dns-config hidden">
+                        <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-globe mr-2 text-green-600"></i>
+                                GoDaddy DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="godaddy_api_key" class="block text-sm font-medium text-gray-700">
+                                        API Key
+                                    </label>
+                                    <input type="password" id="godaddy_api_key" name="godaddy_api_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your GoDaddy API key">
+                                </div>
+                                <div>
+                                    <label for="godaddy_secret" class="block text-sm font-medium text-gray-700">
+                                        API Secret
+                                    </label>
+                                    <input type="password" id="godaddy_secret" name="godaddy_secret" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your GoDaddy API secret">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Create API credentials at <a href="https://developer.godaddy.com/keys" target="_blank" class="text-primary hover:underline">GoDaddy Developer Portal</a>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Hurricane Electric Configuration -->
+                    <div id="he-ddns-config" class="dns-config hidden">
+                        <div class="border border-yellow-200 rounded-lg p-4 bg-yellow-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-bolt mr-2 text-yellow-600"></i>
+                                Hurricane Electric DNS Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="he_ddns_username" class="block text-sm font-medium text-gray-700">
+                                        Username
+                                    </label>
+                                    <input type="text" id="he_ddns_username" name="he_ddns_username" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Hurricane Electric username">
+                                </div>
+                                <div>
+                                    <label for="he_ddns_password" class="block text-sm font-medium text-gray-700">
+                                        Password
+                                    </label>
+                                    <input type="password" id="he_ddns_password" name="he_ddns_password" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your Hurricane Electric password">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Use your <a href="https://dns.he.net/" target="_blank" class="text-primary hover:underline">Hurricane Electric DNS</a> account credentials.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Dynu Configuration -->
+                    <div id="dynudns-config" class="dns-config hidden">
+                        <div class="border border-purple-200 rounded-lg p-4 bg-purple-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-sync-alt mr-2 text-purple-600"></i>
+                                Dynu DNS Configuration
+                            </h4>
+                            <div>
+                                <label for="dynudns_token" class="block text-sm font-medium text-gray-700">
+                                    API Token
+                                </label>
+                                <input type="password" id="dynudns_token" name="dynudns_token" 
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                       placeholder="Your Dynu API token">
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Generate an API token at <a href="https://www.dynu.com/en-US/ControlPanel/APICredentials" target="_blank" class="text-primary hover:underline">Dynu Control Panel</a>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Vultr Configuration -->
+                    <div id="vultr-config" class="dns-config hidden">
+                        <div class="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-cloud mr-2 text-blue-600"></i>
+                                Vultr DNS Configuration
+                            </h4>
+                            <div>
+                                <label for="vultr_api_key" class="block text-sm font-medium text-gray-700">
+                                    API Key
+                                </label>
+                                <input type="password" id="vultr_api_key" name="vultr_api_key" 
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                       placeholder="Your Vultr API key">
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Generate an API key in your Vultr account with DNS permissions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- DNS Made Easy Configuration -->
+                    <div id="dnsmadeeasy-config" class="dns-config hidden">
+                        <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-cogs mr-2 text-green-600"></i>
+                                DNS Made Easy Configuration
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="dnsmadeeasy_api_key" class="block text-sm font-medium text-gray-700">
+                                        API Key
+                                    </label>
+                                    <input type="password" id="dnsmadeeasy_api_key" name="dnsmadeeasy_api_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your DNS Made Easy API key">
+                                </div>
+                                <div>
+                                    <label for="dnsmadeeasy_secret_key" class="block text-sm font-medium text-gray-700">
+                                        Secret Key
+                                    </label>
+                                    <input type="password" id="dnsmadeeasy_secret_key" name="dnsmadeeasy_secret_key" 
+                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                           placeholder="Your DNS Made Easy secret key">
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Create API credentials in your DNS Made Easy account with DNS management permissions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- NS1 Configuration -->
+                    <div id="nsone-config" class="dns-config hidden">
+                        <div class="border border-indigo-200 rounded-lg p-4 bg-indigo-50">
+                            <h4 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-network-wired mr-2 text-indigo-600"></i>
+                                NS1 DNS Configuration
+                            </h4>
+                            <div>
+                                <label for="nsone_api_key" class="block text-sm font-medium text-gray-700">
+                                    API Key
+                                </label>
+                                <input type="password" id="nsone_api_key" name="nsone_api_key" 
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
+                                       placeholder="Your NS1 API key">
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">
+                                Generate an API key in your NS1 account with DNS record management permissions.
                             </p>
                         </div>
                     </div>
@@ -654,7 +1221,10 @@
             };
 
             // Collect DNS provider configurations
-            const providers = ['cloudflare', 'route53', 'azure', 'google', 'powerdns'];
+            const providers = [
+                'cloudflare', 'route53', 'azure', 'google', 'powerdns', 'digitalocean',
+                'linode', 'gandi', 'ovh', 'namecheap', 'rfc2136', 'vultr', 'dnsmadeeasy', 'nsone'
+            ];
             providers.forEach(provider => {
                 settings.dns_providers[provider] = {};
                 
@@ -684,6 +1254,70 @@
                     const apiKey = formData.get('powerdns_api_key');
                     if (apiUrl) settings.dns_providers[provider].api_url = apiUrl;
                     if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                } else if (provider === 'digitalocean') {
+                    const token = formData.get('digitalocean_api_token');
+                    if (token) settings.dns_providers[provider].api_token = token;
+                } else if (provider === 'linode') {
+                    const key = formData.get('linode_api_key');
+                    if (key) settings.dns_providers[provider].api_key = key;
+                } else if (provider === 'gandi') {
+                    const token = formData.get('gandi_api_token');
+                    if (token) settings.dns_providers[provider].api_token = token;
+                } else if (provider === 'vultr') {
+                    const key = formData.get('vultr_api_key');
+                    if (key) settings.dns_providers[provider].api_key = key;
+                } else if (provider === 'nsone') {
+                    const key = formData.get('nsone_api_key');
+                    if (key) settings.dns_providers[provider].api_key = key;
+                } else if (provider === 'ovh') {
+                    const endpoint = formData.get('ovh_endpoint');
+                    const appKey = formData.get('ovh_application_key');
+                    const appSecret = formData.get('ovh_application_secret');
+                    const consumerKey = formData.get('ovh_consumer_key');
+                    if (endpoint) settings.dns_providers[provider].endpoint = endpoint;
+                    if (appKey) settings.dns_providers[provider].application_key = appKey;
+                    if (appSecret) settings.dns_providers[provider].application_secret = appSecret;
+                    if (consumerKey) settings.dns_providers[provider].consumer_key = consumerKey;
+                } else if (provider === 'namecheap') {
+                    const username = formData.get('namecheap_username');
+                    const apiKey = formData.get('namecheap_api_key');
+                    if (username) settings.dns_providers[provider].username = username;
+                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                } else if (provider === 'dnsmadeeasy') {
+                    const apiKey = formData.get('dnsmadeeasy_api_key');
+                    const secretKey = formData.get('dnsmadeeasy_secret_key');
+                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                    if (secretKey) settings.dns_providers[provider].secret_key = secretKey;
+                } else if (provider === 'rfc2136') {
+                    const nameserver = formData.get('rfc2136_nameserver');
+                    const tsigKey = formData.get('rfc2136_tsig_key');
+                    const tsigSecret = formData.get('rfc2136_tsig_secret');
+                    const tsigAlgorithm = formData.get('rfc2136_tsig_algorithm');
+                    if (nameserver) settings.dns_providers[provider].nameserver = nameserver;
+                    if (tsigKey) settings.dns_providers[provider].tsig_key = tsigKey;
+                    if (tsigSecret) settings.dns_providers[provider].tsig_secret = tsigSecret;
+                    if (tsigAlgorithm) settings.dns_providers[provider].tsig_algorithm = tsigAlgorithm;
+                } else if (provider === 'hetzner') {
+                    const token = formData.get('hetzner_api_token');
+                    if (token) settings.dns_providers[provider].api_token = token;
+                } else if (provider === 'porkbun') {
+                    const apiKey = formData.get('porkbun_api_key');
+                    const secretKey = formData.get('porkbun_secret_key');
+                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                    if (secretKey) settings.dns_providers[provider].secret_key = secretKey;
+                } else if (provider === 'godaddy') {
+                    const apiKey = formData.get('godaddy_api_key');
+                    const secret = formData.get('godaddy_secret');
+                    if (apiKey) settings.dns_providers[provider].api_key = apiKey;
+                    if (secret) settings.dns_providers[provider].secret = secret;
+                } else if (provider === 'he-ddns') {
+                    const username = formData.get('he_ddns_username');
+                    const password = formData.get('he_ddns_password');
+                    if (username) settings.dns_providers[provider].username = username;
+                    if (password) settings.dns_providers[provider].password = password;
+                } else if (provider === 'dynudns') {
+                    const token = formData.get('dynudns_token');
+                    if (token) settings.dns_providers[provider].token = token;
                 }
             });
 
@@ -902,6 +1536,77 @@
                         api_url: apiUrl,
                         api_key: apiKey
                     };
+                }
+            } else if (dnsProvider === 'digitalocean') {
+                const token = formData.get('digitalocean_api_token');
+                if (token) {
+                    settings.dns_providers.digitalocean = { api_token: token };
+                }
+            } else if (dnsProvider === 'linode') {
+                const key = formData.get('linode_api_key');
+                if (key) {
+                    settings.dns_providers.linode = { api_key: key };
+                }
+            } else if (dnsProvider === 'gandi') {
+                const token = formData.get('gandi_api_token');
+                if (token) {
+                    settings.dns_providers.gandi = { api_token: token };
+                }
+            } else if (dnsProvider === 'ovh') {
+                const endpoint = formData.get('ovh_endpoint');
+                const appKey = formData.get('ovh_application_key');
+                const appSecret = formData.get('ovh_application_secret');
+                const consumerKey = formData.get('ovh_consumer_key');
+                if (endpoint && appKey && appSecret && consumerKey) {
+                    settings.dns_providers.ovh = {
+                        endpoint: endpoint,
+                        application_key: appKey,
+                        application_secret: appSecret,
+                        consumer_key: consumerKey
+                    };
+                }
+            } else if (dnsProvider === 'namecheap') {
+                const username = formData.get('namecheap_username');
+                const apiKey = formData.get('namecheap_api_key');
+                if (username && apiKey) {
+                    settings.dns_providers.namecheap = {
+                        username: username,
+                        api_key: apiKey
+                    };
+                }
+            } else if (dnsProvider === 'vultr') {
+                const key = formData.get('vultr_api_key');
+                if (key) {
+                    settings.dns_providers.vultr = { api_key: key };
+                }
+            } else if (dnsProvider === 'dnsmadeeasy') {
+                const apiKey = formData.get('dnsmadeeasy_api_key');
+                const secretKey = formData.get('dnsmadeeasy_secret_key');
+                if (apiKey && secretKey) {
+                    settings.dns_providers.dnsmadeeasy = {
+                        api_key: apiKey,
+                        secret_key: secretKey
+                    };
+                }
+            } else if (dnsProvider === 'nsone') {
+                const key = formData.get('nsone_api_key');
+                if (key) {
+                    settings.dns_providers.nsone = { api_key: key };
+                }
+            } else if (dnsProvider === 'rfc2136') {
+                const nameserver = formData.get('rfc2136_nameserver');
+                const tsigKey = formData.get('rfc2136_tsig_key');
+                const tsigSecret = formData.get('rfc2136_tsig_secret');
+                const tsigAlgorithm = formData.get('rfc2136_tsig_algorithm');
+                if (nameserver && tsigKey && tsigSecret) {
+                    settings.dns_providers.rfc2136 = {
+                        nameserver: nameserver,
+                        tsig_key: tsigKey,
+                        tsig_secret: tsigSecret
+                    };
+                    if (tsigAlgorithm) {
+                        settings.dns_providers.rfc2136.tsig_algorithm = tsigAlgorithm;
+                    }
                 }
             }
 

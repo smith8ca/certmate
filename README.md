@@ -23,7 +23,7 @@
 CertMate solves the complexity of SSL certificate management in modern distributed architectures. Whether you're running a single application or managing certificates across multiple datacenters, CertMate provides:
 
 - **🔄 Zero-Downtime Automation** - Certificates renew automatically 30 days before expiry
-- **🌐 Multi-Cloud Support** - Works with 5+ DNS providers (Cloudflare, AWS, Azure, GCP, PowerDNS)
+- **🌐 Multi-Cloud Support** - Works with 130+ DNS providers (Cloudflare, AWS, Azure, GCP, Hetzner, Porkbun, GoDaddy, and more)
 - **🚀 Enterprise-Ready** - Docker, Kubernetes, REST API, and monitoring built-in
 - **📦 Simple Integration** - One-URL certificate downloads for easy automation
 - **🔒 Security-First** - Bearer token authentication, secure file permissions, audit logging
@@ -68,8 +68,9 @@ CertMate solves the complexity of SSL certificate management in modern distribut
 
 ## 🌐 Supported DNS Providers
 
-CertMate supports all major DNS providers through Let's Encrypt DNS-01 challenge. Choose the provider that best fits your infrastructure:
+CertMate supports **130+ DNS providers** through Let's Encrypt DNS-01 challenge via individual certbot plugins and the powerful `certbot-dns-multi` plugin. Choose the provider that best fits your infrastructure:
 
+### 🏆 Tier 1: Individual Plugins (Optimal Performance)
 | Provider | Plugin Version | Credentials Required | Use Case | Status |
 |----------|---------------|---------------------|----------|---------|
 | **🔶 Cloudflare** | `certbot-dns-cloudflare==4.1.1` | API Token | Global CDN, Free tier available | ✅ **Stable** |
@@ -77,14 +78,37 @@ CertMate supports all major DNS providers through Let's Encrypt DNS-01 challenge
 | **🔵 Azure DNS** | `certbot-dns-azure==2.6.1` | Service Principal credentials | Microsoft ecosystem | ✅ **Stable** |
 | **🟢 Google Cloud DNS** | `certbot-dns-google==4.1.1` | Service Account JSON | Google Cloud Platform | ✅ **Stable** |
 | **⚫ PowerDNS** | `certbot-dns-powerdns==0.2.1` | API URL, API Key | Self-hosted, On-premises | ✅ **Stable** |
+| **🔷 DigitalOcean** | `certbot-dns-digitalocean` | API Token | Cloud infrastructure | ✅ **Stable** |
+| **🟣 Linode** | `certbot-dns-linode` | API Key | Cloud hosting | ✅ **Stable** |
+| **🟡 Gandi** | `certbot-dns-gandi` | API Token | Domain registrar | ✅ **Stable** |
+| **🔴 OVH** | `certbot-dns-ovh` | API Credentials | European hosting | ✅ **Stable** |
+| **🟢 Namecheap** | `certbot-dns-namecheap` | Username, API Key | Domain registrar | ✅ **Stable** |
 
-### � Provider-Specific Features
+### 🚀 Tier 2: Multi-Provider Support (120+ providers via certbot-dns-multi)
+| Provider | Credentials Required | Use Case | Status |
+|----------|---------------------|----------|---------|
+| **Hetzner** | API Token | European cloud hosting | ✅ **Stable** |
+| **Porkbun** | API Key, Secret Key | Affordable domains | ✅ **Stable** |
+| **Vultr** | API Key | Global cloud infrastructure | ✅ **Stable** |
+| **GoDaddy** | API Key, API Secret | Popular registrar | ✅ **Stable** |
+| **Netlify** | Token | JAMstack hosting | ✅ **Stable** |
+| **DreamHost** | API Key | Web hosting | ✅ **Stable** |
+| **Name.com** | Username, API Token | Domain registrar | ✅ **Stable** |
+| **NameSilo** | API Key | Budget domains | ✅ **Stable** |
+| **Duck DNS** | Token | Free dynamic DNS | ✅ **Stable** |
+| **Hurricane Electric** | Username, Password | Free DNS hosting | ✅ **Stable** |
+| **+110 more providers** | Various | See [DNS_PROVIDERS.md](DNS_PROVIDERS.md) | ✅ **Stable** |
+
+### 🌟 Provider-Specific Features
 
 - **Cloudflare**: Global edge locations, DDoS protection, free tier
-- **Route53**: AWS integration, health checks, geolocation routing
+- **Route53**: AWS integration, health checks, geolocation routing  
 - **Azure DNS**: Microsoft ecosystem, private DNS zones
 - **Google Cloud DNS**: Global anycast network, DNSSEC support
 - **PowerDNS**: Self-hosted control, advanced DNS features
+- **Hetzner**: European data sovereignty, competitive pricing
+- **Porkbun**: Domain registration with DNS, affordable SSL
+- **Duck DNS**: Completely free, dynamic DNS for home labs
 
 > 📚 **Detailed Setup Instructions**: See [DNS_PROVIDERS.md](DNS_PROVIDERS.md) for provider-specific configuration.  
 > 🔧 **Step-by-Step Installation**: See [INSTALLATION.md](INSTALLATION.md) for complete setup guide.

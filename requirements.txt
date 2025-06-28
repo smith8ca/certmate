@@ -7,6 +7,22 @@ certbot-dns-route53
 certbot-dns-azure
 certbot-dns-google
 certbot-dns-powerdns
+certbot-dns-digitalocean
+certbot-dns-linode
+certbot-dns-gandi
+certbot-dns-ovh
+certbot-dns-namecheap
+certbot-dns-rfc2136
+certbot-dns-vultr
+certbot-dns-dnsmadeeasy
+certbot-dns-nsone
+certbot-dns-hetzner
+certbot-dns-porkbun
+certbot-dns-godaddy
+certbot-dns-he-ddns
+certbot-dns-dynudns
+# Individual plugins for popular providers - no need for certbot-dns-multi
+requests
 cloudflare
 boto3
 azure-identity

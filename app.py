@@ -91,7 +91,12 @@ def load_settings():
             'route53': {'access_key_id': '', 'secret_access_key': '', 'region': 'us-east-1'},
             'azure': {'subscription_id': '', 'resource_group': '', 'tenant_id': '', 'client_id': '', 'client_secret': ''},
             'google': {'project_id': '', 'service_account_key': ''},
-            'powerdns': {'api_url': '', 'api_key': ''}
+            'powerdns': {'api_url': '', 'api_key': ''},
+            'digitalocean': {'api_token': ''},
+            'linode': {'api_key': ''},
+            'gandi': {'api_token': ''},
+            'ovh': {'endpoint': '', 'application_key': '', 'application_secret': '', 'consumer_key': ''},
+            'namecheap': {'username': '', 'api_key': ''}
         }
     }
     
@@ -279,6 +284,196 @@ def create_powerdns_config(api_url, api_key):
     config_file.chmod(0o600)
     return config_file
 
+def create_digitalocean_config(api_token):
+    """Create DigitalOcean DNS credentials file"""
+    config_dir = Path("letsencrypt/config")
+    config_dir.mkdir(parents=True, exist_ok=True)
+    
+    config_file = config_dir / "digitalocean.ini"
+    with open(config_file, 'w') as f:
+        f.write(f"dns_digitalocean_token = {api_token}\n")
+    
+    # Set proper permissions
+    config_file.chmod(0o600)
+    return config_file
+
+def create_linode_config(api_key):
+    """Create Linode DNS credentials file"""
+    config_dir = Path("letsencrypt/config")
+    config_dir.mkdir(parents=True, exist_ok=True)
+    
+    config_file = config_dir / "linode.ini"
+    with open(config_file, 'w') as f:
+        f.write(f"dns_linode_key = {api_key}\n")
+        f.write("dns_linode_version = 4\n")  # Use API v4
+    
+    # Set proper permissions
+    config_file.chmod(0o600)
+    return config_file
+
+def create_gandi_config(api_token):
+    """Create Gandi DNS credentials file"""
+    config_dir = Path("letsencrypt/config")
+    config_dir.mkdir(parents=True, exist_ok=True)
+    
+    config_file = config_dir / "gandi.ini"
+    with open(config_file, 'w') as f:
+        f.write(f"dns_gandi_token = {api_token}\n")
+    
+    # Set proper permissions
+    config_file.chmod(0o600)
+    return config_file
+
+def create_ovh_config(endpoint, application_key, application_secret, consumer_key):
+    """Create OVH DNS credentials file"""
+    config_dir = Path("letsencrypt/config")
+    config_dir.mkdir(parents=True, exist_ok=True)
+    
+    config_file = config_dir / "ovh.ini"
+    with open(config_file, 'w') as f:
+        f.write(f"dns_ovh_endpoint = {endpoint}\n")
+        f.write(f"dns_ovh_application_key = {application_key}\n")
+        f.write(f"dns_ovh_application_secret = {application_secret}\n")
+        f.write(f"dns_ovh_consumer_key = {consumer_key}\n")
+    
+    # Set proper permissions
+    config_file.chmod(0o600)
+    return config_file
+
+def create_namecheap_config(username, api_key):
+    """Create Namecheap DNS credentials file"""
+    config_dir = Path("letsencrypt/config")
+    config_dir.mkdir(parents=True, exist_ok=True)
+    
+    config_file = config_dir / "namecheap.ini"
+    with open(config_file, 'w') as f:
+        f.write(f"dns_namecheap_username = {username}\n")
+        f.write(f"dns_namecheap_api_key = {api_key}\n")
+    
+    # Set proper permissions
+    config_file.chmod(0o600)
+    return config_file
+
+def create_multi_provider_config(provider, config_data):
+    """Create configuration for additional DNS providers using individual plugins where available
+    
+    This function supports additional providers beyond the core Tier 1 providers.
+    For providers without individual certbot plugins, returns None to indicate
+    direct API implementation should be used instead.
+    """
+    config_dir = Path("letsencrypt/config")
+    config_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Map providers to their individual plugin configuration files
+    plugin_configs = {
+        'vultr': 'vultr.ini',
+        'dnsmadeeasy': 'dnsmadeeasy.ini',
+        'nsone': 'nsone.ini',
+        'rfc2136': 'rfc2136.ini',
+        'hetzner': 'hetzner.ini',
+        'porkbun': 'porkbun.ini',
+        'godaddy': 'godaddy.ini',
+        'he-ddns': 'he-ddns.ini',
+        'dynudns': 'dynudns.ini'
+    }
+    
+    if provider not in plugin_configs:
+        # Provider doesn't have an individual plugin
+        # Return None to indicate fallback to direct API should be used
+        return None
+    
+    config_file = config_dir / plugin_configs[provider]
+    
+    # Create provider-specific configuration
+    if provider == 'vultr':
+        api_key = config_data.get('api_key')
+        if not api_key:
+            raise ValueError("Vultr API key required")
+        
+        config_content = f"dns_vultr_api_key = {api_key}\n"
+        
+    elif provider == 'dnsmadeeasy':
+        api_key = config_data.get('api_key')
+        secret_key = config_data.get('secret_key')
+        if not api_key or not secret_key:
+            raise ValueError("DNS Made Easy API key and secret key required")
+            
+        config_content = f"dns_dnsmadeeasy_api_key = {api_key}\n"
+        config_content += f"dns_dnsmadeeasy_secret_key = {secret_key}\n"
+        
+    elif provider == 'nsone':
+        api_key = config_data.get('api_key')
+        if not api_key:
+            raise ValueError("NS1 API key required")
+            
+        config_content = f"dns_nsone_api_key = {api_key}\n"
+        
+    elif provider == 'rfc2136':
+        nameserver = config_data.get('nameserver')
+        tsig_key = config_data.get('tsig_key')
+        tsig_secret = config_data.get('tsig_secret')
+        tsig_algorithm = config_data.get('tsig_algorithm', 'HMAC-SHA512')
+        
+        if not nameserver or not tsig_key or not tsig_secret:
+            raise ValueError("RFC2136 nameserver, TSIG key and secret required")
+            
+        config_content = f"dns_rfc2136_nameserver = {nameserver}\n"
+        config_content += f"dns_rfc2136_name = {tsig_key}\n"
+        config_content += f"dns_rfc2136_secret = {tsig_secret}\n"
+        config_content += f"dns_rfc2136_algorithm = {tsig_algorithm}\n"
+        
+    elif provider == 'hetzner':
+        api_token = config_data.get('api_token')
+        if not api_token:
+            raise ValueError("Hetzner DNS API token required")
+            
+        config_content = f"dns_hetzner_api_token = {api_token}\n"
+        
+    elif provider == 'porkbun':
+        api_key = config_data.get('api_key')
+        secret_key = config_data.get('secret_key')
+        if not api_key or not secret_key:
+            raise ValueError("Porkbun API key and secret key required")
+            
+        config_content = f"dns_porkbun_api_key = {api_key}\n"
+        config_content += f"dns_porkbun_secret_key = {secret_key}\n"
+        
+    elif provider == 'godaddy':
+        api_key = config_data.get('api_key')
+        secret = config_data.get('secret')
+        if not api_key or not secret:
+            raise ValueError("GoDaddy API key and secret required")
+            
+        config_content = f"dns_godaddy_key = {api_key}\n"
+        config_content += f"dns_godaddy_secret = {secret}\n"
+        
+    elif provider == 'he-ddns':
+        username = config_data.get('username')
+        password = config_data.get('password')
+        if not username or not password:
+            raise ValueError("Hurricane Electric username and password required")
+            
+        config_content = f"dns_he_ddns_username = {username}\n"
+        config_content += f"dns_he_ddns_password = {password}\n"
+        
+    elif provider == 'dynudns':
+        token = config_data.get('token')
+        if not token:
+            raise ValueError("Dynu API token required")
+            
+        config_content = f"dns_dynudns_token = {token}\n"
+        
+    else:
+        # This shouldn't happen given our check above, but just in case
+        return None
+    
+    # Write the configuration file
+    with open(config_file, 'w') as f:
+        f.write(config_content)
+    
+    # Set proper permissions
+    config_file.chmod(0o600)
+    return config_file
 def get_certificate_info(domain):
     """Get certificate information for a domain"""
     cert_path = CERT_DIR / domain
@@ -435,8 +630,81 @@ def create_certificate(domain, email, dns_provider=None, dns_config=None):
             dns_plugin = 'powerdns'
             dns_args = ['--dns-powerdns-credentials', str(config_file)]
             
+        elif dns_provider == 'digitalocean':
+            api_token = dns_config.get('api_token', '')
+            if not api_token:
+                return False, "DigitalOcean API token not configured"
+            config_file = create_digitalocean_config(api_token)
+            dns_plugin = 'digitalocean'
+            dns_args = ['--dns-digitalocean-credentials', str(config_file)]
+            
+        elif dns_provider == 'linode':
+            api_key = dns_config.get('api_key', '')
+            if not api_key:
+                return False, "Linode API key not configured"
+            config_file = create_linode_config(api_key)
+            dns_plugin = 'linode'
+            dns_args = ['--dns-linode-credentials', str(config_file)]
+            
+        elif dns_provider == 'gandi':
+            api_token = dns_config.get('api_token', '')
+            if not api_token:
+                return False, "Gandi API token not configured"
+            config_file = create_gandi_config(api_token)
+            dns_plugin = 'gandi'
+            dns_args = ['--dns-gandi-credentials', str(config_file)]
+            
+        elif dns_provider == 'ovh':
+            endpoint = dns_config.get('endpoint', '')
+            application_key = dns_config.get('application_key', '')
+            application_secret = dns_config.get('application_secret', '')
+            consumer_key = dns_config.get('consumer_key', '')
+            if not all([endpoint, application_key, application_secret, consumer_key]):
+                return False, "OVH credentials not fully configured"
+            config_file = create_ovh_config(endpoint, application_key, application_secret, consumer_key)
+            dns_plugin = 'ovh'
+            dns_args = ['--dns-ovh-credentials', str(config_file)]
+            
+        elif dns_provider == 'namecheap':
+            username = dns_config.get('username', '')
+            api_key = dns_config.get('api_key', '')
+            if not username or not api_key:
+                return False, "Namecheap credentials not configured"
+            config_file = create_namecheap_config(username, api_key)
+            dns_plugin = 'namecheap'
+            dns_args = ['--dns-namecheap-credentials', str(config_file)]
+            
         else:
-            return False, f"Unsupported DNS provider: {dns_provider}"
+            # Try to use individual plugins for additional providers
+            if not dns_config:
+                return False, f"DNS provider '{dns_provider}' requires configuration"
+            
+            try:
+                config_file = create_multi_provider_config(dns_provider, dns_config)
+                if config_file is None:
+                    # Provider doesn't have individual plugin - not supported in this version
+                    return False, f"DNS provider '{dns_provider}' is not supported. Please use one of the supported providers: cloudflare, route53, azure, google, powerdns, digitalocean, linode, gandi, ovh, namecheap, vultr, dnsmadeeasy, nsone, rfc2136, hetzner, porkbun, godaddy, he-ddns, dynudns"
+                
+                # Determine the plugin name based on provider
+                plugin_map = {
+                    'vultr': 'vultr',
+                    'dnsmadeeasy': 'dnsmadeeasy',
+                    'nsone': 'nsone',
+                    'rfc2136': 'rfc2136',
+                    'hetzner': 'hetzner',
+                    'porkbun': 'porkbun',
+                    'godaddy': 'godaddy',
+                    'he-ddns': 'he-ddns',
+                    'dynudns': 'dynudns'
+                }
+                
+                dns_plugin = plugin_map.get(dns_provider, dns_provider)
+                dns_args = [f'--dns-{dns_plugin}-credentials', str(config_file)]
+                logger.info(f"Using certbot-dns-{dns_plugin} for provider: {dns_provider}")
+                
+            except Exception as e:
+                logger.error(f"Failed to configure DNS provider {dns_provider}: {e}")
+                return False, f"Failed to configure DNS provider '{dns_provider}': {str(e)}"
         
         # Create local directories for certbot
         letsencrypt_dir = Path("letsencrypt")
@@ -601,12 +869,83 @@ powerdns_model = api.model('PowerDNSConfig', {
     'api_key': fields.String(description='PowerDNS API Key')
 })
 
+digitalocean_model = api.model('DigitalOceanConfig', {
+    'api_token': fields.String(description='DigitalOcean API token')
+})
+
+linode_model = api.model('LinodeConfig', {
+    'api_key': fields.String(description='Linode API key')
+})
+
+gandi_model = api.model('GandiConfig', {
+    'api_token': fields.String(description='Gandi API token')
+})
+
+ovh_model = api.model('OvhConfig', {
+    'endpoint': fields.String(description='OVH API endpoint'),
+    'application_key': fields.String(description='OVH application key'),
+    'application_secret': fields.String(description='OVH application secret'),
+    'consumer_key': fields.String(description='OVH consumer key')
+})
+
+namecheap_model = api.model('NamecheapConfig', {
+    'username': fields.String(description='Namecheap username'),
+    'api_key': fields.String(description='Namecheap API key')
+})
+
+# Tier 3 DNS Providers (Additional individual plugins)
+hetzner_model = api.model('HetznerConfig', {
+    'api_token': fields.String(description='Hetzner DNS API token')
+})
+
+porkbun_model = api.model('PorkbunConfig', {
+    'api_key': fields.String(description='Porkbun API key'),
+    'secret_key': fields.String(description='Porkbun secret key')
+})
+
+godaddy_model = api.model('GoDaddyConfig', {
+    'api_key': fields.String(description='GoDaddy API key'),
+    'secret': fields.String(description='GoDaddy API secret')
+})
+
+he_ddns_model = api.model('HurricaneElectricConfig', {
+    'username': fields.String(description='Hurricane Electric username'),
+    'password': fields.String(description='Hurricane Electric password')
+})
+
+dynudns_model = api.model('DynuConfig', {
+    'token': fields.String(description='Dynu API token')
+})
+
+# Multi-provider model for certbot-dns-multi (117+ providers)
+multi_provider_model = api.model('MultiProviderConfig', {
+    'provider': fields.String(description='DNS provider name (e.g., hetzner, porkbun, vultr)'),
+    'config': fields.Raw(description='Provider-specific configuration (flexible key-value pairs)')
+})
+
 dns_providers_model = api.model('DNSProviders', {
     'cloudflare': fields.Nested(cloudflare_model),
     'route53': fields.Nested(route53_model),
     'azure': fields.Nested(azure_model),
     'google': fields.Nested(google_model),
-    'powerdns': fields.Nested(powerdns_model)
+    'powerdns': fields.Nested(powerdns_model),
+    'digitalocean': fields.Nested(digitalocean_model),
+    'linode': fields.Nested(linode_model),
+    'gandi': fields.Nested(gandi_model),
+    'ovh': fields.Nested(ovh_model),
+    'namecheap': fields.Nested(namecheap_model),
+    'vultr': fields.Nested(linode_model),  # Same API structure as Linode
+    'dnsmadeeasy': fields.Nested(digitalocean_model),  # Simple API token
+    'nsone': fields.Nested(digitalocean_model),  # Simple API token
+    'rfc2136': fields.Nested(powerdns_model),  # Server URL and key
+    # Tier 3 providers
+    'hetzner': fields.Nested(hetzner_model),
+    'porkbun': fields.Nested(porkbun_model),
+    'godaddy': fields.Nested(godaddy_model),
+    'he-ddns': fields.Nested(he_ddns_model),
+    'dynudns': fields.Nested(dynudns_model),
+    # Support for any other provider via certbot-dns-multi
+    'multi': fields.Raw(description='Configuration for any DNS provider via certbot-dns-multi')
 })
 
 certificate_model = api.model('Certificate', {
@@ -625,13 +964,13 @@ settings_model = api.model('Settings', {
     'email': fields.String(description='Email for Let\'s Encrypt'),
     'auto_renew': fields.Boolean(description='Enable auto-renewal'),
     'api_bearer_token': fields.String(description='API bearer token for authentication'),
-    'dns_provider': fields.String(description='Active DNS provider', enum=['cloudflare', 'route53', 'azure', 'google', 'powerdns']),
+    'dns_provider': fields.String(description='Active DNS provider', enum=['cloudflare', 'route53', 'azure', 'google', 'powerdns', 'digitalocean', 'linode', 'gandi', 'ovh', 'namecheap', 'vultr', 'dnsmadeeasy', 'nsone', 'rfc2136', 'hetzner', 'porkbun', 'godaddy', 'he-ddns', 'dynudns']),
     'dns_providers': fields.Nested(dns_providers_model, description='DNS provider configurations')
 })
 
 create_cert_model = api.model('CreateCertificate', {
     'domain': fields.String(required=True, description='Domain name to create certificate for'),
-    'dns_provider': fields.String(description='DNS provider to use (optional, uses default from settings)', enum=['cloudflare', 'route53', 'azure', 'google', 'powerdns'])
+    'dns_provider': fields.String(description='DNS provider to use (optional, uses default from settings)', enum=['cloudflare', 'route53', 'azure', 'google', 'powerdns', 'digitalocean', 'linode', 'gandi', 'ovh', 'namecheap', 'vultr', 'dnsmadeeasy', 'nsone', 'rfc2136', 'hetzner', 'porkbun', 'godaddy', 'he-ddns', 'dynudns'])
 })
 
 # Define namespaces
@@ -793,6 +1132,76 @@ class DNSProviders(Resource):
                         dns_providers.get('powerdns', {}).get('api_key')
                     ),
                     'required_fields': ['api_url', 'api_key']
+                },
+                'digitalocean': {
+                    'name': 'DigitalOcean',
+                    'description': 'DigitalOcean DNS provider',
+                    'configured': bool(dns_providers.get('digitalocean', {}).get('api_token')),
+                    'required_fields': ['api_token']
+                },
+                'linode': {
+                    'name': 'Linode',
+                    'description': 'Linode DNS provider',
+                    'configured': bool(dns_providers.get('linode', {}).get('api_key')),
+                    'required_fields': ['api_key']
+                },
+                'gandi': {
+                    'name': 'Gandi',
+                    'description': 'Gandi DNS provider',
+                    'configured': bool(dns_providers.get('gandi', {}).get('api_token')),
+                    'required_fields': ['api_token']
+                },
+                'ovh': {
+                    'name': 'OVH',
+                    'description': 'OVH DNS provider',
+                    'configured': bool(
+                        dns_providers.get('ovh', {}).get('endpoint') and 
+                        dns_providers.get('ovh', {}).get('application_key') and
+                        dns_providers.get('ovh', {}).get('application_secret') and
+                        dns_providers.get('ovh', {}).get('consumer_key')
+                    ),
+                    'required_fields': ['endpoint', 'application_key', 'application_secret', 'consumer_key']
+                },
+                'namecheap': {
+                    'name': 'Namecheap',
+                    'description': 'Namecheap DNS provider',
+                    'configured': bool(
+                        dns_providers.get('namecheap', {}).get('username') and 
+                        dns_providers.get('namecheap', {}).get('api_key')
+                    ),
+                    'required_fields': ['username', 'api_key']
+                },
+                # RFC2136 and additional individual plugins
+                'rfc2136': {
+                    'name': 'RFC2136',
+                    'description': 'RFC2136 DNS Update Protocol',
+                    'configured': bool(
+                        dns_providers.get('rfc2136', {}).get('nameserver') and
+                        dns_providers.get('rfc2136', {}).get('tsig_key')
+                    ),
+                    'required_fields': ['nameserver', 'tsig_key', 'tsig_secret'],
+                    'optional_fields': ['tsig_algorithm']
+                },
+                'vultr': {
+                    'name': 'Vultr',
+                    'description': 'Vultr DNS provider',
+                    'configured': bool(dns_providers.get('vultr', {}).get('api_key')),
+                    'required_fields': ['api_key']
+                },
+                'dnsmadeeasy': {
+                    'name': 'DNS Made Easy',
+                    'description': 'DNS Made Easy provider',
+                    'configured': bool(
+                        dns_providers.get('dnsmadeeasy', {}).get('api_key') and
+                        dns_providers.get('dnsmadeeasy', {}).get('secret_key')
+                    ),
+                    'required_fields': ['api_key', 'secret_key']
+                },
+                'nsone': {
+                    'name': 'NS1',
+                    'description': 'NS1 DNS provider',
+                    'configured': bool(dns_providers.get('nsone', {}).get('api_key')),
+                    'required_fields': ['api_key']
                 }
             }
         }
@@ -866,6 +1275,40 @@ class CreateCertificate(Resource):
             provider_configured = bool(dns_config.get('project_id') and dns_config.get('service_account_key'))
         elif dns_provider == 'powerdns':
             provider_configured = bool(dns_config.get('api_url') and dns_config.get('api_key'))
+        elif dns_provider == 'digitalocean':
+            provider_configured = bool(dns_config.get('api_token'))
+        elif dns_provider == 'linode':
+            provider_configured = bool(dns_config.get('api_key'))
+        elif dns_provider == 'gandi':
+            provider_configured = bool(dns_config.get('api_token'))
+        elif dns_provider == 'ovh':
+            provider_configured = bool(
+                dns_config.get('endpoint') and 
+                dns_config.get('application_key') and
+                dns_config.get('application_secret') and
+                dns_config.get('consumer_key')
+            )
+        elif dns_provider == 'namecheap':
+            provider_configured = bool(
+                dns_config.get('username') and 
+                dns_config.get('api_key')
+            )
+        else:
+            # Check for multi-provider configurations (certbot-dns-multi)
+            # Check if the DNS provider is configured
+            # All supported providers should have their configuration in dns_providers
+            supported_providers = [
+                'cloudflare', 'route53', 'azure', 'google', 'powerdns',
+                'digitalocean', 'linode', 'gandi', 'ovh', 'namecheap',
+                'vultr', 'dnsmadeeasy', 'nsone', 'rfc2136'
+            ]
+            
+            if dns_provider in supported_providers:
+                # For supported providers, check if they are configured
+                provider_configured = bool(dns_config and any(dns_config.values()))
+            else:
+                # Unsupported provider
+                return {'success': False, 'message': f'DNS provider "{dns_provider}" is not supported. Please use one of the supported providers: {", ".join(supported_providers)}'}, 400
         
         if not provider_configured:
             return {'success': False, 'message': f'{dns_provider.title()} DNS provider not configured in settings'}, 400
@@ -1141,6 +1584,21 @@ def web_create_certificate():
     elif dns_provider == 'powerdns':
         if not dns_config.get('api_url') or not dns_config.get('api_key'):
             return jsonify({'success': False, 'message': 'PowerDNS API credentials not configured in settings'}), 400
+    elif dns_provider == 'digitalocean':
+        if not dns_config.get('api_token'):
+            return jsonify({'success': False, 'message': 'DigitalOcean API token not configured in settings'}), 400
+    elif dns_provider == 'linode':
+        if not dns_config.get('api_key'):
+            return jsonify({'success': False, 'message': 'Linode API key not configured in settings'}), 400
+    elif dns_provider == 'gandi':
+        if not dns_config.get('api_token'):
+            return jsonify({'success': False, 'message': 'Gandi API token not configured in settings'}), 400
+    elif dns_provider == 'ovh':
+        if not all(dns_config.get(field) for field in ['endpoint', 'application_key', 'application_secret', 'consumer_key']):
+            return jsonify({'success': False, 'message': 'OVH credentials not fully configured in settings'}), 400
+    elif dns_provider == 'namecheap':
+        if not all(dns_config.get(field) for field in ['username', 'api_key']):
+            return jsonify({'success': False, 'message': 'Namecheap credentials not fully configured in settings'}), 400
     
     # Add domain to settings if not already there (using new format)
     domains = settings.get('domains', [])

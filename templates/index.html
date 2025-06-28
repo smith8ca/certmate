@@ -95,11 +95,34 @@
                             <select id="dns_provider_select" name="dns_provider" 
                                     class="block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200">
                                 <option value="">Use default from settings</option>
-                                <option value="cloudflare">Cloudflare</option>
-                                <option value="route53">AWS Route53</option>
-                                <option value="azure">Azure DNS</option>
-                                <option value="google">Google Cloud DNS</option>
-                                <option value="powerdns">PowerDNS</option>
+                                <!-- Tier 1: Core Providers (Individual Plugins) -->
+                                <optgroup label="Tier 1: Core Providers">
+                                    <option value="cloudflare">Cloudflare</option>
+                                    <option value="route53">AWS Route53</option>
+                                    <option value="azure">Azure DNS</option>
+                                    <option value="google">Google Cloud DNS</option>
+                                    <option value="powerdns">PowerDNS</option>
+                                    <option value="digitalocean">DigitalOcean</option>
+                                    <option value="linode">Linode</option>
+                                    <option value="gandi">Gandi</option>
+                                    <option value="ovh">OVH</option>
+                                    <option value="namecheap">Namecheap</option>
+                                </optgroup>
+                                <!-- Tier 2: Additional Providers (Individual Plugins) -->
+                                <optgroup label="Tier 2: Additional Providers">
+                                    <option value="vultr">Vultr</option>
+                                    <option value="dnsmadeeasy">DNS Made Easy</option>
+                                    <option value="nsone">NS1</option>
+                                    <option value="rfc2136">RFC2136 (Generic DNS Update)</option>
+                                </optgroup>
+                                <!-- Tier 3: Extended Providers (Individual Plugins) -->
+                                <optgroup label="Tier 3: Extended Providers">
+                                    <option value="hetzner">Hetzner</option>
+                                    <option value="porkbun">Porkbun</option>
+                                    <option value="godaddy">GoDaddy</option>
+                                    <option value="he-ddns">Hurricane Electric</option>
+                                    <option value="dynudns">Dynu</option>
+                                </optgroup>
                             </select>
                             <p class="mt-2 text-sm text-gray-500">
                                 Leave empty to use the default DNS provider from settings
