@@ -8,6 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'media', // Automatically respects system preference
             theme: {
                 extend: {
                     colors: {
@@ -19,9 +20,9 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b">
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -29,15 +30,15 @@
                         <i class="fas fa-shield-alt text-primary text-2xl"></i>
                     </div>
                     <div class="ml-3">
-                        <h1 class="text-xl font-semibold text-gray-900">CertMate</h1>
-                        <p class="text-sm text-gray-500">SSL Certificate Manager</p>
+                        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">CertMate</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">SSL Certificate Manager</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="px-3 py-2 rounded-md text-sm font-medium text-primary bg-blue-50 border border-blue-200">
+                    <a href="/" class="px-3 py-2 rounded-md text-sm font-medium text-primary bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700">
                         <i class="fas fa-certificate mr-1"></i> Certificates
                     </a>
-                    <a href="/settings" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+                    <a href="/settings" class="px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-cog mr-1"></i> Settings
                     </a>
                 </div>
@@ -48,17 +49,17 @@
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Header -->
-        <div class="bg-white shadow-sm rounded-lg mb-6 border border-gray-200">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg mb-6 border border-gray-200 dark:border-gray-700">
             <div class="px-6 py-6">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-primary bg-opacity-10 rounded-lg flex items-center justify-center">
+                        <div class="w-12 h-12 bg-primary bg-opacity-10 dark:bg-primary dark:bg-opacity-20 rounded-lg flex items-center justify-center">
                             <i class="fas fa-shield-alt text-primary text-xl"></i>
                         </div>
                     </div>
                     <div class="ml-4">
-                        <h2 class="text-2xl font-bold text-gray-900">SSL Certificates Dashboard</h2>
-                        <p class="text-gray-600 mt-1">Manage your SSL certificates with automatic renewal</p>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">SSL Certificates Dashboard</h2>
+                        <p class="text-gray-600 dark:text-gray-300 mt-1">Manage your SSL certificates with automatic renewal</p>
                     </div>
                 </div>
             </div>
@@ -70,30 +71,30 @@
         </div>
 
         <!-- Create Certificate Form -->
-        <div class="bg-white shadow-sm rounded-lg mb-6 border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
-                <h3 class="text-lg font-semibold text-gray-900">Create New Certificate</h3>
-                <p class="text-sm text-gray-600 mt-1">Generate a new SSL certificate for your domain</p>
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg mb-6 border border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-t-lg">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Create New Certificate</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">Generate a new SSL certificate for your domain</p>
             </div>
             <div class="px-6 py-6">
                 <form id="createCertForm" class="space-y-6">
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div>
-                            <label for="domain" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="domain" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 <i class="fas fa-globe mr-1 text-gray-400"></i>
                                 Domain
                             </label>
                             <input type="text" id="domain" name="domain" 
-                                   class="block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200"
+                                   class="block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200"
                                    placeholder="example.com" required>
                         </div>
                         <div>
-                            <label for="dns_provider_select" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="dns_provider_select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 <i class="fas fa-server mr-1 text-gray-400"></i>
                                 DNS Provider (Optional)
                             </label>
                             <select id="dns_provider_select" name="dns_provider" 
-                                    class="block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200">
+                                    class="block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg shadow-sm py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow duration-200">
                                 <option value="">Use default from settings</option>
                                 <!-- Tier 1: Core Providers (Individual Plugins) -->
                                 <optgroup label="Tier 1: Core Providers">
@@ -124,7 +125,7 @@
                                     <option value="dynudns">Dynu</option>
                                 </optgroup>
                             </select>
-                            <p class="mt-2 text-sm text-gray-500">
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                 Leave empty to use the default DNS provider from settings
                             </p>
                         </div>
@@ -141,38 +142,38 @@
         </div>
 
         <!-- Certificates List -->
-        <div class="bg-white shadow-sm rounded-lg border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 rounded-t-lg">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                    <h3 class="text-lg font-semibold text-gray-900">Your Certificates</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Your Certificates</h3>
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
                         <div class="relative">
                             <input type="text" id="certificateSearch" placeholder="Search certificates..." 
-                                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm bg-white shadow-sm transition-shadow duration-200">
+                                   class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm bg-white shadow-sm transition-shadow duration-200">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-search text-gray-400"></i>
                             </div>
                         </div>
-                        <select id="statusFilter" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary bg-white shadow-sm transition-shadow duration-200">
+                        <select id="statusFilter" class="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary bg-white shadow-sm transition-shadow duration-200">
                             <option value="all">All Status</option>
                             <option value="valid">Valid</option>
                             <option value="expiring">Expiring Soon</option>
                             <option value="expired">Expired</option>
                         </select>
                         <button onclick="checkAllDeploymentStatuses()" 
-                                class="inline-flex items-center px-3 py-2 border border-indigo-300 shadow-sm text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                class="inline-flex items-center px-3 py-2 border border-indigo-300 dark:border-indigo-600 shadow-sm text-sm font-medium rounded-lg text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                             <i class="fas fa-sync mr-2"></i>
                             Check All
                         </button>
                         <button onclick="toggleDebugConsole()" 
-                                class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                                class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-lg text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
                             <i class="fas fa-terminal mr-2"></i>
                             Debug
                         </button>
                     </div>
                 </div>
             </div>
-            <div id="certificatesList" class="divide-y divide-gray-200">
+            <div id="certificatesList" class="divide-y divide-gray-200 dark:divide-gray-700">
                 <!-- Certificates will be loaded here -->
             </div>
         </div>
@@ -180,20 +181,20 @@
 
     <!-- Loading Modal -->
     <div id="loadingModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 m-4 max-w-md w-full">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 m-4 max-w-md w-full">
             <div class="text-center">
                 <div class="relative">
-                    <div class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-primary mx-auto"></div>
+                    <div class="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 dark:border-gray-600 border-t-primary mx-auto"></div>
                     <div class="absolute inset-0 flex items-center justify-center">
                         <i class="fas fa-certificate text-primary text-lg"></i>
                     </div>
                 </div>
-                <h3 class="mt-4 text-lg font-medium text-gray-900" id="loadingTitle">Processing Certificate...</h3>
-                <p class="mt-2 text-sm text-gray-600" id="loadingMessage">This may take a few minutes</p>
-                <div class="mt-4 bg-gray-200 rounded-full h-2">
+                <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white" id="loadingTitle">Processing Certificate...</h3>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300" id="loadingMessage">This may take a few minutes</p>
+                <div class="mt-4 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                     <div class="bg-primary h-2 rounded-full transition-all duration-1000" id="progressBar" style="width: 0%"></div>
                 </div>
-                <p class="mt-2 text-xs text-gray-500">Do not close this window</p>
+                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Do not close this window</p>
             </div>
         </div>
     </div>
@@ -598,7 +599,7 @@
                                 </button>
                             ` : `
                                 <button onclick="clearFilters()" 
-                                        class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                                        class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
                                     <i class="fas fa-times mr-2"></i>
                                     Clear Filters
                                 </button>
@@ -615,9 +616,9 @@
                         <div class="px-6 py-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h4 class="text-lg font-medium text-gray-900">${cert.domain}</h4>
-                                    <p class="text-sm text-red-600">Certificate not found</p>
-                                    ${cert.dns_provider ? `<p class="text-sm text-gray-500">DNS Provider: ${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>` : ''}
+                                    <h4 class="text-lg font-medium text-gray-900 dark:text-white">${cert.domain}</h4>
+                                    <p class="text-sm text-red-600 dark:text-red-400">Certificate not found</p>
+                                    ${cert.dns_provider ? `<p class="text-sm text-gray-500 dark:text-gray-400">DNS Provider: ${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -629,28 +630,28 @@
                 const isExpired = cert.days_until_expiry <= 0;
                 
                 return `
-                    <div class="px-6 py-6 hover:bg-gray-50 transition-colors duration-200">
+                    <div class="px-6 py-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200">
                         <div class="flex flex-col space-y-4">
                             <!-- Certificate Header -->
                             <div class="flex flex-wrap items-start justify-between gap-3">
                                 <div class="flex items-center space-x-3 min-w-0 flex-1">
                                     <div class="flex-shrink-0">
-                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-certificate text-blue-600"></i>
+                                        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-certificate text-blue-600 dark:text-blue-400"></i>
                                         </div>
                                     </div>
                                     <div class="min-w-0 flex-1">
-                                        <h4 class="text-lg font-semibold text-gray-900 truncate">${cert.domain}</h4>
+                                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white truncate">${cert.domain}</h4>
                                         <div class="flex items-center space-x-2 mt-1">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                                isExpired ? 'bg-red-100 text-red-800' : 
-                                                isExpiringSoon ? 'bg-yellow-100 text-yellow-800' : 
-                                                'bg-green-100 text-green-800'
+                                                isExpired ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400' : 
+                                                isExpiringSoon ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400' : 
+                                                'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
                                             }">
                                                 <i class="fas ${isExpired ? 'fa-times-circle' : isExpiringSoon ? 'fa-exclamation-triangle' : 'fa-check-circle'} mr-1"></i>
                                                 ${isExpired ? 'Expired' : isExpiringSoon ? 'Expiring Soon' : 'Valid'}
                                             </span>
-                                            <span id="deployment-status-${cert.domain.replace(/\./g, '-')}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                            <span id="deployment-status-${cert.domain.replace(/\./g, '-')}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
                                                 <i class="fas fa-spinner fa-spin mr-1"></i>
                                                 Checking...
                                             </span>
@@ -660,41 +661,41 @@
                             </div>
                             
                             <!-- Certificate Details Grid -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
+                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                                 <div class="flex items-center space-x-3">
                                     <div class="flex-shrink-0">
-                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-calendar text-blue-600 text-sm"></i>
+                                        <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-calendar text-blue-600 dark:text-blue-400 text-sm"></i>
                                         </div>
                                     </div>
                                     <div class="min-w-0">
-                                        <p class="text-xs font-medium text-gray-500">Expires</p>
-                                        <p class="text-sm font-medium text-gray-900">${expiryDate.toLocaleDateString()}</p>
+                                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Expires</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-white">${expiryDate.toLocaleDateString()}</p>
                                     </div>
                                 </div>
                                 
                                 <div class="flex items-center space-x-3">
                                     <div class="flex-shrink-0">
-                                        <div class="w-8 h-8 ${isExpired ? 'bg-red-100' : isExpiringSoon ? 'bg-yellow-100' : 'bg-green-100'} rounded-full flex items-center justify-center">
-                                            <i class="fas fa-clock ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-yellow-600' : 'text-green-600'} text-sm"></i>
+                                        <div class="w-8 h-8 ${isExpired ? 'bg-red-100 dark:bg-red-900/30' : isExpiringSoon ? 'bg-yellow-100 dark:bg-yellow-900/30' : 'bg-green-100 dark:bg-green-900/30'} rounded-full flex items-center justify-center">
+                                            <i class="fas fa-clock ${isExpired ? 'text-red-600 dark:text-red-400' : isExpiringSoon ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400'} text-sm"></i>
                                         </div>
                                     </div>
                                     <div class="min-w-0">
-                                        <p class="text-xs font-medium text-gray-500">Days Left</p>
-                                        <p class="text-sm font-medium ${isExpired ? 'text-red-600' : isExpiringSoon ? 'text-yellow-600' : 'text-green-600'}">${cert.days_until_expiry}</p>
+                                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Days Left</p>
+                                        <p class="text-sm font-medium ${isExpired ? 'text-red-600 dark:text-red-400' : isExpiringSoon ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400'}">${cert.days_until_expiry}</p>
                                     </div>
                                 </div>
                                 
                                 ${cert.dns_provider ? `
                                     <div class="flex items-center space-x-3">
                                         <div class="flex-shrink-0">
-                                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                                <i class="fas fa-server text-purple-600 text-sm"></i>
+                                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-server text-purple-600 dark:text-purple-400 text-sm"></i>
                                             </div>
                                         </div>
                                         <div class="min-w-0">
-                                            <p class="text-xs font-medium text-gray-500">DNS Provider</p>
-                                            <p class="text-sm font-medium text-gray-900">${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>
+                                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400">DNS Provider</p>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-white">${cert.dns_provider.charAt(0).toUpperCase() + cert.dns_provider.slice(1)}</p>
                                         </div>
                                     </div>
                                 ` : ''}
