@@ -23,7 +23,7 @@
 CertMate solves the complexity of SSL certificate management in modern distributed architectures. Whether you're running a single application or managing certificates across multiple datacenters, CertMate provides:
 
 - **🔄 Zero-Downtime Automation** - Certificates renew automatically 30 days before expiry
-- **🌐 Multi-Cloud Support** - Works with 130+ DNS providers (Cloudflare, AWS, Azure, GCP, Hetzner, Porkbun, GoDaddy, and more)
+- **🌐 Multi-Cloud Support** - Works with 19 DNS providers (Cloudflare, AWS, Azure, GCP, Hetzner, Porkbun, GoDaddy, and more)
 - **🚀 Enterprise-Ready** - Docker, Kubernetes, REST API, and monitoring built-in
 - **📦 Simple Integration** - One-URL certificate downloads for easy automation
 - **🔒 Security-First** - Bearer token authentication, secure file permissions, audit logging
@@ -68,47 +68,38 @@ CertMate solves the complexity of SSL certificate management in modern distribut
 
 ## 🌐 Supported DNS Providers
 
-CertMate supports **130+ DNS providers** through Let's Encrypt DNS-01 challenge via individual certbot plugins and the powerful `certbot-dns-multi` plugin. Choose the provider that best fits your infrastructure:
+CertMate supports **19 DNS providers** through Let's Encrypt DNS-01 challenge via individual certbot plugins that provide reliable, well-tested DNS challenge support:
 
-### 🏆 Tier 1: Individual Plugins (Optimal Performance)
-| Provider | Plugin Version | Credentials Required | Use Case | Status |
-|----------|---------------|---------------------|----------|---------|
-| **🔶 Cloudflare** | `certbot-dns-cloudflare==4.1.1` | API Token | Global CDN, Free tier available | ✅ **Stable** |
-| **🟠 AWS Route53** | `certbot-dns-route53==4.1.1` | Access Key, Secret Key | AWS infrastructure, Enterprise | ✅ **Stable** |
-| **🔵 Azure DNS** | `certbot-dns-azure==2.6.1` | Service Principal credentials | Microsoft ecosystem | ✅ **Stable** |
-| **🟢 Google Cloud DNS** | `certbot-dns-google==4.1.1` | Service Account JSON | Google Cloud Platform | ✅ **Stable** |
-| **⚫ PowerDNS** | `certbot-dns-powerdns==0.2.1` | API URL, API Key | Self-hosted, On-premises | ✅ **Stable** |
-| **🔷 DigitalOcean** | `certbot-dns-digitalocean` | API Token | Cloud infrastructure | ✅ **Stable** |
-| **🟣 Linode** | `certbot-dns-linode` | API Key | Cloud hosting | ✅ **Stable** |
-| **🟡 Gandi** | `certbot-dns-gandi` | API Token | Domain registrar | ✅ **Stable** |
-| **🔴 OVH** | `certbot-dns-ovh` | API Credentials | European hosting | ✅ **Stable** |
-| **🟢 Namecheap** | `certbot-dns-namecheap` | Username, API Key | Domain registrar | ✅ **Stable** |
-
-### 🚀 Tier 2: Multi-Provider Support (120+ providers via certbot-dns-multi)
 | Provider | Credentials Required | Use Case | Status |
 |----------|---------------------|----------|---------|
-| **Hetzner** | API Token | European cloud hosting | ✅ **Stable** |
-| **Porkbun** | API Key, Secret Key | Affordable domains | ✅ **Stable** |
-| **Vultr** | API Key | Global cloud infrastructure | ✅ **Stable** |
-| **GoDaddy** | API Key, API Secret | Popular registrar | ✅ **Stable** |
-| **Netlify** | Token | JAMstack hosting | ✅ **Stable** |
-| **DreamHost** | API Key | Web hosting | ✅ **Stable** |
-| **Name.com** | Username, API Token | Domain registrar | ✅ **Stable** |
-| **NameSilo** | API Key | Budget domains | ✅ **Stable** |
-| **Duck DNS** | Token | Free dynamic DNS | ✅ **Stable** |
-| **Hurricane Electric** | Username, Password | Free DNS hosting | ✅ **Stable** |
-| **+110 more providers** | Various | See [DNS_PROVIDERS.md](DNS_PROVIDERS.md) | ✅ **Stable** |
+| **🔶 Cloudflare** | API Token | Global CDN, Free tier available | ✅ **Stable** |
+| **🟠 AWS Route53** | Access Key, Secret Key | AWS infrastructure, Enterprise | ✅ **Stable** |
+| **🔵 Azure DNS** | Service Principal credentials | Microsoft ecosystem | ✅ **Stable** |
+| **🟢 Google Cloud DNS** | Service Account JSON | Google Cloud Platform | ✅ **Stable** |
+| **⚫ PowerDNS** | API URL, API Key | Self-hosted, On-premises | ✅ **Stable** |
+| **🔷 DigitalOcean** | API Token | Cloud infrastructure | ✅ **Stable** |
+| **🟣 Linode** | API Key | Cloud hosting | ✅ **Stable** |
+| **🟡 Gandi** | API Token | Domain registrar | ✅ **Stable** |
+| **🔴 OVH** | API Credentials | European hosting | ✅ **Stable** |
+| **🟢 Namecheap** | Username, API Key | Domain registrar | ✅ **Stable** |
+| **🟦 Vultr** | API Key | Global cloud infrastructure | ✅ **Stable** |
+| **🔺 DNS Made Easy** | API Key, Secret Key | Enterprise DNS management | ✅ **Stable** |
+| **🟣 NS1** | API Key | Intelligent DNS platform | ✅ **Stable** |
+| **🔷 RFC2136** | Nameserver, TSIG Key/Secret | Standard DNS update protocol | ✅ **Stable** |
+| **🟠 Hetzner** | API Token | European cloud hosting | ✅ **Stable** |
+| **🟡 Porkbun** | API Key, Secret Key | Domain registrar with DNS | ✅ **Stable** |
+| **🟢 GoDaddy** | API Key, Secret | Popular domain registrar | ✅ **Stable** |
+| **🔵 Hurricane Electric** | Username, Password | Free DNS hosting | ✅ **Stable** |
+| **🔶 Dynu** | API Token | Dynamic DNS service | ✅ **Stable** |
 
-### 🌟 Provider-Specific Features
+### 🌟 Provider Categories
 
-- **Cloudflare**: Global edge locations, DDoS protection, free tier
-- **Route53**: AWS integration, health checks, geolocation routing  
-- **Azure DNS**: Microsoft ecosystem, private DNS zones
-- **Google Cloud DNS**: Global anycast network, DNSSEC support
-- **PowerDNS**: Self-hosted control, advanced DNS features
-- **Hetzner**: European data sovereignty, competitive pricing
-- **Porkbun**: Domain registration with DNS, affordable SSL
-- **Duck DNS**: Completely free, dynamic DNS for home labs
+- **Cloud Providers**: AWS Route53, Azure DNS, Google Cloud DNS, DigitalOcean, Linode, Vultr, Hetzner
+- **Enterprise DNS**: Cloudflare, DNS Made Easy, NS1, PowerDNS
+- **Domain Registrars**: Gandi, OVH, Namecheap, Porkbun, GoDaddy  
+- **European Providers**: OVH, Gandi, Hetzner
+- **Free Services**: Hurricane Electric, Dynu
+- **Standard Protocols**: RFC2136 (for BIND and compatible servers)
 
 > 📚 **Detailed Setup Instructions**: See [DNS_PROVIDERS.md](DNS_PROVIDERS.md) for provider-specific configuration.  
 > 🔧 **Step-by-Step Installation**: See [INSTALLATION.md](INSTALLATION.md) for complete setup guide.

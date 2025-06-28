@@ -4,8 +4,7 @@ CertMate now supports **19 DNS providers** for Let's Encrypt DNS challenges thro
 
 ## 🎯 Supported Providers
 
-### 🏆 Tier 1: Core Providers (Fully Supported)
-These providers have dedicated, well-maintained certbot plugins:
+All providers are supported through individual, well-maintained certbot plugins:
 
 | Provider | Plugin | Credentials Required | Use Case |
 |----------|--------|---------------------|----------|
@@ -19,27 +18,15 @@ These providers have dedicated, well-maintained certbot plugins:
 | **Gandi** | `certbot-dns-gandi` | API Token | Domain registrar |
 | **OVH** | `certbot-dns-ovh` | API Credentials | European hosting |
 | **Namecheap** | `certbot-dns-namecheap` | Username, API Key | Domain registrar |
-
-### 🚀 Tier 2: Additional Providers
-High-demand providers with dedicated certbot plugins:
-
-| Provider | Credentials Required | Use Case |
-|----------|---------------------|----------|
-| **Vultr** | API Key | Global cloud infrastructure |
-| **DNS Made Easy** | API Key, Secret Key | Enterprise DNS management |
-| **NS1** | API Key | Intelligent DNS platform |
-| **RFC2136** | Nameserver, TSIG Key/Secret | Standard DNS update protocol |
-
-### 🌟 Tier 3: Extended Providers
-Additional popular providers with dedicated certbot plugins:
-
-| Provider | Credentials Required | Use Case |
-|----------|---------------------|----------|
-| **Hetzner** | API Token | European cloud hosting |
-| **Porkbun** | API Key, Secret Key | Domain registrar with DNS |
-| **GoDaddy** | API Key, Secret | Domain registrar |
-| **Hurricane Electric** | Username, Password | Free DNS hosting |
-| **Dynu** | API Token | Dynamic DNS service |
+| **Vultr** | `certbot-dns-vultr` | API Key | Global cloud infrastructure |
+| **DNS Made Easy** | `certbot-dns-dnsmadeeasy` | API Key, Secret Key | Enterprise DNS management |
+| **NS1** | `certbot-dns-nsone` | API Key | Intelligent DNS platform |
+| **RFC2136** | `certbot-dns-rfc2136` | Nameserver, TSIG Key/Secret | Standard DNS update protocol |
+| **Hetzner** | `certbot-dns-hetzner` | API Token | European cloud hosting |
+| **Porkbun** | `certbot-dns-porkbun` | API Key, Secret Key | Domain registrar with DNS |
+| **GoDaddy** | `certbot-dns-godaddy` | API Key, Secret | Domain registrar |
+| **Hurricane Electric** | `certbot-dns-he-ddns` | Username, Password | Free DNS hosting |
+| **Dynu** | `certbot-dns-dynudns` | API Token | Dynamic DNS service |
 
 ## 🛠 Configuration
 
@@ -124,7 +111,7 @@ curl -X POST http://localhost:5000/api/settings \
 }
 ```
 
-### Hetzner (Tier 3)
+### Hetzner
 ```bash
 # Get API token from Hetzner DNS Console
 {
@@ -137,7 +124,7 @@ curl -X POST http://localhost:5000/api/settings \
 }
 ```
 
-### Porkbun (Tier 3)
+### Porkbun
 ```bash
 # Get API credentials from Porkbun
 {
@@ -151,7 +138,7 @@ curl -X POST http://localhost:5000/api/settings \
 }
 ```
 
-### GoDaddy (Tier 3)
+### GoDaddy
 ```bash
 # Get API credentials from GoDaddy Developer Portal
 {
@@ -165,7 +152,7 @@ curl -X POST http://localhost:5000/api/settings \
 }
 ```
 
-### Hurricane Electric (Tier 3)
+### Hurricane Electric
 ```bash
 # Use your Hurricane Electric DNS account credentials
 {
@@ -179,7 +166,7 @@ curl -X POST http://localhost:5000/api/settings \
 }
 ```
 
-### Dynu (Tier 3)
+### Dynu
 ```bash
 # Get API token from Dynu Control Panel
 {
@@ -215,28 +202,21 @@ curl -X POST http://localhost:5000/api/certificates/create \
 
 ## 🚀 How Provider Support Works
 
-CertMate uses individual, well-maintained certbot plugins for maximum reliability:
-- **Tier 1 providers** use their core plugins (cloudflare, route53, azure, etc.)
-- **Tier 2 providers** use additional individual plugins (vultr, dnsmadeeasy, nsone, rfc2136)
-
-All providers are supported through official or well-maintained certbot plugins, ensuring stability and reliability.
+CertMate uses individual, well-maintained certbot plugins for maximum reliability. All 19 supported providers use dedicated certbot plugins, ensuring stability and consistent behavior across all DNS providers.
 
 ## 🔍 Provider Detection Logic
 
 ```python
-# Tier 1: Core providers with individual plugins  
-if dns_provider in ['cloudflare', 'route53', 'azure', 'google', 'powerdns', 
-                   'digitalocean', 'linode', 'gandi', 'ovh', 'namecheap']:
-    use_individual_plugin()
+# All supported providers use individual certbot plugins
+supported_providers = [
+    'cloudflare', 'route53', 'azure', 'google', 'powerdns', 
+    'digitalocean', 'linode', 'gandi', 'ovh', 'namecheap',
+    'vultr', 'dnsmadeeasy', 'nsone', 'rfc2136',
+    'hetzner', 'porkbun', 'godaddy', 'he-ddns', 'dynudns'
+]
 
-# Tier 2: Additional providers with individual plugins
-elif dns_provider in ['vultr', 'dnsmadeeasy', 'nsone', 'rfc2136']:
+if dns_provider in supported_providers:
     use_individual_plugin()
-
-# Tier 3: Extended providers with individual plugins    
-elif dns_provider in ['hetzner', 'porkbun', 'godaddy', 'he-ddns', 'dynudns']:
-    use_individual_plugin()
-    
 else:
     return_not_supported_error()
 ```
@@ -318,14 +298,11 @@ curl -X GET http://localhost:5000/api/settings/dns-providers \
 ## 📊 Provider Statistics
 
 - **Total Supported**: 19 providers
-- **Tier 1 Providers**: 10 providers (Core certbot plugins)
-- **Tier 2 Providers**: 4 providers (Additional individual plugins)
-- **Tier 3 Providers**: 5 providers (Extended individual plugins)
 - **Geographic Coverage**: Global (all continents)
 - **Enterprise Providers**: AWS, Azure, GCP, Cloudflare, PowerDNS, DNS Made Easy, NS1
 - **European Providers**: OVH, Gandi, Hetzner
 - **Budget Providers**: Namecheap, DigitalOcean, Linode, Vultr, Porkbun
-- **Free Providers**: Hurricane Electric
+- **Free Providers**: Hurricane Electric, Dynu
 
 ---
 
