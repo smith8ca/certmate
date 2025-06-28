@@ -3,7 +3,7 @@
 
 # Core Flask dependencies
 Flask==3.0.3
-Flask-CORS==4.0.1
+Flask-CORS==6.0.0
 flask-restx==1.3.0
 
 # Certificate management
