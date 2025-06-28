@@ -14,7 +14,7 @@ certbot-dns-cloudflare==2.11.0
 cloudflare==2.19.4
 
 # Core application dependencies
-requests==2.32.3
+requests==2.32.4
 python-dotenv==1.0.1
 APScheduler==3.10.4
 cryptography==42.0.8
